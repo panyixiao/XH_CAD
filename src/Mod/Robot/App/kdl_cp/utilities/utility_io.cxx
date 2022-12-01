@@ -37,7 +37,7 @@ namespace KDL {
             }
     }
 // Eats until the end of the line
-	int _EatUntilEndOfLine( std::istream& is, int* countp=nullptr) {
+	int _EatUntilEndOfLine( std::istream& is, int* countp=NULL) {
     int ch;
     int count;
     count = 0;
@@ -46,12 +46,12 @@ namespace KDL {
         count++;
         _check_istream(is);
     } while (ch!='\n');
-    if (countp!=nullptr) *countp = count;
+    if (countp!=NULL) *countp = count;
     return ch;
 }
 
 // Eats until the end of the comment
-	int _EatUntilEndOfComment( std::istream& is, int* countp=nullptr) {
+	int _EatUntilEndOfComment( std::istream& is, int* countp=NULL) {
     int ch;
     int count;
     count = 0;
@@ -66,14 +66,14 @@ namespace KDL {
             break;
         }
     } while (true);
-    if (countp!=nullptr) *countp = count;
+    if (countp!=NULL) *countp = count;
     ch = is.get();
     return ch;
 }
 
 // Eats space-like characters and comments
 // possibly returns the number of space-like characters eaten.
-int _EatSpace( std::istream& is,int* countp=nullptr) {
+int _EatSpace( std::istream& is,int* countp=NULL) {
     int ch;
     int count;
     count=-1;
@@ -97,14 +97,14 @@ int _EatSpace( std::istream& is,int* countp=nullptr) {
             }
         }
     } while ((ch==' ')||(ch=='\n')||(ch=='\t'));
-    if (countp!=nullptr) *countp =  count;
+    if (countp!=NULL) *countp =  count;
     return ch;
 }
 
 
 
 // Eats whites, returns, tabs and the delim character
-//  Checks whether delim char. is encountered.
+//  Checks wether delim char. is encountered.
 void Eat( std::istream& is, int delim )
 {   
     int ch;
@@ -117,7 +117,7 @@ void Eat( std::istream& is, int delim )
 }
 
 // Eats whites, returns, tabs and the delim character
-//  Checks whether delim char. is encountered.
+//  Checks wether delim char. is encountered.
 // EatEnd does not eat all space-like char's at the end.
 void EatEnd( std::istream& is, int delim )
 {   
@@ -189,7 +189,7 @@ void EatWord(std::istream& is,const char* delim,char* storage,int maxsize)
     p = storage;
     size=0;
     int count = 0;
-    while ((count==0)&&(strchr(delim,ch)==nullptr)) {
+    while ((count==0)&&(strchr(delim,ch)==NULL)) {
         *p = (char) toupper(ch);
         ++p;
         if (size==maxsize) {

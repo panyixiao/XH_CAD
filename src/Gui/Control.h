@@ -31,6 +31,8 @@
 #include <stack>
 
 #include <Gui/TaskView/TaskDialog.h>
+#include <Gui/TaskManagePanel/TaskManageDialog.h>
+#include <Gui/TaskManagePanel/TaskManageDockPanel.h>
 
 class QTabWidget;
 
@@ -68,6 +70,10 @@ public:
     Gui::TaskView::TaskDialog* activeDialog() const;
     //void closeDialog();
     //@}
+
+    // TaskManage Panels
+    void show_TaskManageDialog(std::shared_ptr<TaskManage::TaskManageDialog> t_Dlg, bool onDockPanel = true);
+    Gui::DockWnd::TaskManageDockPanel* getTaskManagePanel();
 
     /** @name task view handling
      */

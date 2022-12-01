@@ -22,8 +22,7 @@
 #ifndef KDL_TREE_HPP
 #define KDL_TREE_HPP
 
-// This file comes along with oce but not with occ.
-//#include "config.h"
+#include "config.h"
 
 #include "segment.hpp"
 #include "chain.hpp"
@@ -32,7 +31,7 @@
 #include <map>
 
 #ifdef KDL_USE_NEW_TREE_INTERFACE
-#include <memory>
+#include <boost/shared_ptr.hpp>
 #endif //#ifdef KDL_USE_NEW_TREE_INTERFACE
 
 namespace KDL
@@ -40,10 +39,10 @@ namespace KDL
     class TreeElement;
 
 #ifdef KDL_USE_NEW_TREE_INTERFACE
-    //We use smart pointers for managing tree nodes for now because
+    //We use smart pointers for managing tree nodes for now becuase
     //c++11 and unique_ptr support is not ubiquitous
-    typedef std::shared_ptr<TreeElement> TreeElementPtr;
-    typedef std::shared_ptr<const TreeElement> TreeElementConstPtr;
+    typedef boost::shared_ptr<TreeElement> TreeElementPtr;
+    typedef boost::shared_ptr<const TreeElement> TreeElementConstPtr;
     typedef std::map<std::string, TreeElementPtr> SegmentMap;
     typedef TreeElementPtr TreeElementType;
 
@@ -93,7 +92,7 @@ namespace KDL
 
     /**
      * \brief  This class encapsulates a <strong>tree</strong>
-     * kinematic interconnection structure. It is built out of segments.
+     * kinematic interconnection structure. It is build out of segments.
      *
      * @ingroup KinematicFamily
      */

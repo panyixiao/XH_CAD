@@ -124,6 +124,13 @@ public:
     /// is called by the framework if the user press the help button 
     virtual void helpRequested();
 
+    void setDlgWdith(const int n_width){
+        dlg_width = n_width;
+    }
+    int getDlgWidth() const{
+        return dlg_width;
+    }
+
     void emitDestructionSignal() {
         Q_EMIT aboutToBeDestroyed();
     }
@@ -140,6 +147,7 @@ private:
     std::string documentName;
     bool escapeButton;
     bool autoCloseTransaction;
+    int dlg_width;
 };
 
 } //namespace TaskView

@@ -52,13 +52,13 @@ namespace KDL
 	 * \param V [INPUT/OUTPUT] is an \f$n \times n\f$ orthonormal matrix.
 	 * \param B [TEMPORARY] is an \f$m \times n\f$ matrix used for temporary storage.
 	 * \param tempi [TEMPORARY] is an \f$m\f$ vector used for temporary storage.
-	 * \param threshold [INPUT] Threshold to determine orthogonality.
+	 * \param thresshold [INPUT] Thresshold to determine orthogonality.
 	 * \param toggle [INPUT] toggle this boolean variable on each call of this routine.
 	 * \return number of sweeps.
 	 */
     int svd_eigen_Macie(const MatrixXd& A,MatrixXd& U,VectorXd& S, MatrixXd& V,
                         MatrixXd& B, VectorXd& tempi,
-                        double threshold,bool toggle)
+                        double treshold,bool toggle)
     {
         bool rotate = true;
         unsigned int sweeps=0;
@@ -70,8 +70,8 @@ namespace KDL
                 rotate=false;
                 rotations=0;
                 //Perform rotations between columns of B
-                for(auto i=0;i<B.cols();i++){
-                    for(auto j=i+1;j<B.cols();j++){
+                for(unsigned int i=0;i<B.cols();i++){
+                    for(unsigned int j=i+1;j<B.cols();j++){
                         //calculate plane rotation
                         double p = B.col(i).dot(B.col(j));
                         double qi =B.col(i).dot(B.col(i));
@@ -79,8 +79,8 @@ namespace KDL
                         double q=qi-qj;
                         double alpha = pow(p,2.0)/(qi*qj);
                         //if columns are orthogonal with precision
-                        //threshold, don't perform rotation and continue
-                        if(alpha<threshold)
+                        //treshold, don't perform rotation and continue
+                        if(alpha<treshold)
                             continue;
                         rotations++;
                         double c = sqrt(4*pow(p,2.0)+pow(q,2.0));
@@ -111,7 +111,7 @@ namespace KDL
                 }
                 //Only calculate new U and S if there were any rotations
                 if(rotations!=0){
-                    for(auto i=0;i<U.rows();i++) {
+                    for(unsigned int i=0;i<U.rows();i++) {
                         if(i<B.cols()){
                             double si=sqrt(B.col(i).dot(B.col(i)));
                             if(si==0)
@@ -134,8 +134,8 @@ namespace KDL
                 rotate=false;
                 rotations=0;
                 //Perform rotations between rows of B
-                for(auto i=0;i<B.cols();i++){
-                    for(auto j=i+1;j<B.cols();j++){
+                for(unsigned int i=0;i<B.cols();i++){
+                    for(unsigned int j=i+1;j<B.cols();j++){
                         //calculate plane rotation
                         double p = B.row(i).dot(B.row(j));
                         double qi = B.row(i).dot(B.row(i));
@@ -144,9 +144,9 @@ namespace KDL
                         double q=qi-qj;
                         double alpha = pow(p,2.0)/(qi*qj);
                         //if columns are orthogonal with precision
-                        //threshold, don't perform rotation and
+                        //treshold, don't perform rotation and
                         //continue
-                        if(alpha<threshold)
+                        if(alpha<treshold)
                             continue;
                         rotations++;
                         double c = sqrt(4*pow(p,2.0)+pow(q,2.0));
@@ -179,7 +179,7 @@ namespace KDL
 
                 //Only calculate new U and S if there were any rotations
                 if(rotations!=0){
-                    for(auto i=0;i<V.rows();i++) {
+                    for(unsigned int i=0;i<V.rows();i++) {
                         double si=sqrt(B.row(i).dot(B.row(i)));
                         if(si==0)
                             V.col(i) = B.row(i);

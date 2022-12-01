@@ -84,13 +84,14 @@ class Path_Circle : public Path
 		 * CAN THROW Error_MotionPlanning_Circle_ToSmall
 		 * CAN THROW Error_MotionPlanning_Circle_No_Plane
 		 */
-		Path_Circle(const Frame& F_base_start,const Vector& V_base_center,
-			const Vector& V_base_p,
-			const Rotation& R_base_end,
-			double alpha,
-			RotationalInterpolation* otraj,
-			double eqradius,
-			bool _aggregate=true);
+        Path_Circle(const Frame& F_base_start,
+                    const Vector& V_base_center,
+                    const Vector& V_base_p,
+                    const Rotation& R_base_end,
+                    double alpha,
+                    RotationalInterpolation* otraj,
+                    double eqradius,
+                    bool _aggregate=true);
 
 		double LengthToS(double length);
 

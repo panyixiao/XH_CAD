@@ -24,11 +24,12 @@
 #ifndef GUI_FILEDIALOG_H
 #define GUI_FILEDIALOG_H
 
-#include <QCompleter>
-#include <QFileDialog>
-#include <QFileIconProvider>
-#include <QFileSystemModel>
-#include <QPointer>
+#include <qt5/QtWidgets/QCompleter>
+//#include <QCompleter>
+#include <qt5/QtWidgets/QFileDialog>
+#include <qt5/QtWidgets/QFileIconProvider>
+#include <qt5/QtWidgets/QFileSystemModel>
+#include <qt5/QtCore/QPointer>
 #include <FCGlobal.h>
 
 class QButtonGroup;

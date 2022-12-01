@@ -13,6 +13,18 @@
         <file>icons/Robot_Simulate.svg</file>
         <file>icons/Robot_TrajectoryCompound.svg</file>
         <file>icons/Robot_TrajectoryDressUp.svg</file>
+        <file>icons/ToolAndSetup.svg</file>
+        <file>icons/tool.svg</file>
+        <file>icons/robotArm.svg</file>
+        <file>icons/assemble.png</file>
+        <file>icons/Authorize.svg</file>
+        <file>icons/cad_Import.svg</file>
+        <file>icons/Torch.svg</file>
+	<file>icons/Rail.svg</file>
+        <file>icons/sensor.svg</file>
+        <file>icons/camera.svg</file>
+        <file>icons/2DScanner.svg</file>
+        <file>icons/weldingpositioner.svg</file>
         <file>icons/RobotWorkbench.svg</file>
         <file>translations/Robot_af.qm</file>
         <file>translations/Robot_de.qm</file>
@@ -40,19 +52,5 @@
         <file>translations/Robot_sr.qm</file>
         <file>translations/Robot_el.qm</file>
         <file>translations/Robot_sl.qm</file>
-        <file>translations/Robot_eu.qm</file>
-        <file>translations/Robot_ca.qm</file>
-        <file>translations/Robot_gl.qm</file>
-        <file>translations/Robot_kab.qm</file>
-        <file>translations/Robot_ko.qm</file>
-        <file>translations/Robot_fil.qm</file>
-        <file>translations/Robot_id.qm</file>
-        <file>translations/Robot_lt.qm</file>
-        <file>translations/Robot_val-ES.qm</file>
-        <file>translations/Robot_ar.qm</file>
-        <file>translations/Robot_vi.qm</file>
-        <file>translations/Robot_es-AR.qm</file>
-        <file>translations/Robot_bg.qm</file>
-        <file>translations/Robot_ka.qm</file>
     </qresource>
 </RCC> 

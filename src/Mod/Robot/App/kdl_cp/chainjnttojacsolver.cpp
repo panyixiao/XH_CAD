@@ -55,7 +55,7 @@ namespace KDL
         else
             segmentNr = seg_nr;
 
-        //Initialize Jacobian to zero since only segmentNr columns are computed
+        //Initialize Jacobian to zero since only segmentNr colunns are computed
         SetToZero(jac) ;
 
         if(q_in.rows()!=chain.getNrOfJoints()||nr_of_unlocked_joints_!=jac.columns())
@@ -100,8 +100,7 @@ namespace KDL
 
     const char* ChainJntToJacSolver::strError(const int error) const
     {
-        if (E_JAC_FAILED == error)
-            return "Jac Failed";
+        if (E_JAC_FAILED == error) return "Jac Failed";
         else return SolverI::strError(error);
     }
 }

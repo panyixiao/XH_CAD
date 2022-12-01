@@ -39,10 +39,10 @@ namespace KDL
      * KDL::Chain. It uses a svd-calculation based on householders
      * rotations.
      *
-     * In case of a redundant robot this solver optimizes the following criterium:
+     * In case of a redundant robot this solver optimizes the the following criterium:
      * g=0.5*sum(weight*(Desired_joint_positions - actual_joint_positions))^2 as described in 
      *  A. Liegeois. Automatic supervisory control of the configuration and 
-     * behavior of multibody mechanisms. IEEE Transactions on Systems, Man, and 
+     * behavior of multibody mechnisms. IEEE Transactions on Systems, Man, and 
      * Cybernetics, 7(12):868–871, 1977
      *
      * @ingroup KinematicFamily
@@ -75,7 +75,7 @@ namespace KDL
          * not (yet) implemented.
          *
          */
-        virtual int CartToJnt(const JntArray& /*q_init*/, const FrameVel& /*v_in*/, JntArrayVel& /*q_out*/){return -1;};
+        virtual int CartToJnt(const JntArray& q_init, const FrameVel& v_in, JntArrayVel& q_out){return -1;};
 
         /**
          *Set joint weights for optimization criterion
@@ -94,7 +94,7 @@ namespace KDL
         virtual int setOptPos(const JntArray &opt_pos);
 
         /**
-         *Set null space velocity gain
+         *Set null psace velocity gain
          *
          *@param alpha NUllspace velocity cgain
          *

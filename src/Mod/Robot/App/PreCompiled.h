@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2008 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2008 Jürgen Riegel (juergen.riegel@web.de)              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -20,6 +20,7 @@
  *                                                                         *
  ***************************************************************************/
 
+
 #ifndef ROBOT_PRECOMPILED_H
 #define ROBOT_PRECOMPILED_H
 
@@ -30,10 +31,12 @@
 # define RobotExport __declspec(dllexport)
 # define PartExport  __declspec(dllimport)
 # define MeshExport  __declspec(dllimport)
+# define BaseExport  __declspec(dllimport)
 #else // for Linux
 # define RobotExport
 # define PartExport 
 # define MeshExport  
+# define BaseExport  
 #endif
 
 #ifdef _PreComp_
@@ -41,13 +44,18 @@
 // standard
 #include <iostream>
 #include <sstream>
-#include <cstdio>
-#include <cassert>
+#include <stdio.h>
+#include <assert.h>
 #include <string>
 #include <map>
 #include <vector>
 #include <set>
 #include <bitset>
+
+#include <Python.h>
+
+
+
 
 #endif // _PreComp_
 #endif

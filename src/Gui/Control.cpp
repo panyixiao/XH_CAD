@@ -172,6 +172,27 @@ Gui::TaskView::TaskDialog* ControlSingleton::activeDialog() const
     return ActiveDialog;
 }
 
+// TaskManage Panels
+void ControlSingleton::show_TaskManageDialog(std::shared_ptr<TaskManage::TaskManageDialog> t_DlgPtr, bool onDockPanel)
+{
+    if(onDockPanel){
+        Gui::DockWnd::TaskManageDockPanel* tskManagePanel = qobject_cast<Gui::DockWnd::TaskManageDockPanel*>
+                (Gui::DockWindowManager::instance()->getDockWindow("TaskManagePanel"));
+        if(tskManagePanel!=nullptr)
+            tskManagePanel->showDialog(t_DlgPtr);
+        else
+            Base::Console().Error("Can't find TaskManagePanel to attach Dialog, Please set Panels in Edit->View!\n");
+    }
+    else{
+        if(t_DlgPtr!=nullptr)
+           t_DlgPtr->exec();
+    }
+}
+DockWnd::TaskManageDockPanel *ControlSingleton::getTaskManagePanel()
+{
+    return qobject_cast<Gui::DockWnd::TaskManageDockPanel*>(Gui::DockWindowManager::instance()->getDockWindow("TaskManagePanel"));
+}
+
 Gui::TaskView::TaskView* ControlSingleton::getTaskPanel()
 {
     // should return the pointer to combo view

@@ -59,13 +59,13 @@ namespace KDL
 
     double JntArray::operator()(unsigned int i,unsigned int j)const
     {
-        (void)j;assert(j==0);
+        assert(j==0);
         return data(i);
     }
 
     double& JntArray::operator()(unsigned int i,unsigned int j)
     {
-        (void)j;assert(j==0);
+        assert(j==0);
         return data(i);
     }
 
@@ -117,8 +117,8 @@ namespace KDL
         return src1.data.isApprox(src2.data,eps);
     }
 
-    bool operator==(const JntArray& src1,const JntArray& src2){return Equal(src1,src2);}
-    //bool operator!=(const JntArray& src1,const JntArray& src2){return Equal(src1,src2);}
+    bool operator==(const JntArray& src1,const JntArray& src2){return Equal(src1,src2);};
+    //bool operator!=(const JntArray& src1,const JntArray& src2){return Equal(src1,src2);};
 
 }
 

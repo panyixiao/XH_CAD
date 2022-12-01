@@ -33,6 +33,8 @@ namespace KDL {
     Frame Trajectory_Composite::Pos(double time) const {
         // not optimal, could be done in log(#elem)
         // or one could buffer the last segment and start looking from there.
+        if(vt.empty())
+            return Frame();
         unsigned int i;
         double previoustime;
         Trajectory* traj;
@@ -93,8 +95,7 @@ namespace KDL {
         vt.insert(vt.end(),elem);
         duration += elem->Duration();
         vd.insert(vd.end(),duration);
-        if (path)
-            path->Add(elem->GetPath(),false); // FreeCAD change
+        path->Add(elem->GetPath(),false); // FreeCAD change
     }
 
     void Trajectory_Composite::Destroy() {
@@ -106,7 +107,6 @@ namespace KDL {
         vd.erase(vd.begin(),vd.end());
         
         delete path; // FreeCAD change
-        path = nullptr; // FreeCAD change
     }
 
     Trajectory_Composite::~Trajectory_Composite() {
@@ -139,7 +139,7 @@ namespace KDL {
 
     VelocityProfile* Trajectory_Composite::GetProfile()
     {
-        return nullptr;
+        return 0;
     }
 }
 

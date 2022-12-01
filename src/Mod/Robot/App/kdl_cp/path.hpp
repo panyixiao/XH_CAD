@@ -64,7 +64,8 @@ class Path
 			ID_COMPOSITE=3,
 			ID_ROUNDED_COMPOSITE=4,
 			ID_POINT=5,
-			ID_CYCLIC_CLOSED=6
+            ID_CYCLIC_CLOSED=6,
+            ID_JOINTSPACE = 7
 		};
 		/**
 		 * LengthToS() converts a physical length along the trajectory

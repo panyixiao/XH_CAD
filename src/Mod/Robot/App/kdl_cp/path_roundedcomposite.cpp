@@ -67,7 +67,7 @@ Path_RoundedComposite::Path_RoundedComposite(double _radius,double _eqradius,Rot
 }
 
 void Path_RoundedComposite::Add(const Frame& F_base_point) {
-	double eps = 1E-7;
+    double eps = 1E-4;
 	if (nrofpoints == 0) {
 		F_base_start = F_base_point;
 	} else if (nrofpoints == 1) {
@@ -85,15 +85,19 @@ void Path_RoundedComposite::Add(const Frame& F_base_point) {
 		if (bcdist < eps) {
 			throw Error_MotionPlanning_Not_Feasible(3);
 		}
-		double alpha = acos(dot(ab, bc) / abdist / bcdist);
+        auto result = dot(ab, bc) / abdist / bcdist;
+        if(result>1)
+            result = 1;
+        double alpha = acos(result); // Calcualte Angles between 2 Vector
 		if ((PI - alpha) < eps) {
 			throw Error_MotionPlanning_Not_Feasible(4);
 		}
 		if (alpha < eps) {
 			// no rounding is done in the case of parallel line segments
-			comp->Add(
-					new Path_Line(F_base_start, F_base_via, orient->Clone(),
-							eqradius));
+            comp->Add(new Path_Line(F_base_start,
+                                    F_base_via,
+                                    orient->Clone(),
+                                    eqradius));
 			F_base_start = F_base_via;
 			F_base_via = F_base_point;
 		} else {
@@ -104,14 +108,12 @@ void Path_RoundedComposite::Add(const Frame& F_base_point) {
 			if (d >= bcdist)
 				throw Error_MotionPlanning_Not_Feasible(6);
 
-			std::unique_ptr < Path
-					> line1(
-							new Path_Line(F_base_start, F_base_via,
-									orient->Clone(), eqradius));
-			std::unique_ptr < Path
-					> line2(
-							new Path_Line(F_base_via, F_base_point,
-									orient->Clone(), eqradius));
+            std::auto_ptr <Path> line1(new Path_Line(F_base_start,
+                                                     F_base_via,
+                                                     orient->Clone(), eqradius));
+            std::auto_ptr <Path> line2(new Path_Line(F_base_via,
+                                                     F_base_point,
+                                                     orient->Clone(), eqradius));
 			Frame F_base_circlestart = line1->Pos(line1->LengthToS(abdist - d));
 			Frame F_base_circleend = line2->Pos(line2->LengthToS(d));
 			// end of circle segment, beginning of next line
@@ -120,11 +122,13 @@ void Path_RoundedComposite::Add(const Frame& F_base_point) {
 			comp->Add(
 					new Path_Line(F_base_start, F_base_circlestart,
 							orient->Clone(), eqradius));
-			comp->Add(
-					new Path_Circle(F_base_circlestart,
-							F_base_circlestart.p - V_base_t * radius,
-							F_base_circleend.p, F_base_circleend.M, alpha,
-							orient->Clone(), eqradius));
+            comp->Add(new Path_Circle(F_base_circlestart,
+                                      F_base_circlestart.p - V_base_t * radius,
+                                      F_base_circleend.p,
+                                      F_base_circleend.M,
+                                      alpha,
+                                      orient->Clone(),
+                                      eqradius));
 			// shift for next line
 			F_base_start = F_base_circleend; // end of the circle segment
 			F_base_via = F_base_point;
@@ -136,9 +140,10 @@ void Path_RoundedComposite::Add(const Frame& F_base_point) {
 
 void Path_RoundedComposite::Finish() {
 	if (nrofpoints >= 1) {
-		comp->Add(
-				new Path_Line(F_base_start, F_base_via, orient->Clone(),
-						eqradius));
+        comp->Add(new Path_Line(F_base_start,
+                                F_base_via,
+                                orient->Clone(),
+                                eqradius));
 	}
 }
 
@@ -189,8 +194,7 @@ void Path_RoundedComposite::GetCurrentSegmentLocation(double s,
 Path_RoundedComposite::~Path_RoundedComposite() {
     if (aggregate)
         delete orient;
-
-    delete comp;
+	delete comp;
 }
 
 

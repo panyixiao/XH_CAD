@@ -50,7 +50,7 @@ namespace KDL {
 // simple linear search : TODO : make it binary search
 // uses cached_... variables
 // returns the relative path length within the segment
-// you probably want to use the cached_index variable
+// you propably want to use the cached_index variable
 double Path_Composite::Lookup(double s) const
 {
 	assert(s>=-1e-12);
@@ -84,8 +84,9 @@ void Path_Composite::Add(Path* geom, bool aggregate ) {
 	gv.insert( gv.end(),std::make_pair(geom,aggregate) );
 }
 
-double Path_Composite::LengthToS(double /*length*/) {
+double Path_Composite::LengthToS(double length) {
 	throw Error_MotionPlanning_Not_Applicable();
+	return 0;
 }
 
 double Path_Composite::PathLength() {
@@ -109,7 +110,7 @@ Twist Path_Composite::Acc(double s,double sd,double sdd) const {
 }
 
 Path* Path_Composite::Clone()  {
-	std::unique_ptr<Path_Composite> comp( new Path_Composite() );
+	std::auto_ptr<Path_Composite> comp( new Path_Composite() );
 	for (unsigned int i = 0; i < dv.size(); ++i) {
 		comp->Add(gv[i].first->Clone(), gv[i].second);
 	}

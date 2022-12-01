@@ -40,7 +40,7 @@
 #include <Gui/TaskView/TaskView.h>
 #include <Gui/TaskView/TaskWatcher.h>
 
-#include "TaskWatcher.h"
+//#include "TaskWatcher.h"
 
 
 using namespace RobotGui;
@@ -68,52 +68,30 @@ Workbench::~Workbench()
 
 void Workbench::activated()
 {
-    std::string res = App::Application::getResourceDir();
-    QString dir = QString::fromLatin1("%1/Mod/Robot/Lib/Kuka")
-                  .arg(QString::fromUtf8(res.c_str()));
-    QFileInfo fi(dir, QString::fromLatin1("kr_16.csv"));
-
-    if (!fi.exists()) {
-        Gui::WaitCursor wc;
-        wc.restoreCursor();
-        QMessageBox::warning(
-            Gui::getMainWindow(),
-            QObject::tr("No robot files installed"),
-            QObject::tr("Please visit %1 and copy the files to %2")
-                    .arg(QString::fromLatin1(
-                             "https://github.com/FreeCAD/FreeCAD/tree/master"
-                             "/src/Mod/Robot/Lib/Kuka"), dir)
-        );
-        wc.setWaitCursor();
-    }
-
     Gui::Workbench::activated();
+    const char* ModelOperation[] = {
+        "Import_CAD_File",
+        "ImportTool"
+        };
 
     const char* RobotAndTrac[] = {
         "Robot_InsertWaypoint",
         "Robot_InsertWaypointPreselect",
-        nullptr};
+        0};
 
-    const char* Robot[] = {
-        "Robot_AddToolShape",
+    const char* RobotOperation[] = {
+//        "Robot_AddToolShape",
         "Robot_SetHomePos",
         "Robot_RestoreHomePos",
-        nullptr};
-
-    const char* Empty[] = {
-        "Robot_InsertKukaIR500",
-        "Robot_InsertKukaIR16",
-        "Robot_InsertKukaIR210",
-        "Robot_InsertKukaIR125",
-        nullptr};
+        0};
 
     const char* TracSingle[] = {
         "Robot_TrajectoryDressUp",
-        nullptr};
+        0};
 
     const char* TracMore[] = {
         "Robot_TrajectoryCompound",
-        nullptr};
+        0};
 
     std::vector<Gui::TaskView::TaskWatcher*> Watcher;
 
@@ -125,11 +103,11 @@ void Workbench::activated()
         "Robot_InsertWaypoint"
     ));
 
-    Watcher.push_back(new TaskWatcherRobot);
+//    Watcher.push_back(new TaskWatcherRobot);
 
     Watcher.push_back(new Gui::TaskView::TaskWatcherCommands(
         "SELECT Robot::RobotObject COUNT 1",
-        Robot,
+        RobotOperation,
         "Robot tools",
         "Robot_CreateRobot"
     ));
@@ -148,12 +126,6 @@ void Workbench::activated()
         "Robot_CreateRobot"
     ));
 
-   Watcher.push_back(new Gui::TaskView::TaskWatcherCommandsEmptyDoc(
-         Empty,
-        "Insert Robot",
-        "Robot_CreateRobot"
-    ));
-
     
     addTaskWatcher(Watcher);
     Gui::Control().showTaskView();
@@ -164,35 +136,42 @@ void Workbench::deactivated()
 {
     Gui::Workbench::deactivated();
     removeTaskWatcher();
-
 }
 
 
 Gui::ToolBarItem* Workbench::setupToolBars() const
 {
-    Gui::ToolBarItem* root = StdWorkbench::setupToolBars();
-    Gui::ToolBarItem* part = new Gui::ToolBarItem(root);
-    part->setCommand("Robot");
-    *part << "Robot_Create";
-    *part << "Separator";
-    *part << "Robot_CreateTrajectory";
-    *part << "Robot_InsertWaypoint";
-    *part << "Robot_InsertWaypointPreselect";
-    *part << "Separator";
-    *part << "Robot_Edge2Trac";
-    *part << "Robot_TrajectoryDressUp";
-    *part << "Robot_TrajectoryCompound";
-    *part << "Separator"; 
-    *part << "Robot_SetHomePos";
-    *part << "Robot_RestoreHomePos";
-    *part << "Separator";
-    *part << "Robot_Simulate";
+    Gui::ToolBarItem* root = Gui::StdWorkbench::setupToolBars();
+
+    Gui::ToolBarItem* model = new Gui::ToolBarItem(root);
+    model->setCommand("model");
+    *model << "Import_CAD_File";
+//    *model << "ImportTool";
+
+    Gui::ToolBarItem* robot = new Gui::ToolBarItem(root);
+    robot->setCommand("Robot");
+    *robot << "Robot_Insert6AxisRobot"
+           << "Robot_InsertPositioner"
+           << "Robot_InsertExtAxisDevice"
+           << "Separator";
+
+    Gui::ToolBarItem* tool = new Gui::ToolBarItem(root);
+    tool->setCommand("Tool");
+    *tool << "Command_InsertWeldTorch";
+    *tool << "Command_InsertLaserScanner";
+    *tool << "Separator";
+
+    Gui::ToolBarItem* task = new Gui::ToolBarItem(root);
+    task->setCommand("TaskManage");
+    *task <<"Command_CreateNewTask"
+         << "Separator";
+
     return root;
 }
 
 Gui::MenuItem* Workbench::setupMenuBar() const
 {
-    Gui::MenuItem* root = StdWorkbench::setupMenuBar();
+    Gui::MenuItem* root = Gui::StdWorkbench::setupMenuBar();
     Gui::MenuItem* item = root->findItem("&Windows");
     Gui::MenuItem* robot = new Gui::MenuItem;
     root->insertItem( item, robot );
@@ -200,38 +179,35 @@ Gui::MenuItem* Workbench::setupMenuBar() const
     // analyze
     Gui::MenuItem* insertRobots = new Gui::MenuItem;
     insertRobots->setCommand("Insert Robots");
-    *insertRobots << "Robot_InsertKukaIR500" 
-                  << "Robot_InsertKukaIR210" 
-                  << "Robot_InsertKukaIR125" 
-                  << "Robot_InsertKukaIR16" 
+    *insertRobots << "Robot_InsertGoogolBa006n"
                   << "Separator"
-                  << "Robot_AddToolShape"
+//                  << "Robot_AddToolShape"
                   ;
 
-    // boolean
-    Gui::MenuItem* exportM = new Gui::MenuItem;
-    exportM->setCommand("Export trajectory");
-    *exportM << "Robot_ExportKukaCompact" 
-             << "Robot_ExportKukaFull"
-             ;
+//    // boolean
+//    Gui::MenuItem* exportM = new Gui::MenuItem;
+//    exportM->setCommand("Export trajectory");
+//    *exportM << "Robot_ExportKukaCompact"
+//             << "Robot_ExportKukaFull"
+//             ;
  
-    robot->setCommand("&Robot");
-    *robot << insertRobots 
-           << "Robot_CreateTrajectory"
-           << "Separator"
-           << "Robot_CreateTrajectory"
-           << "Robot_InsertWaypoint"
-           << "Robot_InsertWaypointPreselect"
-           << "Robot_Edge2Trac"
-           << "Separator"
-           << "Robot_SetHomePos"
-           << "Robot_RestoreHomePos"
-           << "Separator"
-           << "Robot_SetDefaultOrientation"
-           << "Robot_SetDefaultValues"
-           << "Separator"
-           << "Robot_Simulate"
-           << exportM
-           ;
+//    robot->setCommand("&Robot");
+//    *robot << insertRobots
+//           << "Robot_CreateTrajectory"
+//           << "Separator"
+//           << "Robot_CreateTrajectory"
+//           << "Robot_InsertWaypoint"
+//           << "Robot_InsertWaypointPreselect"
+//           << "Robot_Edge2Trac"
+//           << "Separator"
+//           << "Robot_SetHomePos"
+//           << "Robot_RestoreHomePos"
+//           << "Separator"
+//           << "Robot_SetDefaultOrientation"
+//           << "Robot_SetDefaultValues"
+//           << "Separator"
+//           << "Robot_Simulate"
+//           << exportM;
+
     return root;
 }

@@ -1,0 +1,7 @@
+a    ,alpha ,d    ,theta,rotDir,maxAngle ,minAngle ,AxisVelocity, MeshPath
+260  ,-90   ,675  ,0    ,-1    ,+185     ,-185     ,156         ,/home/yix/library/RD_FreeCAD/src/Mod/Robot/Lib/Googol/mesh/Link_1.STL
+680  ,0     ,0    ,0    , 1    ,+35      ,-155     ,156         ,/home/yix/library/RD_FreeCAD/src/Mod/Robot/Lib/Googol/mesh/Link_2.STL
+-35  ,+90   ,0    ,-90  , 1    ,+154     ,-130     ,156         ,/home/yix/library/RD_FreeCAD/src/Mod/Robot/Lib/Googol/mesh/Link_3.STL
+0    ,-90   ,-670 ,0    , 1    ,+350     ,-350     ,330         ,/home/yix/library/RD_FreeCAD/src/Mod/Robot/Lib/Googol/mesh/Link_4.STL
+0    ,+90   ,0    ,0    , 1    ,+130     ,-130     ,330         ,/home/yix/library/RD_FreeCAD/src/Mod/Robot/Lib/Googol/mesh/Link_5.STL
+0    ,+180  ,-158 ,180  , 1    ,+350     ,-350     ,615         ,/home/yix/library/RD_FreeCAD/src/Mod/Robot/Lib/Googol/mesh/Link_6.STL

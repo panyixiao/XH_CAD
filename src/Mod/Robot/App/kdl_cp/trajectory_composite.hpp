@@ -31,12 +31,12 @@ namespace KDL {
    */
 class Trajectory_Composite: public Trajectory
 	{
-		typedef std::vector<Trajectory*> VectorTraj;
+        typedef std::vector<Trajectory*>    VectorTraj;
 		typedef std::vector<double>         VectorDouble;
-		VectorTraj vt;      // contains the element Trajectories
+        VectorTraj    vt;      // contains the element Trajectories
 		VectorDouble  vd;      // contains end time for each Trajectory
-		double duration;    // total duration of the composed
-				    // Trajectory
+        double duration;    // total duration of the composed
+        // Trajectory
         Path_Composite* path; // FreeCAD change
 
 	public:

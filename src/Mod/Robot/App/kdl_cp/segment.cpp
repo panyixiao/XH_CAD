@@ -59,6 +59,11 @@ namespace KDL {
         return joint.pose(q)*f_tip;
     }
 
+    Frame Segment::pose_2(const double &q) const
+    {
+        return f_tip * joint.pose(q);
+    }
+
     Twist Segment::twist(const double& q, const double& qdot)const
     {
         return joint.twist(qdot).RefPoint(joint.pose(q).M * f_tip.p);

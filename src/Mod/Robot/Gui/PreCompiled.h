@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2008 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2008 Jürgen Riegel (juergen.riegel@web.de)              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -36,6 +36,7 @@
 # define PartExport
 # define RobotExport
 # define PartGuiExport
+# define MeshExport
 # define RobotGuiExport
 #endif
 
@@ -43,14 +44,16 @@
 
 #ifdef _MSC_VER
 #   pragma warning(disable : 4005)
-#   pragma warning(disable : 4273)
 #endif
 
 #ifdef _PreComp_
 
+// Python
+#include <Python.h>
+
 // standard
 #include <iostream>
-#include <cassert>
+#include <assert.h>
 #include <cmath>
 
 // STL
@@ -70,8 +73,8 @@
 
 
 // Qt Toolkit
-#ifndef __QtAll__
-# include <Gui/QtAll.h>
+#ifndef __Qt4All__
+# include <Gui/Qt4All.h>
 #endif
 
 #endif //_PreComp_

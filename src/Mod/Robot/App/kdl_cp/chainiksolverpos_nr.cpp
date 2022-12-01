@@ -57,8 +57,7 @@ namespace KDL
 
     const char* ChainIkSolverPos_NR::strError(const int error) const
     {
-        if (E_IKSOLVER_FAILED == error)
-            return "Child IK solver failed";
+        if (E_IKSOLVER_FAILED == error) return "Child IK solver failed";
         else return SolverI::strError(error);
     }
 }

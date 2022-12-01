@@ -24,7 +24,9 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include <QPixmap>
+//#include <QPixmap>
+//#include <qpixmap.h>
+#include <qt5/QtGui/qpixmap.h>
 #include <map>
 #include <string>
 

@@ -731,6 +731,16 @@ SET(Propertyeditor_SRCS
 )
 SOURCE_GROUP("Propertyeditor" FILES ${Propertyeditor_SRCS})
 
+SET(TaskManagePanel_SRCS
+    TaskManagePanel/TaskManageDialog.cpp
+    TaskManagePanel/TaskManageDialog.h
+    TaskManagePanel/TaskManageDockPanel.cpp
+    TaskManagePanel/TaskManageDockPanel.h
+    TaskManagePanel/TaskManageWidget.h
+    TaskManagePanel/TaskManageWidget.cpp
+)
+SOURCE_GROUP("TaskManagePanel" FILES ${TaskManagePanel_SRCS})
+
 # The task view
 SET(Task_View_SRCS
     TaskView/TaskAppearance.cpp
@@ -1195,6 +1205,7 @@ SET(FreeCADGui_SRCS
     ${Language_SRCS}
     ${Propertyeditor_SRCS}
     ${Task_View_SRCS}
+    ${TaskManagePanel_SRCS}
     ${qsintActionPanel_SRCS}
     ${Resource_SRCS}
     ${Quarter_SRCS}

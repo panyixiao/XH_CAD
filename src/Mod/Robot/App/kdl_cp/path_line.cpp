@@ -133,11 +133,13 @@ double Path_Line::PathLength(){
 	return pathlength;
 }
 Frame Path_Line::Pos(double s) const  {
-	return Frame(orient->Pos(s*scalerot),V_base_start + V_start_end*s*scalelin );
+    return Frame(orient->Pos(s*scalerot),
+                 V_base_start + V_start_end*s*scalelin );
 }
 
 Twist Path_Line::Vel(double s,double sd) const  {
-	return Twist( V_start_end*sd*scalelin, orient->Vel(s*scalerot,sd*scalerot) );
+    return Twist( V_start_end*sd*scalelin,
+                  orient->Vel(s*scalerot,sd*scalerot) );
 }
 
 Twist Path_Line::Acc(double s,double sd,double sdd) const  {
