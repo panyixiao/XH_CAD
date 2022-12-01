@@ -26,12 +26,14 @@
 # include <Python.h>
 #endif
 
-#include <App/Application.h>
 #include <Base/Console.h>
 #include <Base/Interpreter.h>
+#include <Base/PyObjectBase.h>
 
 #include <CXX/Extensions.hxx>
 #include <CXX/Objects.hxx>
+
+#include <App/Application.h>
 
 #include "Mechanics/MechanicDatabase.h"
 #include "Mechanics/MechanicDevice.h"
@@ -72,7 +74,6 @@ public:
         add_varargs_method("insert_ROBOT", &Module::insert_Robot);
         add_varargs_method("insert_POSER", &Module::insert_Poser);
         add_varargs_method("insert_EXTAX", &Module::insert_ExtAx);
-
         add_varargs_method("insert_CAD", &Module::insert_CAD);
         add_varargs_method("insert_Tool", &Module::insert_Tool);
         add_varargs_method("insert_Torch", &Module::insert_Torch);
@@ -85,9 +86,7 @@ public:
 
 private:
 
-    Py::Object setHomePos(const Py::Tuple &args){
-
-    }
+    Py::Object setHomePos(const Py::Tuple &args){}
 
     Py::Object insert_Robot(const Py::Tuple & args){
         char *ModelInfo;
@@ -342,13 +341,18 @@ private:
       }
       return Py::None();
     }
-
 };
+
+PyObject* initModule()
+{
+    return Base::Interpreter().addModule(new Module);
+}
+
 } // namespace Robot
 
 
 /* Python entry */
-PyMODINIT_FUNC initRobot()
+PyMOD_INIT_FUNC(Robot)
 {
     // load dependent module
     try {
@@ -359,7 +363,8 @@ PyMODINIT_FUNC initRobot()
 //        return;
     }
 
-    PyObject* robotModule = (new Robot::Module())->module().ptr();
+    PyObject* robotModule = Robot::initModule();
+//    PyObject* robotModule = (new Robot::Module())->module().ptr();
     Base::Console().Log("Loading Robot module... done\n");
 
     // NOTE: To finish the initialization of our own type objects we must
@@ -394,4 +399,6 @@ PyMODINIT_FUNC initRobot()
     Robot::MoveCommand             ::init();
     Robot::CoordCommand            ::init();
     Robot::ToolCommand             ::init();
+
+    PyMOD_Return(robotModule);
 }

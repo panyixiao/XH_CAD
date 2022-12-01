@@ -1,6 +1,5 @@
 // Created By Yixiao 2022-10-13
 
-
 #include "Mod/Robot/App/PreCompiled.h"
 
 #ifndef _PreComp_
@@ -14,6 +13,7 @@
 #include <Base/Console.h>
 #include <Base/VectorPy.h>
 
+#include <App/Application.h>
 #include "MechanicDatabase.h"
 
 
@@ -281,15 +281,17 @@ const std::vector<ExtAxModelInfo> MechanicDatabase::getParaMatched_ExtAxs(const 
 
 void MechanicDatabase::append_RobotData()
 {
+    auto resPath = App::GetApplication().getResourceDir();
+
     std::vector<RobotModelInfo> kawasaki_models;
-    kawasaki_models.push_back(RobotModelInfo(std::string("ba006n"), RobotType::_Standard, 6, 5.0, std::string("/home/yix/model/Robot/Kawasaki/BA006N/kawasaki_ba006n.urdf")));
-    kawasaki_models.push_back(RobotModelInfo(std::string("ba006n_l"), RobotType::_Standard, 6, 7.0, std::string("")));
-    kawasaki_models.push_back(RobotModelInfo(std::string("rs007l"), RobotType::_Standard, 6, 5.0, std::string("/home/yix/model/Robot/Kawasaki/RS007L/RS007L.urdf")));
+    kawasaki_models.push_back(RobotModelInfo(std::string("ba006n"), RobotType::_Standard, 6, 5.0, resPath+std::string("Mod/Robot/Lib/RobotModel/Kawasaki/BA006N/kawasaki_ba006n.urdf")));
+    kawasaki_models.push_back(RobotModelInfo(std::string("ba006n_l"), RobotType::_Standard, 6, 7.0, resPath+std::string("")));
+    kawasaki_models.push_back(RobotModelInfo(std::string("rs007l"), RobotType::_Standard, 6, 5.0, resPath+std::string("Mod/Robot/Lib/RobotModel/Kawasaki/RS007L/RS007L.urdf")));
 
     std::vector<RobotModelInfo> moka_models;
-    moka_models.push_back(RobotModelInfo(std::string("MR07S_930"), RobotType::_Standard, 6, 7.0, std::string("/home/yix/model/Robot/MOKA/MR07S-930/MR07S_930.urdf")));
-    moka_models.push_back(RobotModelInfo(std::string("MR10_1440"), RobotType::_Standard, 6, 10.0, std::string("/home/yix/model/Robot/MOKA/MR10-1440/MR10_1440.urdf")));
-    moka_models.push_back(RobotModelInfo(std::string("MR12_2010"), RobotType::_Standard, 6, 12.0, std::string("/home/yix/model/Robot/MOKA/MR12-2010/MR12_2010.urdf")));
+    moka_models.push_back(RobotModelInfo(std::string("MR07S_930"), RobotType::_Standard, 6, 7.0, resPath+std::string("Mod/Robot/Lib/RobotModel/MOKA/MR07S-930/MR07S_930.urdf")));
+    moka_models.push_back(RobotModelInfo(std::string("MR10_1440"), RobotType::_Standard, 6, 10.0, resPath+std::string("Mod/Robot/Lib/RobotModel/MOKA/MR10-1440/MR10_1440.urdf")));
+    moka_models.push_back(RobotModelInfo(std::string("MR12_2010"), RobotType::_Standard, 6, 12.0, resPath+std::string("Mod/Robot/Lib/RobotModel/MOKA/MR12-2010/MR12_2010.urdf")));
 
     m_Database_Robot.insert(std::make_pair(RobotBrand::Kawasaki,kawasaki_models));
     m_Database_Robot.insert(std::make_pair(RobotBrand::MOKA,moka_models));

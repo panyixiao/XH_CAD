@@ -114,7 +114,7 @@ struct RobotModelInfo{
     std::string model_FilePath;
 };
 
-class RobotExport MechanicDatabase
+class MechanicDatabase
 {
 public:
 	/// Constructor

@@ -9,6 +9,7 @@
 
 #include <Base/Console.h>
 #include <Base/Interpreter.h>
+#include <Base/PyObjectBase.h>
 #include <Gui/Application.h>
 #include <Gui/Language/Translator.h>
 #include "Workbench.h"
@@ -60,11 +61,15 @@ public:
 
 private:
 };
+PyObject* initModule()
+{
+    return Base::Interpreter().addModule(new Module);
+}
 } // namespace RobotGui
 
 
 /* Python entry */
-PyMODINIT_FUNC initRobotGui()
+PyMOD_INIT_FUNC(RobotGui)
 {
     if (!Gui::Application::Instance) {
         PyErr_SetString(PyExc_ImportError, "Cannot load Gui module in console application.");
@@ -79,8 +84,10 @@ PyMODINIT_FUNC initRobotGui()
         PyErr_SetString(PyExc_ImportError, e.what());
 //        return;
     }
-    (void)new RobotGui::Module();
+    PyObject* mod = RobotGui::initModule();
     Base::Console().Log("Loading GUI of Robot module... done\n");
+//    (void)new RobotGui::Module();
+//    Base::Console().Log("Loading GUI of Robot module... done\n");
 
     // instantiating the commands
     CreateRobotCommands();
@@ -96,12 +103,12 @@ PyMODINIT_FUNC initRobotGui()
 
     // addition objects
     RobotGui::Workbench                      ::init();
-    Gui::SoFCCSysDragger                     ::initClass();
+//    Gui::SoFCCSysDragger                     ::initClass();
 
     // Mechanics
-    RobotGui::ViewProviderRobot6AxisObject        ::init();
-    RobotGui::ViewProviderMechanicDevice        ::init();
-    RobotGui::ViewProviderMechanicGroup           ::init();
+    RobotGui::ViewProviderRobot6AxisObject   ::init();
+    RobotGui::ViewProviderMechanicDevice     ::init();
+    RobotGui::ViewProviderMechanicGroup      ::init();
 
     // Tool
     RobotGui::ViewProviderToolObject         ::init();
@@ -109,13 +116,14 @@ PyMODINIT_FUNC initRobotGui()
     RobotGui::ViewProviderScannerObject      ::init();
 
     // Obstacle
-    RobotGui::ViewProviderPlanningObj::init();
+    RobotGui::ViewProviderPlanningObj        ::init();
 
     // Task
-    RobotGui::ViewProviderTaskObject::init();
+    RobotGui::ViewProviderTaskObject         ::init();
     // Trac
-    RobotGui::ViewProviderRobotTrajectory::init();
+    RobotGui::ViewProviderRobotTrajectory    ::init();
     RobotGui::ViewProviderEdgebasedTracObject::init();
 
     loadRobotResource();
+    PyMOD_Return(mod);
 }
