@@ -128,7 +128,7 @@ void Workbench::activated()
 
     
     addTaskWatcher(Watcher);
-    Gui::Control().showTaskView();
+//    Gui::Control().showTaskView();
 }
 
 

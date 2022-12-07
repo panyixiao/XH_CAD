@@ -1467,8 +1467,8 @@ DockWindowItems *RBT_Workbench::setupDockWindows() const
 {
     DockWindowItems* root = new DockWindowItems();
     root->addDockWidget("TaskManagePanel", Qt::RightDockWidgetArea, true, false);
-    root->addDockWidget("Std_CombiView", Qt::LeftDockWidgetArea, false, false);
-    root->setVisibility("Std_CombiView",true);
+    root->addDockWidget("Std_ComboView", Qt::LeftDockWidgetArea, true, false);
+    root->setVisibility("Std_ComboView",true);
     //Dagview through parameter.
     ParameterGrp::handle group = App::GetApplication().GetUserParameter().
           GetGroup("BaseApp")->GetGroup("Preferences")->GetGroup("DockWindows")->GetGroup("DAGView");
