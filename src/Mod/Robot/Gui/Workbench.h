@@ -32,7 +32,7 @@ namespace RobotGui {
 /**
  * @author Werner Mayer
  */
-class RobotGuiExport Workbench : public Gui::StdWorkbench
+class RobotGuiExport Workbench : public Gui::RBT_Workbench
 {
     TYPESYSTEM_HEADER();
 

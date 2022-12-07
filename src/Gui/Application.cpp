@@ -1836,12 +1836,14 @@ void Application::initTypes(void)
     // Workbench
     Gui::Workbench                              ::init();
     Gui::StdWorkbench                           ::init();
-    Gui::BlankWorkbench                         ::init();
+//    Gui::BlankWorkbench                         ::init();
     Gui::NoneWorkbench                          ::init();
-    Gui::TestWorkbench                          ::init();
+//    Gui::TestWorkbench                          ::init();
     Gui::PythonBaseWorkbench                    ::init();
     Gui::PythonBlankWorkbench                   ::init();
     Gui::PythonWorkbench                        ::init();
+
+    Gui::RBT_Workbench                          ::init();
 
     // register transaction type
     new App::TransactionProducer<TransactionViewProvider>

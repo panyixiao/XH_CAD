@@ -141,7 +141,7 @@ void Workbench::deactivated()
 
 Gui::ToolBarItem* Workbench::setupToolBars() const
 {
-    Gui::ToolBarItem* root = Gui::StdWorkbench::setupToolBars();
+    Gui::ToolBarItem* root = Gui::RBT_Workbench::setupToolBars();
 
     Gui::ToolBarItem* model = new Gui::ToolBarItem(root);
     model->setCommand("model");
@@ -171,7 +171,7 @@ Gui::ToolBarItem* Workbench::setupToolBars() const
 
 Gui::MenuItem* Workbench::setupMenuBar() const
 {
-    Gui::MenuItem* root = Gui::StdWorkbench::setupMenuBar();
+    Gui::MenuItem* root = Gui::RBT_Workbench::setupMenuBar();
     Gui::MenuItem* item = root->findItem("&Windows");
     Gui::MenuItem* robot = new Gui::MenuItem;
     root->insertItem( item, robot );

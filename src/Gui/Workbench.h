@@ -329,6 +329,31 @@ protected:
     DockWindowItems* setupDockWindows() const;
 };
 
+class GuiExport RBT_Workbench : public Workbench
+{
+    TYPESYSTEM_HEADER();
+public:
+    RBT_Workbench();
+    virtual ~RBT_Workbench();
+
+public:
+    /** Defines the standard context menu. */
+    virtual void setupContextMenu(const char* recipient, MenuItem*item) const;
+    virtual void createMainWindowPopupMenu(MenuItem*item) const;
+
+protected:
+    /** Defines the standard menus. */
+    virtual MenuItem* setupMenuBar() const;
+    /** Defines the standard toolbars. */
+    virtual ToolBarItem* setupToolBars() const;
+    /** Defines the standard command bars. */
+    virtual ToolBarItem* setupCommandBars() const;
+    /** Returns a DockWindowItems structure of dock windows this workbench. */
+    virtual DockWindowItems* setupDockWindows() const;
+
+    friend class PythonWorkbench;
+};
+
 } // namespace Gui
 
 

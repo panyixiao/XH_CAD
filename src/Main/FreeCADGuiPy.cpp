@@ -324,7 +324,7 @@ QWidget* setupMainWindow()
         qApp->setActiveWindow(mw);
 
         // Activate the correct workbench
-        std::string start = App::Application::Config()["StartWorkbench"];
+        std::string start = App::Application::Config()["RobotWorkbench"];
         Base::Console().Log("Init: Activating default workbench %s\n", start.c_str());
         std::string autoload = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/General")->
                                GetASCII("AutoloadModule", start.c_str());

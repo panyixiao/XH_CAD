@@ -468,7 +468,7 @@ std::list<std::string> Workbench::listToolbars() const
     std::unique_ptr<ToolBarItem> tb(setupToolBars());
     std::list<std::string> bars;
     QList<ToolBarItem*> items = tb->getItems();
-    for (QList<ToolBarItem*>::ConstIterator item = items.begin(); item != items.end(); ++item)
+    for (QList<ToolBarItem*>::ConstIterator item = items.cbegin(); item != items.cend(); ++item)
         bars.push_back((*item)->command());
     return bars;
 }
@@ -479,10 +479,10 @@ std::list<std::pair<std::string, std::list<std::string>>> Workbench::getToolbarI
 
     std::list<std::pair<std::string, std::list<std::string>>> itemsList;
     QList<ToolBarItem*> items = tb->getItems();
-    for (QList<ToolBarItem*>::ConstIterator it = items.begin(); it != items.end(); ++it) {
+    for (QList<ToolBarItem*>::ConstIterator it = items.cbegin(); it != items.cend(); ++it) {
         QList<ToolBarItem*> sub = (*it)->getItems();
         std::list<std::string> cmds;
-        for (QList<ToolBarItem*>::ConstIterator jt = sub.begin(); jt != sub.end(); ++jt) {
+        for (QList<ToolBarItem*>::ConstIterator jt = sub.cbegin(); jt != sub.cend(); ++jt) {
             cmds.push_back((*jt)->command());
         }
 
@@ -496,7 +496,7 @@ std::list<std::string> Workbench::listMenus() const
     std::unique_ptr<MenuItem> mb(setupMenuBar());
     std::list<std::string> menus;
     QList<MenuItem*> items = mb->getItems();
-    for ( QList<MenuItem*>::ConstIterator it = items.begin(); it != items.end(); ++it )
+    for ( QList<MenuItem*>::ConstIterator it = items.cbegin(); it != items.cend(); ++it )
         menus.push_back((*it)->command());
     return menus;
 }
@@ -506,7 +506,7 @@ std::list<std::string> Workbench::listCommandbars() const
     std::unique_ptr<ToolBarItem> cb(setupCommandBars());
     std::list<std::string> bars;
     QList<ToolBarItem*> items = cb->getItems();
-    for (QList<ToolBarItem*>::ConstIterator item = items.begin(); item != items.end(); ++item)
+    for (QList<ToolBarItem*>::ConstIterator item = items.cbegin(); item != items.cend(); ++item)
         bars.push_back((*item)->command());
     return bars;
 }
@@ -1251,4 +1251,229 @@ void PythonWorkbench::createMainWindowPopupMenu(MenuItem* item) const
 {
     StdWorkbench wb;
     wb.createMainWindowPopupMenu(item);
+}
+
+///
+/// Robot_Workbench
+///
+///
+TYPESYSTEM_SOURCE(Gui::RBT_Workbench, Gui::Workbench)
+RBT_Workbench::RBT_Workbench() : Workbench()
+{
+
+}
+
+RBT_Workbench::~RBT_Workbench()
+{
+
+}
+
+void RBT_Workbench::setupContextMenu(const char *recipient, MenuItem *item) const
+{
+    if (strcmp(recipient,"View") == 0)
+    {
+        MenuItem* StdViews = new MenuItem;
+        StdViews->setCommand( "Standard views" );
+
+        *StdViews << "Separator" << "Std_ViewFront" << "Std_ViewTop" << "Std_ViewRight"
+                  << "Std_ViewRear" << "Std_ViewBottom" << "Std_ViewLeft"
+                  << "Separator" << "Std_ViewRotateLeft" << "Std_ViewRotateRight";
+
+        MenuItem *measure = new MenuItem();
+        measure->setCommand("Measure");
+        *measure << "View_Measure_Toggle_All" << "View_Measure_Clear_All";
+
+        *item << "Std_ViewFitAll" << "Std_ViewFitSelection" << "Std_DrawStyle" << StdViews << measure
+              << "Separator" << "Std_ViewDockUndockFullscreen";
+
+        if (Gui::Selection().countObjectsOfType(App::DocumentObject::getClassTypeId()) > 0) {
+            *item << "Separator" << "Std_SetAppearance" << "Std_ToggleVisibility"
+                  << "Std_ToggleSelectability" << "Std_TreeSelection"
+                  << "Std_RandomColor" << "Separator" << "Std_Delete";
+        }
+    }
+    else if (strcmp(recipient,"Tree") == 0)
+    {
+        if (Gui::Selection().countObjectsOfType(App::DocumentObject::getClassTypeId()) > 0) {
+            *item << "Std_ToggleVisibility" << "Std_ShowSelection" << "Std_HideSelection"
+                  << "Std_ToggleSelectability" << "Separator" << "Std_SetAppearance"
+                  << "Std_RandomColor" << "Std_Cut" << "Std_Copy" << "Std_Paste"
+                  << "Separator" << "Std_Delete";
+        }
+    }
+}
+
+void RBT_Workbench::createMainWindowPopupMenu(MenuItem *item) const
+{
+    *item << "Std_DlgCustomize";
+}
+
+MenuItem *RBT_Workbench::setupMenuBar() const
+{
+    // Setup the default menu bar
+    MenuItem* menuBar = new MenuItem;
+    // File
+    MenuItem* file = new MenuItem( menuBar );
+    file->setCommand("&File");
+    *file << "Std_New" << "Std_Open" << "Separator" << "Std_CloseActiveWindow"
+          << "Std_CloseAllWindows" << "Separator" << "Std_Save" << "Std_SaveAs"
+          << "Std_SaveCopy" << "Std_Revert" << "Separator" << "Std_Import"
+          << "Std_Export" << "Std_MergeProjects" << "Std_ProjectInfo"
+          << "Separator" << "Std_Print" << "Std_PrintPreview" << "Std_PrintPdf"
+          << "Separator" << "Std_RecentFiles" << "Separator" << "Std_Quit";
+    // Edit
+    MenuItem* edit = new MenuItem( menuBar );
+    edit->setCommand("&Edit");
+    *edit << "Std_Undo" << "Std_Redo" << "Separator" << "Std_Cut" << "Std_Copy"
+          << "Std_Paste" << "Std_DuplicateSelection" << "Separator"
+          << "Std_Refresh" << "Std_BoxSelection" << "Std_SelectAll" << "Std_Delete"
+          << "Separator" << "Std_Placement" /*<< "Std_TransformManip"*/ << "Std_Alignment"
+          << "Std_Edit" << "Separator" << "Std_DlgPreferences";
+    // Standard views
+    MenuItem* stdviews = new MenuItem;
+    stdviews->setCommand("Standard views");
+    *stdviews << "Std_ViewFitAll" << "Std_ViewFitSelection"
+              << "Separator" << "Std_ViewFront" << "Std_ViewTop"
+              << "Std_ViewRight" << "Separator" << "Std_ViewRear"
+              << "Std_ViewBottom" << "Std_ViewLeft"
+              << "Separator" << "Std_ViewRotateLeft" << "Std_ViewRotateRight";
+
+    // stereo
+    MenuItem* view3d = new MenuItem;
+    view3d->setCommand("&Stereo");
+    *view3d << "Std_ViewIvStereoRedGreen" << "Std_ViewIvStereoQuadBuff"
+            << "Std_ViewIvStereoInterleavedRows" << "Std_ViewIvStereoInterleavedColumns"
+            << "Std_ViewIvStereoOff" << "Separator" << "Std_ViewIvIssueCamPos";
+    // zoom
+    MenuItem* zoom = new MenuItem;
+    zoom->setCommand("&Zoom");
+    *zoom << "Std_ViewZoomIn" << "Std_ViewZoomOut" << "Separator" << "Std_ViewBoxZoom";
+
+    // Visibility
+    MenuItem* visu = new MenuItem;
+    visu->setCommand("Visibility");
+    *visu << "Std_ToggleVisibility" << "Std_ShowSelection" << "Std_HideSelection"
+          << "Separator" << "Std_ToggleObjects" << "Std_ShowObjects" << "Std_HideObjects"
+          << "Separator" << "Std_ToggleSelectability"
+          << "Separator" << "View_Measure_Toggle_All" << "View_Measure_Clear_All";
+
+    // View
+    MenuItem* view = new MenuItem( menuBar );
+    view->setCommand("&View");
+    *view << "Std_ViewCreate" << "Std_OrthographicCamera" << "Std_PerspectiveCamera" << "Separator"
+          << stdviews << "Std_FreezeViews" << "Std_DrawStyle" << "Separator" << view3d << zoom
+          << "Std_ViewDockUndockFullscreen" << "Std_AxisCross" << "Std_ToggleClipPlane"
+          << "Std_TextureMapping"
+          #ifdef BUILD_VR
+          << "Std_ViewVR"
+          #endif
+          << "Separator" << visu
+          << "Std_ToggleVisibility" << "Std_ToggleNavigation"
+          << "Std_SetAppearance" << "Std_RandomColor" << "Separator"
+          << "Std_Workbench" << "Std_ToolBarMenu" << "Std_DockViewMenu" << "Separator"
+          << "Std_ViewStatusBar";
+
+    // Tools
+    MenuItem* tool = new MenuItem( menuBar );
+    tool->setCommand("&Tools");
+    *tool << "Std_DlgParameter" << "Separator"
+          << "Std_ViewScreenShot" << "Std_SceneInspector"
+          << "Std_ProjectUtil" << "Separator"
+          << "Std_MeasureDistance" << "Separator"
+          << "Std_DemoMode" << "Std_UnitsCalculator" << "Separator" << "Std_DlgCustomize";
+
+    // Macro
+    MenuItem* macro = new MenuItem( menuBar );
+    macro->setCommand("&Macro");
+    *macro << "Std_DlgMacroRecord" << "Std_MacroStopRecord" << "Std_DlgMacroExecute"
+           << "Separator" << "Std_DlgMacroExecuteDirect" << "Std_MacroStartDebug"
+           << "Std_MacroStopDebug" << "Std_MacroStepOver" << "Std_MacroStepInto"
+           << "Std_ToggleBreakpoint";
+
+    // Windows
+    MenuItem* wnd = new MenuItem( menuBar );
+    wnd->setCommand("&Windows");
+    *wnd << "Std_ActivateNextWindow" << "Std_ActivatePrevWindow" << "Separator"
+         << "Std_TileWindows" << "Std_CascadeWindows"
+         << "Std_ArrangeIcons" << "Separator" << "Std_WindowsMenu" << "Std_Windows";
+
+    // Separator
+    MenuItem* sep = new MenuItem( menuBar );
+    sep->setCommand( "Separator" );
+
+    // Help
+    MenuItem* help = new MenuItem( menuBar );
+    help->setCommand("&Help");
+    *help << "Std_OnlineHelp" << "Std_FreeCADWebsite"
+          << "Std_FreeCADUserHub" << "Std_FreeCADPowerUserHub"
+          << "Std_PythonHelp" << "Std_FreeCADForum"
+          << "Std_FreeCADFAQ" << "Std_About" << "Std_WhatsThis";
+
+    return menuBar;
+}
+
+ToolBarItem *RBT_Workbench::setupToolBars() const
+{
+    ToolBarItem* root = new ToolBarItem;
+
+    // File
+    ToolBarItem* file = new ToolBarItem( root );
+    file->setCommand("File");
+    *file << "Std_New" << "Std_Open" << "Std_Save" << "Std_Print" << "Separator" << "Std_Cut"
+          << "Std_Copy" << "Std_Paste" << "Separator" << "Std_Undo" << "Std_Redo" << "Separator"
+          << "Std_Refresh" << "Separator" << "Std_WhatsThis";
+
+    // Workbench switcher
+    ToolBarItem* wb = new ToolBarItem( root );
+    wb->setCommand("Workbench");
+    *wb << "Std_Workbench";
+
+    // Macro
+    ToolBarItem* macro = new ToolBarItem( root );
+    macro->setCommand("Macro");
+    *macro << "Std_DlgMacroRecord" << "Std_MacroStopRecord" << "Std_DlgMacroExecute"
+           << "Std_DlgMacroExecuteDirect";
+
+    // View
+    ToolBarItem* view = new ToolBarItem( root );
+    view->setCommand("View");
+    *view << "Std_ViewFitAll" << "Std_ViewFitSelection" << "Std_DrawStyle" << "Separator" << "Std_ViewFront"
+          << "Std_ViewTop" << "Std_ViewRight" << "Separator" << "Std_ViewRear" << "Std_ViewBottom"
+          << "Std_ViewLeft" << "Separator" << "Std_MeasureDistance" ;
+    return root;
+}
+
+ToolBarItem *RBT_Workbench::setupCommandBars() const
+{
+    ToolBarItem* root = new ToolBarItem;
+
+    // View
+    ToolBarItem* view = new ToolBarItem( root );
+    view->setCommand("Standard views");
+    *view << "Std_ViewFitAll" << "Std_ViewFitSelection" << "Separator"
+          << "Std_ViewFront" << "Std_ViewRight" << "Std_ViewTop" << "Separator"
+          << "Std_ViewRear" << "Std_ViewLeft" << "Std_ViewBottom";
+    // Special Ops
+    ToolBarItem* macro = new ToolBarItem( root );
+    macro->setCommand("Special Ops");
+    *macro << "Std_DlgParameter" << "Std_DlgPreferences" << "Std_DlgMacroRecord" << "Std_MacroStopRecord"
+           << "Std_DlgMacroExecute" << "Std_DlgCustomize";
+
+    return root;
+
+}
+
+DockWindowItems *RBT_Workbench::setupDockWindows() const
+{
+    DockWindowItems* root = new DockWindowItems();
+    root->addDockWidget("TaskManagePanel", Qt::RightDockWidgetArea, true, false);
+    root->addDockWidget("Std_CombiView", Qt::LeftDockWidgetArea, false, false);
+    root->setVisibility("Std_CombiView",true);
+    //Dagview through parameter.
+    ParameterGrp::handle group = App::GetApplication().GetUserParameter().
+          GetGroup("BaseApp")->GetGroup("Preferences")->GetGroup("DockWindows")->GetGroup("DAGView");
+    bool enabled = group->GetBool("Enabled", false);
+    if (enabled)
+        root->addDockWidget("Std_DAGView", Qt::RightDockWidgetArea, false, false);
+    return root;
 }

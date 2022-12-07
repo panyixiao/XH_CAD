@@ -96,6 +96,8 @@
 #include "DlgObjectSelection.h"
 #include "Tools.h"
 
+#include "TaskManagePanel/TaskManageDockPanel.h"
+
 FC_LOG_LEVEL_INIT("MainWindow",false,true,true)
 
 #if defined(Q_OS_WIN32)
@@ -411,6 +413,14 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags f)
         pcComboView->setObjectName(QString::fromLatin1(QT_TRANSLATE_NOOP("QDockWidget","Combo View")));
         pcComboView->setMinimumWidth(150);
         pDockMgr->registerDockWindow("Std_ComboView", pcComboView);
+    }
+
+    // TaskManagePanel
+    if (hiddenDockWindows.find("TaskManagePanel") == std::string::npos) {
+        TaskManageDockPanel* tskManage_DockPanel = new TaskManageDockPanel(0,this);
+        tskManage_DockPanel->setObjectName(QString::fromLatin1(QT_TRANSLATE_NOOP("QDockWidget", "TaskManagePanel")));
+        tskManage_DockPanel->setMinimumWidth(150);
+        pDockMgr->registerDockWindow("TaskManagePanel", tskManage_DockPanel);
     }
 
     // Report view (must be created before PythonConsole!)

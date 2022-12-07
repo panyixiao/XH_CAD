@@ -166,8 +166,8 @@ int main( int argc, char ** argv )
 #endif
 
     // Name and Version of the Application
-    App::Application::Config()["ExeName"] = "FreeCAD";
-    App::Application::Config()["ExeVendor"] = "FreeCAD";
+    App::Application::Config()["ExeName"] = "X-Mind";
+    App::Application::Config()["ExeVendor"] = "XH_CAD";
     App::Application::Config()["AppDataSkipVendor"] = "true";
     App::Application::Config()["MaintainerUrl"] = "http://www.freecad.org/wiki/Main_Page";
 
@@ -176,7 +176,7 @@ int main( int argc, char ** argv )
     App::Application::Config()["AppIcon"] = "freecad";
     App::Application::Config()["SplashScreen"] = "freecadsplash";
     App::Application::Config()["AboutImage"] = "freecadabout";
-    App::Application::Config()["StartWorkbench"] = "Robot";
+    App::Application::Config()["StartWorkbench"] = "RobotWorkbench";
     //App::Application::Config()["HiddenDockWindow"] = "Property editor";
     App::Application::Config()["SplashAlignment" ] = "Bottom|Left";
     App::Application::Config()["SplashTextColor" ] = "#ffffff"; // white
