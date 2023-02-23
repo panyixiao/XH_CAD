@@ -418,78 +418,78 @@ void KinematicModel::updateJointLimitsByConfigType()
        m_JointUpperLimits_Configured.rows() < 6)
         return;
 
-    double initPose[6] = {0.0, 0.0, M_PI/2, M_PI/2, 0.0, 0.0};
+//    double initPose[6] = {0.0, 0.0, M_PI/2, M_PI/2, 0.0, 0.0};
 
-    // TODO: Need to Consider about Joint Initial Position
-    bool flag_Nonflip, flag_RhtSide, flag_UpElbow;
-    switch(m_ConfigType){
-    case ConfigType::NON:
-        break;
-    case ConfigType::NRU:
-        flag_Nonflip = true;
-        flag_RhtSide = true;
-        flag_UpElbow = true;
-        break;
-    case ConfigType::NRD:
-        flag_Nonflip = true;
-        flag_RhtSide = true;
-        flag_UpElbow = false;
-        break;
-    case ConfigType::NLU:
-        flag_Nonflip = true;
-        flag_RhtSide = false;
-        flag_UpElbow = true;
-        break;
-    case ConfigType::NLD:
-        flag_Nonflip = true;
-        flag_RhtSide = false;
-        flag_UpElbow = false;
-        break;
-    case ConfigType::FRU:
-        flag_Nonflip = false;
-        flag_RhtSide = true;
-        flag_UpElbow = true;
-        break;
-    case ConfigType::FRD:
-        flag_Nonflip = false;
-        flag_RhtSide = true;
-        flag_UpElbow = false;
-        break;
-    case ConfigType::FLU:
-        flag_Nonflip = false;
-        flag_RhtSide = false;
-        flag_UpElbow = true;
-        break;
-    case ConfigType::FLD:
-        flag_Nonflip = false;
-        flag_RhtSide = false;
-        flag_UpElbow = false;
-        break;
-    }
+//    // TODO: Need to Consider about Joint Initial Position
+//    bool flag_Nonflip, flag_RhtSide, flag_UpElbow;
+//    switch(m_ConfigType){
+//    case ConfigType::NON:
+//        break;
+//    case ConfigType::NRU:
+//        flag_Nonflip = true;
+//        flag_RhtSide = true;
+//        flag_UpElbow = true;
+//        break;
+//    case ConfigType::NRD:
+//        flag_Nonflip = true;
+//        flag_RhtSide = true;
+//        flag_UpElbow = false;
+//        break;
+//    case ConfigType::NLU:
+//        flag_Nonflip = true;
+//        flag_RhtSide = false;
+//        flag_UpElbow = true;
+//        break;
+//    case ConfigType::NLD:
+//        flag_Nonflip = true;
+//        flag_RhtSide = false;
+//        flag_UpElbow = false;
+//        break;
+//    case ConfigType::FRU:
+//        flag_Nonflip = false;
+//        flag_RhtSide = true;
+//        flag_UpElbow = true;
+//        break;
+//    case ConfigType::FRD:
+//        flag_Nonflip = false;
+//        flag_RhtSide = true;
+//        flag_UpElbow = false;
+//        break;
+//    case ConfigType::FLU:
+//        flag_Nonflip = false;
+//        flag_RhtSide = false;
+//        flag_UpElbow = true;
+//        break;
+//    case ConfigType::FLD:
+//        flag_Nonflip = false;
+//        flag_RhtSide = false;
+//        flag_UpElbow = false;
+//        break;
+//    }
 
-    if(flag_Nonflip){
-        m_JointLowerLimits_Configured.data(4) = 0.1 - initPose[4];
-        m_JointUpperLimits_Configured.data(4) = std::min(M_PI - initPose[4], m_JointUpperLimits.data(4));
-    }else{
-        m_JointLowerLimits_Configured.data(4) = std::max(-M_PI + initPose[4], m_JointLowerLimits.data(4));
-        m_JointUpperLimits_Configured.data(4) = 0.1 + initPose[4];
-    }
+//    if(flag_Nonflip){
+//        m_JointLowerLimits_Configured.data(4) = 0.1 - initPose[4];
+//        m_JointUpperLimits_Configured.data(4) = std::min(M_PI - initPose[4], m_JointUpperLimits.data(4));
+//    }else{
+//        m_JointLowerLimits_Configured.data(4) = std::max(-M_PI + initPose[4], m_JointLowerLimits.data(4));
+//        m_JointUpperLimits_Configured.data(4) = 0.1 + initPose[4];
+//    }
 
-    if(flag_RhtSide){
-        m_JointLowerLimits_Configured.data(3) = 0 - initPose[3];
-        m_JointUpperLimits_Configured.data(3) = std::min(M_PI - initPose[3], m_JointUpperLimits.data(3));
-    }else{
-        m_JointLowerLimits_Configured.data(3) = std::max(-M_PI + initPose[3], m_JointLowerLimits.data(3));
-        m_JointUpperLimits_Configured.data(3) = 0 + initPose[3];
-    }
+//    if(flag_RhtSide){
+//        m_JointLowerLimits_Configured.data(3) = 0 - initPose[3];
+//        m_JointUpperLimits_Configured.data(3) = std::min(M_PI - initPose[3], m_JointUpperLimits.data(3));
+//    }else{
+//        m_JointLowerLimits_Configured.data(3) = std::max(-M_PI + initPose[3], m_JointLowerLimits.data(3));
+//        m_JointUpperLimits_Configured.data(3) = 0 + initPose[3];
+//    }
 
-    if(flag_UpElbow){
-        m_JointLowerLimits_Configured.data(2) = 0 - initPose[2];
-        m_JointUpperLimits_Configured.data(2) = std::min(M_PI - initPose[2], m_JointUpperLimits.data(2));
-    }else{
-        m_JointLowerLimits_Configured.data(2) = std::max(-M_PI + initPose[2], m_JointLowerLimits.data(2));
-        m_JointUpperLimits_Configured.data(2) = 0 + initPose[2];
-    }
+//    if(flag_UpElbow){
+//        m_JointLowerLimits_Configured.data(2) = 0 - initPose[2];
+//        m_JointUpperLimits_Configured.data(2) = std::min(M_PI - initPose[2], m_JointUpperLimits.data(2));
+//    }else{
+//        m_JointLowerLimits_Configured.data(2) = std::max(-M_PI + initPose[2], m_JointLowerLimits.data(2));
+//        m_JointUpperLimits_Configured.data(2) = 0 + initPose[2];
+//    }
 }
 
 bool KinematicModel::setJointAngle(int j_ID,double Value)

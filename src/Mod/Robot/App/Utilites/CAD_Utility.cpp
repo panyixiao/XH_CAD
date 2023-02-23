@@ -550,11 +550,11 @@ X_Normal CAD_Utility::getAverageNorm(const X_Normal &norm_1, const X_Normal &nor
   return norm_ret;
 }
 
-//#include < Geom_Circle.hxx>
-//#include < Handle_Geom_Circle.hxx>
-//#include < Standard_Type.hxx>
-//#include < gp_Ax1.hxx>
-//#include < gp_Circ.hxx>
+//#include <Geom_Circle.hxx>
+//#include <Handle_Geom_Circle.hxx>
+//#include <Standard_Type.hxx>
+//#include <gp_Ax1.hxx>
+//#include <gp_Circ.hxx>
 // Base::Placement CAD_Utility::getCurveCenterPnt(const TopoDS_Edge &t_edge) {
 //  Base::Placement result;
 //  double first, last;

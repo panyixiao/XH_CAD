@@ -1,4 +1,5 @@
-#include "Mod/Robot/App/PreCompiled.h"
+// #include <Mod/Robot/App/PreCompiled.h>
+#include <Mod/Robot/App/PreCompiled.h>
 #ifndef _PreComp_
 #endif
 
@@ -8,9 +9,6 @@
 #include <StlAPI.hxx>
 //#include <oce/TopLoc_Location.hxx>
 #include <gp_Trsf.hxx>
-
-//#include <g3log/rlog.h>
-
 #include "DS_Utility.h"
 using namespace Robot;
 using namespace std;

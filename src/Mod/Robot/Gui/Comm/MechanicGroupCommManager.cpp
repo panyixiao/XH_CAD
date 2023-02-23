@@ -35,16 +35,11 @@ int ControllerTcpConnector::init()
         return -1;
     }
 
-    connect(tcpClient, SIGNAL(connected()),
-            this, SLOT(onConnected()));
-    connect(tcpClient, SIGNAL(disconnected()),
-            this, SLOT(onDisconnected()));
-    connect(tcpClient, SIGNAL(readyRead()),
-            this, SLOT(onReadData()));
-    connect(tcpClient, SIGNAL(error(QAbstractSocket::SocketError)),
-            this, SLOT(onSocketError(QAbstractSocket::SocketError)));
-    connect(&reconnectTimer, SIGNAL(timeout()),
-            this, SLOT(onReconnectTimer()));
+    connect(tcpClient, SIGNAL(connected()), this, SLOT(onConnected()));
+    connect(tcpClient, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
+    connect(tcpClient, SIGNAL(readyRead()), this, SLOT(onReadData()));
+    connect(tcpClient, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onSocketError(QAbstractSocket::SocketError)));
+    connect(&reconnectTimer, SIGNAL(timeout()), this, SLOT(onReconnectTimer()));
     return 0;
 }
 

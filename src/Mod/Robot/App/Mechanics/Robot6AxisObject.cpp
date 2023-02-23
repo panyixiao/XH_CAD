@@ -30,7 +30,6 @@ Robot6AxisObject::Robot6AxisObject()
     ADD_PROPERTY_TYPE(Visible,(true),"Property",Prop_None,"Is Robot Visiable");
 
     ADD_PROPERTY_TYPE(File_URDF,(""),"Files",Prop_None,"Included file with robot definition about robot model");
-//    ADD_PROPERTY_TYPE(File_LinkMesh,(0),"Files",Prop_None,"Included file with mesh path definition of the robot links");
 
     ADD_PROPERTY_TYPE(ExternalAxisName,(""),"Property",Prop_None,"The Name of Assembled External Axis");
     ADD_PROPERTY_TYPE(Pose_Reference,(Base::Placement()),"Property",Prop_None,"Pose of Reference Origin");
