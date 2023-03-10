@@ -120,32 +120,77 @@ private:
             throw Py::Exception();
         }
         t_RobotPtr->File_URDF.setValue(t_ItemInfo.model_FilePath.c_str());
-//        PyMem_Free(Name);
-//        Base::FileInfo file(EncodedName.c_str());
-//        if (file.extension().empty())
-//          throw Py::RuntimeError("No file extension");
-
-//        auto result = PartUtility::importCADFile(pcDoc, EncodedName.c_str());
-//        if (result) {
-//          auto objPtr = pcDoc->getObject(result->getNameInDocument());
-//          if (objPtr != nullptr &&
-//              objPtr->isDerivedFrom(Robot::PlanningObject::getClassTypeId())) {
-//            auto planningObj = dynamic_cast<Robot::PlanningObject *>(objPtr);
-//  //          planningObj->insertIntoCollisionWorld();
-//          } else {
-//            Base::Console().Error("Can't Find Object in Document\n");
-//            Base::Console().Message("Suggestion: Change Object name without numbers and try again.\n");
-//          }
-//        };
         return Py::None();
     }
 
     Py::Object insert_Poser(const Py::Tuple & args){
-
+        char *ModelInfo;
+        const char*DocName;
+        if (!PyArg_ParseTuple(args.ptr(), "ets","utf-8",
+                              &ModelInfo,
+                              &DocName))
+            throw Py::Exception();
+        App::Document *pcDoc = App::GetApplication().getDocument(DocName);
+        if (!pcDoc) {
+          pcDoc = App::GetApplication().newDocument(DocName);
+        }
+        std::vector<string> result;
+        DS_Utility::split(std::string(ModelInfo),'_',result);
+        if(result.size()!=2){
+            std::string msg = "Invalid Modelinfo segment: " + std::string(ModelInfo) + "\n";
+            Base::Console().Error(msg.c_str());
+            throw Py::Exception();
+        }
+        auto ModelBrand = result[0];
+        auto ModelName = result[1];
+        auto t_ItemInfo = m_ModelDatabase.getTargetPoserItemInfo(ModelBrand,ModelName);
+        if(t_ItemInfo.model_Name.empty()){
+            std::string msg = "Failed to get" + std::string(ModelBrand) + " " + ModelName + " from Database\n";
+            Base::Console().Error(msg.c_str());
+            throw Py::Exception();
+        }
+        auto t_RobotPtr = static_cast<Robot::MechanicDevice*>(pcDoc->addObject("Robot::MechanicDevice",ModelName.c_str()));
+        if(t_RobotPtr == nullptr){
+            Base::Console().Error("Failed to insert Robot Object into Document\n");
+            throw Py::Exception();
+        }
+        t_RobotPtr->File_URDF.setValue(t_ItemInfo.model_FilePath.c_str());
+        return Py::None();
     }
 
     Py::Object insert_ExtAx(const Py::Tuple & args){
-
+        char *ModelInfo;
+        const char*DocName;
+        if (!PyArg_ParseTuple(args.ptr(), "ets","utf-8",
+                              &ModelInfo,
+                              &DocName))
+            throw Py::Exception();
+        App::Document *pcDoc = App::GetApplication().getDocument(DocName);
+        if (!pcDoc) {
+          pcDoc = App::GetApplication().newDocument(DocName);
+        }
+        std::vector<string> result;
+        DS_Utility::split(std::string(ModelInfo),'_',result);
+        if(result.size()!=2){
+            std::string msg = "Invalid Modelinfo segment: " + std::string(ModelInfo) + "\n";
+            Base::Console().Error(msg.c_str());
+            throw Py::Exception();
+        }
+        auto ModelBrand = result[0];
+        auto ModelName = result[1];
+        auto t_ItemInfo = m_ModelDatabase.getTargetExtAxItemInfo(ModelBrand,ModelName);
+        if(t_ItemInfo.model_Name.empty()){
+            std::string msg = "Failed to get" + std::string(ModelBrand) + " " + ModelName + " from Database\n";
+            Base::Console().Error(msg.c_str());
+            throw Py::Exception();
+        }
+        auto t_RobotPtr = static_cast<Robot::MechanicDevice*>(pcDoc->addObject("Robot::MechanicDevice",ModelName.c_str()));
+        if(t_RobotPtr == nullptr){
+            Base::Console().Error("Failed to insert Robot Object into Document\n");
+            throw Py::Exception();
+        }
+        t_RobotPtr->File_URDF.setValue(t_ItemInfo.model_FilePath.c_str());
+        return Py::None();
     }
 
     Py::Object insert_CAD(const Py::Tuple &args) {

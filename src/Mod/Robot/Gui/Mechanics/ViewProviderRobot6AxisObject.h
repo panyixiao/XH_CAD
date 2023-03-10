@@ -70,7 +70,7 @@ public:
 protected:
     void DraggerMotionCallback(InteractiveDragger *t_dragger);
     void DraggerFinishCallback(InteractiveDragger *t_dragger);
-    bool generateLinkMeshNodes(const char *FileName);
+//    bool generateLinkMeshNodes(const char *FileName);
     bool generateLinkMeshNodes_fromURDF(const char *urdf_FilePath);
     bool updatelinkmeshPoses(const Base::Placement &basePose);
     bool callbackRegistered();

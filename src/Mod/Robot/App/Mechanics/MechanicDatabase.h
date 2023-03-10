@@ -121,7 +121,11 @@ public:
     MechanicDatabase(void);
     virtual ~MechanicDatabase();
     const RobotModelInfo getTargetRobotItemInfo(const std::string t_brandName,
-                                                 const std::string t_ModelName);
+                                                const std::string t_ModelName);
+    const PoserModelInfo getTargetPoserItemInfo(const std::string t_brandName,
+                                                const std::string t_ModelName);
+    const ExtAxModelInfo getTargetExtAxItemInfo(const std::string t_brandName,
+                                                const std::string t_ModelName);
     const std::vector<RobotBrand> getAvailableRobotBrands() const;
     const std::vector<PoserBrand> getAvailablePoserBrands() const;
     const std::vector<ExtAxBrand> getAvailableExtAxBrands() const;

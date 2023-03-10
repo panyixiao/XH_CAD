@@ -43,11 +43,47 @@ const RobotModelInfo MechanicDatabase::getTargetRobotItemInfo(const string t_bra
     auto result = m_Database_Robot.find(t_Brand);
     if(result==m_Database_Robot.end())
         return t_robotModelInfo;
-    for(auto item : result->second){
+    for(auto& item : result->second){
         if(item.model_Name == t_ModelName)
             t_robotModelInfo = item;
     }
     return t_robotModelInfo;
+}
+
+const PoserModelInfo MechanicDatabase::getTargetPoserItemInfo(const std::string t_brandName, const std::string t_ModelName)
+{
+    PoserModelInfo t_poserModelInfo = PoserModelInfo("", PoserType::_CType,0,0,"");
+    PoserBrand t_Brand;
+    for(uint i = 0; i < m_Database_Poser.size(); i++){
+        if(std::string(PoserBrand_str[i]) == t_brandName)
+            t_Brand = (PoserBrand)i;
+    }
+    auto result = m_Database_Poser.find(t_Brand);
+    if(result==m_Database_Poser.end())
+        return t_poserModelInfo;
+    for(auto& item : result->second){
+        if(item.model_Name == t_ModelName)
+            t_poserModelInfo = item;
+    }
+    return t_poserModelInfo;
+}
+
+const ExtAxModelInfo MechanicDatabase::getTargetExtAxItemInfo(const std::string t_brandName, const std::string t_ModelName)
+{
+    ExtAxModelInfo t_extAxModelInfo = ExtAxModelInfo("", ExtAxType::_RotateStation,0,0,"");
+    ExtAxBrand t_Brand;
+    for(uint i = 0; i < m_Database_ExtAx.size(); i++){
+        if(std::string(ExtAxBrand_str[i]) == t_brandName)
+            t_Brand = (ExtAxBrand)i;
+    }
+    auto result = m_Database_ExtAx.find(t_Brand);
+    if(result==m_Database_ExtAx.end())
+        return t_extAxModelInfo;
+    for(auto& item : result->second){
+        if(item.model_Name == t_ModelName)
+            t_extAxModelInfo = item;
+    }
+    return t_extAxModelInfo;
 }
 
 const std::vector<RobotBrand> MechanicDatabase::getAvailableRobotBrands() const
@@ -267,7 +303,7 @@ const std::vector<ExtAxModelInfo> MechanicDatabase::getParaMatched_ExtAxs(const 
     std::vector<ExtAxModelInfo> result;
     auto iter = m_Database_ExtAx.find(t_Brand);
     if(iter != m_Database_ExtAx.end()){
-        for(auto item : iter->second){
+        for(auto& item : iter->second){
             if(item.model_Type == t_Type &&
                t_dof==0?true:item.model_dof == t_dof &&
                t_payload==0?true:item.model_payload == t_payload){
@@ -284,14 +320,14 @@ void MechanicDatabase::append_RobotData()
     auto resPath = App::GetApplication().getResourceDir();
 
     std::vector<RobotModelInfo> kawasaki_models;
-    kawasaki_models.push_back(RobotModelInfo(std::string("ba006n"), RobotType::_Standard, 6, 5.0, resPath+std::string("Mod/Robot/Lib/RobotModel/Kawasaki/BA006N/kawasaki_ba006n.urdf")));
-    kawasaki_models.push_back(RobotModelInfo(std::string("ba006n_l"), RobotType::_Standard, 6, 7.0, resPath+std::string("")));
-    kawasaki_models.push_back(RobotModelInfo(std::string("rs007l"), RobotType::_Standard, 6, 5.0, resPath+std::string("Mod/Robot/Lib/RobotModel/Kawasaki/RS007L/RS007L.urdf")));
+    kawasaki_models.push_back(RobotModelInfo(std::string("ba006n"), RobotType::_Standard, 6, 5.0, resPath+std::string("Mod/Robot/Lib/Model/Robot/Kawasaki/BA006N/kawasaki_ba006n.urdf")));
+//    kawasaki_models.push_back(RobotModelInfo(std::string("ba006n_l"), RobotType::_Standard, 6, 7.0, resPath+std::string("")));
+    kawasaki_models.push_back(RobotModelInfo(std::string("rs007l"), RobotType::_Standard, 6, 5.0, resPath+std::string("Mod/Robot/Lib/Model/Robot/Kawasaki/RS007L/RS007L.urdf")));
 
     std::vector<RobotModelInfo> moka_models;
-    moka_models.push_back(RobotModelInfo(std::string("MR07S_930"), RobotType::_Standard, 6, 7.0, resPath+std::string("Mod/Robot/Lib/RobotModel/MOKA/MR07S-930/MR07S_930.urdf")));
-    moka_models.push_back(RobotModelInfo(std::string("MR10_1440"), RobotType::_Standard, 6, 10.0, resPath+std::string("Mod/Robot/Lib/RobotModel/MOKA/MR10-1440/MR10_1440.urdf")));
-    moka_models.push_back(RobotModelInfo(std::string("MR12_2010"), RobotType::_Standard, 6, 12.0, resPath+std::string("Mod/Robot/Lib/RobotModel/MOKA/MR12-2010/MR12_2010.urdf")));
+    moka_models.push_back(RobotModelInfo(std::string("MR07S-930"), RobotType::_Standard, 6, 7.0, resPath+std::string("Mod/Robot/Lib/Model/Robot/MOKA/MR07S-930/MR07S_930.urdf")));
+//    moka_models.push_back(RobotModelInfo(std::string("MR10-1440"), RobotType::_Standard, 6, 10.0, resPath+std::string("Mod/Robot/Lib/Model/Robot/MOKA/MR10-1440/MR10_1440.urdf")));   // Link5 有问题
+//    moka_models.push_back(RobotModelInfo(std::string("MR12-2010"), RobotType::_Standard, 6, 12.0, resPath+std::string("Mod/Robot/Lib/Model/Robot/MOKA/MR12-2010/MR12_2010.urdf")));   // Link1/3 显示不出来
 
     m_Database_Robot.insert(std::make_pair(RobotBrand::Kawasaki,kawasaki_models));
     m_Database_Robot.insert(std::make_pair(RobotBrand::MOKA,moka_models));
@@ -299,18 +335,19 @@ void MechanicDatabase::append_RobotData()
 
 void MechanicDatabase::append_PoserData()
 {
+    auto resPath = App::GetApplication().getResourceDir();
     std::vector<PoserModelInfo> Meric_models;
-    Meric_models.push_back(PoserModelInfo(std::string("Meric_2LPositioner"), PoserType::_LType, 2, 100.0,std::string("/home/yix/model/Poser/Meric/2Dof/_LType/_200kg/L_Type_2AxisPositioner_NoGripper.urdf")));
-    Meric_models.push_back(PoserModelInfo(std::string("Meric_2HPositioner"), PoserType::_LType, 2, 900.0,std::string("/home/yix/model/Poser/Meric/2Dof/_LType/_500kg/2AxisPositioner.urdf")));
+    Meric_models.push_back(PoserModelInfo(std::string("2AxisPositioner"), PoserType::_LType, 2, 100.0,resPath+std::string("Mod/Robot/Lib/Model/Poser/2Axis/L-Type/200kg/2AxisPositioner/2AxisPositioner.urdf")));
+    Meric_models.push_back(PoserModelInfo(std::string("2AxisPositioner(NoGripper)"), PoserType::_LType, 2, 900.0,resPath+std::string("Mod/Robot/Lib/Model/Poser/2Axis/L-Type/500kg/2AxisPositioner_NoGripper/2AxisPositioner_NoGripper.urdf")));
 
     m_Database_Poser.insert(std::make_pair(PoserBrand::Meric, Meric_models));
 }
 
 void MechanicDatabase::append_ExtAxData()
 {
+    auto resPath = App::GetApplication().getResourceDir();
     std::vector<ExtAxModelInfo> Customized_models;
-    Customized_models.push_back(ExtAxModelInfo(std::string("Fork_Lift"), ExtAxType::_ComposeSystem, 2, 500.0, std::string("")));
-
+    Customized_models.push_back(ExtAxModelInfo(std::string("RotateBase"), ExtAxType::_RotateStation, 1, 500.0, resPath+std::string("Mod/Robot/Lib/Model/ExtAx/RotateBase/RotateBase.urdf")));
     m_Database_ExtAx.insert(std::make_pair(ExtAxBrand::Customize, Customized_models));
 }
 

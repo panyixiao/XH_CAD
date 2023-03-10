@@ -28,7 +28,6 @@ MechanicDevice::MechanicDevice()
     ADD_PROPERTY_TYPE(Visiable,(true),"Property",Prop_None,"Is Robot Visiable");
 
     ADD_PROPERTY_TYPE(File_URDF,(0),"Files",Prop_None,"Included file with robot definition about robot model");
-    ADD_PROPERTY_TYPE(File_Mesh,(0),"Files",Prop_None,"Included file with mesh path definition of the robot links");
 
     ADD_PROPERTY_TYPE(OriginReference,(""),"Robot Kinematic",Prop_None,"The Name of Origin Reference");
     ADD_PROPERTY_TYPE(Pose_Ref2Base,(Base::Placement()),"Robot kinematic",Prop_None,"Base placement of the robot");

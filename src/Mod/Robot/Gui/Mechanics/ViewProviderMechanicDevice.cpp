@@ -12,7 +12,8 @@
 # include <Inventor/draggers/SoJackDragger.h>
 # include <Inventor/draggers/SoTrackballDragger.h>
 # include <Inventor/VRMLnodes/SoVRMLTransform.h>
-# include <QFile>
+#include <QFile>
+#include <QFileInfo>
 #endif
 
 #include <Mod/Robot/App/Mechanics/MechanicDevice.h>
@@ -56,38 +57,49 @@ ViewProviderMechanicDevice::ViewProviderMechanicDevice()
     m_TcpRoot->ref();
 }
 
-bool ViewProviderMechanicDevice::generateLinkMeshNodes_fromFile(const char *FileName)
+bool ViewProviderMechanicDevice::generateLinkMeshNodes_fromURDF(const char *urdf_FilePath)
 {
-    // Read Link Mesh File Path
-    std::ifstream in(FileName);
-    if(!in)
-      return false;
-    std::vector<std::string> split_1, split_2;
-    // over read the header
-    std::string tmp_line;
+//    // Read Link Mesh File Path
+//    std::ifstream in(urdf_FilePath);
+//    if(!in)
+//      return false;
+//    std::vector<std::string> split_1, split_2;
+//    // over read the header
+//    std::string tmp_line;
 
-    std::map<std::string, std::string> linkMeshPath;
+//    std::map<std::string, std::string> linkMeshPath;
 
-    // Readin mesh file path and initial Poses
-    while(std::getline(in, tmp_line)){
-        Robot::DS_Utility::split(tmp_line,',',split_1);
-        if(split_1.size() == 2){
-            Robot::DS_Utility::split(split_1[1], ';', split_2);
-            if(split_2.size() == 2){
-                linkMeshPath.insert(std::make_pair(split_1[0],split_2[0]));
-            }
-        }
-        split_1.clear();
-        split_2.clear();
-    }
+//    // Readin mesh file path and initial Poses
+//    while(std::getline(in, tmp_line)){
+//        Robot::DS_Utility::split(tmp_line,',',split_1);
+//        if(split_1.size() == 2){
+//            Robot::DS_Utility::split(split_1[1], ';', split_2);
+//            if(split_2.size() == 2){
+//                linkMeshPath.insert(std::make_pair(split_1[0],split_2[0]));
+//            }
+//        }
+//        split_1.clear();
+//        split_2.clear();
+//    }
 
     Robot::MechanicDevice* t_Positioner = static_cast<Robot::MechanicDevice*>(pcObject);
+    auto urdfFileInfo = QFileInfo(QString::fromLocal8Bit(urdf_FilePath));
 
     int linkID = 0;
     // Generate Link Group
-    for(const auto& linkMeshInfo : linkMeshPath){
-        auto& linkName = linkMeshInfo.first;
-        auto& meshPath = linkMeshInfo.second;
+    for(const auto& linkName : t_Positioner->getKinematicModelRef().getLinkNames()){
+        std::string meshPath;
+        auto path_1 = urdfFileInfo.absolutePath().toStdString() + "/meshes/" + linkName +".stl";
+        auto path_2 = urdfFileInfo.absolutePath().toStdString() + "/meshes/" + linkName +".STL";
+        if(QFile(QString::fromStdString(path_1)).exists())
+            meshPath = path_1;
+        else if(QFile(QString::fromStdString(path_2)).exists())
+            meshPath = path_2;
+        if(meshPath.empty()){
+            std::string warning = "Can't find stl/STL file for link " + linkName +"\n";
+            Base::Console().Warning(warning.c_str());
+            continue;
+        }
         std::string msg = string("Loading ") + linkName + string(" mesh file from ") +
                          meshPath + string("\n");
         Base::Console().Message(msg.c_str());
@@ -241,8 +253,8 @@ bool ViewProviderMechanicDevice::doubleClicked()
 void ViewProviderMechanicDevice::updateData(const App::Property* prop)
 {
     Robot::MechanicDevice* t_Positioner = static_cast<Robot::MechanicDevice*>(pcObject);
-    if (prop == &t_Positioner->File_Mesh) {
-        generateLinkMeshNodes_fromFile(t_Positioner->File_Mesh.getValue());
+    if (prop == &t_Positioner->File_URDF) {
+        generateLinkMeshNodes_fromURDF(t_Positioner->File_URDF.getValue());
         t_Positioner->updateAxisValues();
     }
 

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="L_Type_2AxisPositioner_WithGripper">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.11073 -0.47942 3.8153E-06"
+        rpy="0 0 0" />
+      <mass
+        value="152.28" />
+      <inertia
+        ixx="15.977"
+        ixy="-0.095287"
+        ixz="-1.276E-05"
+        iyy="11.261"
+        iyz="-0.00030094"
+        izz="12.763" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://L_Type_2AxisPositioner_WithGripper/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://L_Type_2AxisPositioner_WithGripper/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="Link1">
+    <inertial>
+      <origin
+        xyz="0.70126 0.1451 -0.0077132"
+        rpy="0 0 0" />
+      <mass
+        value="238.4" />
+      <inertia
+        ixx="17.744"
+        ixy="3.85"
+        ixz="-0.16029"
+        iyy="40.309"
+        iyz="-0.18233"
+        izz="35.656" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://L_Type_2AxisPositioner_WithGripper/meshes/Link1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://L_Type_2AxisPositioner_WithGripper/meshes/Link1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint1"
+    type="continuous">
+    <origin
+      xyz="0.067 0 0"
+      rpy="1.6099 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="Link1" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="0"
+      velocity="0.314" />
+  </joint>
+  <link
+    name="Link2">
+    <inertial>
+      <origin
+        xyz="-3.2424E-05 -0.1704 0.0065449"
+        rpy="0 0 0" />
+      <mass
+        value="96.599" />
+      <inertia
+        ixx="3.7386"
+        ixy="0.009205"
+        ixz="0.23529"
+        iyy="7.375"
+        iyz="-0.14341"
+        izz="3.7155" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://L_Type_2AxisPositioner_WithGripper/meshes/Link2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://L_Type_2AxisPositioner_WithGripper/meshes/Link2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint2"
+    type="continuous">
+    <origin
+      xyz="1.9979 -0.00078195 -0.019985"
+      rpy="0 0 0" />
+    <parent
+      link="Link1" />
+    <child
+      link="Link2" />
+    <axis
+      xyz="0 0.99924 -0.039098" />
+    <limit
+      lower="-6.28"
+      upper="6.28"
+      effort="0"
+      velocity="0.628" />
+  </joint>
+</robot>

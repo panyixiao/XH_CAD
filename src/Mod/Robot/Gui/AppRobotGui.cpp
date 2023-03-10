@@ -31,15 +31,10 @@
 
 
 // use a different name to CreateCommand()
-void CreateRobotCommands(void);
-void CreateRobotCommandsExport(void);
-void CreateRobotCommandsInsertRobots(void);
-void CreateRobotCommandsTrajectory(void);
-void CreateModelOperationCommands(void);
 void CreateRobotCommandsToolOperation(void);
-void CreateRobotCommandsMechanicsOperation(void);
-void CreateRobotCommandsTaskManagement(void);
-void CreateRobotCommandsToolAssemble(void);
+void CreateRobotCommandsMechOperation(void);
+void CreateRobotCommandsModelOperation(void);
+void CreateRobotCommandsTaskOperation(void);
 
 void loadRobotResource()
 {
@@ -90,20 +85,20 @@ PyMOD_INIT_FUNC(RobotGui)
 //    Base::Console().Log("Loading GUI of Robot module... done\n");
 
     // instantiating the commands
-    CreateRobotCommands();
-    CreateRobotCommandsExport();
-    CreateRobotCommandsTrajectory();
-    CreateModelOperationCommands();
+//    CreateRobotCommands();
+//    CreateRobotCommandsExport();
+//    CreateRobotCommandsTrajectory();
+//    CreateModelOperationCommands();
 
     /// New Commands
-    CreateRobotCommandsMechanicsOperation();
-    CreateRobotCommandsTaskManagement();
+    CreateRobotCommandsMechOperation();
+    CreateRobotCommandsTaskOperation();
     CreateRobotCommandsToolOperation();
-    CreateRobotCommandsToolAssemble();
+    CreateRobotCommandsModelOperation();
+//    CreateRobotCommandsToolAssemble();
 
     // addition objects
     RobotGui::Workbench                      ::init();
-//    Gui::SoFCCSysDragger                     ::initClass();
 
     // Mechanics
     RobotGui::ViewProviderRobot6AxisObject   ::init();

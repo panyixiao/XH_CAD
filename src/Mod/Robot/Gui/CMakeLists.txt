@@ -61,14 +61,10 @@ SOURCE_GROUP("Module" FILES ${RobotGui_SRC_Module})
 
 
 SET(RobotGui_SRC_Commands
-    Commands/Command.cpp
-    Commands/CommandTool.cpp
-    Commands/CommandTrajectory.cpp
-    Commands/CommandInsertRobot.cpp
-    Commands/CommandInsertModel.cpp
-    Commands/CommandExport.cpp
-    Commands/CommandRobot.cpp
-    Commands/CommandJob.cpp
+    Commands/CommandTools.cpp
+    Commands/CommandModels.cpp
+    Commands/CommandMechs.cpp
+    Commands/CommandTasks.cpp
 )
 SOURCE_GROUP("Commands" FILES ${RobotGui_SRC_Commands})
 

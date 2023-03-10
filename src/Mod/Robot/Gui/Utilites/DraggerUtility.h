@@ -2,6 +2,7 @@
 #ifndef DRAGGER_UTILITY_H
 #define DRAGGER_UTILITY_H
 
+#include <Mod/Robot/Gui/PreCompiled.h>
 #include <Base/Placement.h>
 #include <Gui/SoFCCSysDragger.h>
 #include <Gui/ViewProvider.h>

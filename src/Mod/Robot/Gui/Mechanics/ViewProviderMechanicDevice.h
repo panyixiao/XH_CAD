@@ -44,7 +44,7 @@ public:
 protected:
     void DraggerMotionCallback(InteractiveDragger *t_dragger);
     void DraggerFinishCallback(InteractiveDragger *t_dragger);
-    bool generateLinkMeshNodes_fromFile(const char *FileName);
+    bool generateLinkMeshNodes_fromURDF(const char *FileName);
     bool updatelinkmeshPoses();
     bool callbackRegistered();
 

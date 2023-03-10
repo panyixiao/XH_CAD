@@ -7,6 +7,7 @@
 #include <App/GeoFeature.h>
 #include <App/Placement.h>
 #include <Base/Placement.h>
+#include <Mod/Robot/App/PreCompiled.h>
 
 //using namespace RD;
 namespace Robot {
