@@ -105,9 +105,10 @@ bool KinematicModel::readURDFfiles(const char *FileName)
     m_RobotModel = urdf::parseURDFFile(std::string(FileName));
     if(m_RobotModel==nullptr)
         return false;
-    if(updateKDLChain())
-        setKinematicModelConfig(ConfigType::NON);
-    return false;
+//    if(updateKDLChain())
+//        setKinematicModelConfig(ConfigType::NON);
+//    return true;
+    return updateKDLChain();
 }
 
 bool KinematicModel::updateKDLChain()

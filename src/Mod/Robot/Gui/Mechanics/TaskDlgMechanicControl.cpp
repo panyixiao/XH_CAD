@@ -22,35 +22,35 @@ using namespace RobotGui;
 
 TaskDlgMechanicControl::TaskDlgMechanicControl(Robot::Robot6AxisObject *targetRobot,
                                                QWidget *parent): TaskDialog() {
-  if (targetRobot == nullptr)
-    return;
-  m_DocPtr = targetRobot->getDocument();
-  // Face Selection
-  auto m_FaceSelection = new Gui::TaskView::TaskSelectLinkProperty("SELECT Part::Feature SUBELEMENT Face COUNT 1",
-                                                              &(targetRobot->LinkedFaceFeature));
-  m_FaceSelection->hide();
-  // Edge Selection
-  auto m_EdgeSelection = new Gui::TaskView::TaskSelectLinkProperty("SELECT Part::Feature SUBELEMENT Edge COUNT 1",
-                                                              &(targetRobot->LinkedEdgeFeature));
-  m_EdgeSelection->hide();
+//  if (targetRobot == nullptr)
+//    return;
+//  m_DocPtr = targetRobot->getDocument();
+//  // Face Selection
+//  auto m_FaceSelection = new Gui::TaskView::TaskSelectLinkProperty("SELECT Part::Feature SUBELEMENT Face COUNT 1",
+//                                                              &(targetRobot->LinkedFaceFeature));
+//  m_FaceSelection->hide();
+//  // Edge Selection
+//  auto m_EdgeSelection = new Gui::TaskView::TaskSelectLinkProperty("SELECT Part::Feature SUBELEMENT Edge COUNT 1",
+//                                                              &(targetRobot->LinkedEdgeFeature));
+//  m_EdgeSelection->hide();
 
-  Content.push_back(m_FaceSelection);
-  Content.push_back(m_EdgeSelection);
+//  Content.push_back(m_FaceSelection);
+//  Content.push_back(m_EdgeSelection);
 
-  auto t_RobotPanel = new TaskBoxRobotTeachPanel(targetRobot,
-                                                 m_FaceSelection,
-                                                 m_EdgeSelection);
-  QObject::connect(this, SIGNAL(signal_updatePanelWidgets()),
-                   t_RobotPanel, SLOT(slot_updatePanelWidgets()));
+//  auto t_RobotPanel = new TaskBoxRobotTeachPanel(targetRobot,
+//                                                 m_FaceSelection,
+//                                                 m_EdgeSelection);
+//  QObject::connect(this, SIGNAL(signal_updatePanelWidgets()),
+//                   t_RobotPanel, SLOT(slot_updatePanelWidgets()));
 
-  t_RobotPanel->setMaximumWidth(MaxiumTaskBoxWidth);
+//  t_RobotPanel->setMaximumWidth(MaxiumTaskBoxWidth);
 
-  // Contents
-  Content.push_back(t_RobotPanel);
+//  // Contents
+//  Content.push_back(t_RobotPanel);
 
-  // Buttons
-  setButtonPosition(ButtonPosition::South);
-  setDlgWdith(MaxiumTaskBoxWidth+5);
+//  // Buttons
+//  setButtonPosition(ButtonPosition::South);
+//  setDlgWdith(MaxiumTaskBoxWidth+5);
 }
 
 TaskDlgMechanicControl::TaskDlgMechanicControl(Robot::MechanicDevice *t_Positioner, QWidget *parent)
@@ -87,6 +87,45 @@ TaskDlgMechanicControl::TaskDlgMechanicControl(Robot::MechanicGroup *t_Group, QW
     // Buttons
     setButtonPosition(ButtonPosition::South);
     setDlgWdith(MaxiumTaskBoxWidth+5);
+}
+
+TaskDlgMechanicControl::TaskDlgMechanicControl(Robot::MechanicBase *t_Mechanics, QWidget *parent)
+{
+    if(t_Mechanics == nullptr)
+        return;
+    if(t_Mechanics->isDerivedFrom(Robot::MechanicRobot::getClassTypeId())){
+        auto targetRobot = static_cast<Robot::MechanicRobot*>(t_Mechanics);
+        m_DocPtr = targetRobot->getDocument();
+        // Face Selection
+        auto m_FaceSelection = new Gui::TaskView::TaskSelectLinkProperty("SELECT Part::Feature SUBELEMENT Face COUNT 1",
+                                                                    &(targetRobot->LinkedFaceFeature));
+        m_FaceSelection->hide();
+        // Edge Selection
+        auto m_EdgeSelection = new Gui::TaskView::TaskSelectLinkProperty("SELECT Part::Feature SUBELEMENT Edge COUNT 1",
+                                                                    &(targetRobot->LinkedEdgeFeature));
+        m_EdgeSelection->hide();
+
+        Content.push_back(m_FaceSelection);
+        Content.push_back(m_EdgeSelection);
+
+        auto t_RobotPanel = new TaskBoxRobotTeachPanel(targetRobot,
+                                                       m_FaceSelection,
+                                                       m_EdgeSelection);
+        QObject::connect(this, SIGNAL(signal_updatePanelWidgets()),
+                         t_RobotPanel, SLOT(slot_updatePanelWidgets()));
+
+        t_RobotPanel->setMaximumWidth(MaxiumTaskBoxWidth);
+
+        // Contents
+        Content.push_back(t_RobotPanel);
+
+        // Buttons
+        setButtonPosition(ButtonPosition::South);
+        setDlgWdith(MaxiumTaskBoxWidth+5);
+    }
+    else if(t_Mechanics->isDerivedFrom(Robot::MechanicPoser::getClassTypeId())){
+
+    }
 }
 
 TaskDlgMechanicControl::~TaskDlgMechanicControl()

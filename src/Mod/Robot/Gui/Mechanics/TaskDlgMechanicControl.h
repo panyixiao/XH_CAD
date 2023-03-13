@@ -6,6 +6,9 @@
 #include <Gui/TaskView/TaskDialog.h>
 #include <Gui/TaskView/TaskView.h>
 
+#include "Mod/Robot/App/Mechanics/MechanicBase.h"
+#include "Mod/Robot/App/Mechanics/MechanicRobot.h"
+#include "Mod/Robot/App/Mechanics/MechanicPoser.h"
 #include "TaskBoxRobotTeachPanel.h"
 #include "TaskBoxMechanicDevice.h"
 #include "TaskBoxMechanicGroupPanel.h"
@@ -21,6 +24,8 @@ public:
                          QWidget *parent = 0);
   TaskDlgMechanicControl(Robot::MechanicGroup* t_Group,
                          QWidget *parent = 0);
+  TaskDlgMechanicControl(Robot::MechanicBase* t_Mechanics,
+                         QWidget* parent = 0);
   ~TaskDlgMechanicControl();
 
   virtual bool accept();

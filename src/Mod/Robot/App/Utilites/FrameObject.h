@@ -1,4 +1,4 @@
-// Created by Yixiao 20220423
+// Created by Yixiao 2022-04-23
 
 #ifndef FRAMEOBJECT_H
 #define FRAMEOBJECT_H
@@ -7,7 +7,6 @@
 #include <App/GeoFeature.h>
 #include <App/Placement.h>
 #include <Base/Placement.h>
-#include <Mod/Robot/App/PreCompiled.h>
 
 //using namespace RD;
 namespace Robot {
@@ -36,10 +35,6 @@ class FrameObject : public App::GeoFeature {
 public:
   FrameObject();
   virtual ~FrameObject();
-//  virtual bool registerFrameInLibrary(const string frameID,
-//                                      sptr<rd_RobotLibInterface> libInterface,
-//                                      const string P_FrameID = string());
-
   virtual const char *getViewProviderName() const override {
     return "RobotGui::ViewProviderFrameObject";
   }
@@ -87,7 +82,6 @@ public:
   App::PropertyBool Visible;
 
 protected:
-//  sptr<rd_RobotLibInterface> m_LibInterfacePtr;
   std::vector<App::DocumentObject *> m_ChildrenObjects;
   bool registered = false;
 };

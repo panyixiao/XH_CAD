@@ -2,11 +2,7 @@
 #include <App/GeoFeature.h>
 #include <App/PropertyContainer.h>
 #include <App/PropertyStandard.h>
-//#include <Mod/RD_Setup/App/RD_Frame.h>
 #include "Mod/Robot/App/Utilites/FrameObject.h"
-//#include <RD_DataStructure/RD_Object.h>
-//#include <RD_DataStructure/RD_STL/RD_String.h>
-//#include <RD_DataStructure/RD_STL/smart_ptr.h>
 
 #include <Mod/Mesh/App/Mesh.h>
 #include <Mod/Part/App/PartFeature.h>
@@ -17,8 +13,6 @@
 namespace Robot {
 //class rd_RobotLibInterface;
 class PlanningObject : public Part::Feature {
-//  using ID_t = RD::RD_Object::ID_t;
-
   PROPERTY_HEADER(Robot::PlanningObject);
 
 public:

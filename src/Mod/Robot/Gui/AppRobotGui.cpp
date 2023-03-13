@@ -14,8 +14,9 @@
 #include <Gui/Language/Translator.h>
 #include "Workbench.h"
 
-#include "Mechanics/ViewProviderRobot6AxisObject.h"
+#include "Mechanics/ViewProviderMechanicBase.h"
 #include "Mechanics/ViewProviderMechanicDevice.h"
+#include "Mechanics/ViewProviderRobot6AxisObject.h"
 #include "Mechanics/ViewProviderMechanicGroup.h"
 
 #include "TaskManage/ViewProviderTaskObject.h"
@@ -30,7 +31,6 @@
 #include "Tool/ViewProviderTorchObject.h"
 
 
-// use a different name to CreateCommand()
 void CreateRobotCommandsToolOperation(void);
 void CreateRobotCommandsMechOperation(void);
 void CreateRobotCommandsModelOperation(void);
@@ -81,28 +81,19 @@ PyMOD_INIT_FUNC(RobotGui)
     }
     PyObject* mod = RobotGui::initModule();
     Base::Console().Log("Loading GUI of Robot module... done\n");
-//    (void)new RobotGui::Module();
-//    Base::Console().Log("Loading GUI of Robot module... done\n");
 
     // instantiating the commands
-//    CreateRobotCommands();
-//    CreateRobotCommandsExport();
-//    CreateRobotCommandsTrajectory();
-//    CreateModelOperationCommands();
-
-    /// New Commands
     CreateRobotCommandsMechOperation();
     CreateRobotCommandsTaskOperation();
     CreateRobotCommandsToolOperation();
     CreateRobotCommandsModelOperation();
-//    CreateRobotCommandsToolAssemble();
 
     // addition objects
     RobotGui::Workbench                      ::init();
-
     // Mechanics
-    RobotGui::ViewProviderRobot6AxisObject   ::init();
+    RobotGui::ViewProviderMechanicBase       ::init();
     RobotGui::ViewProviderMechanicDevice     ::init();
+    RobotGui::ViewProviderRobot6AxisObject   ::init();
     RobotGui::ViewProviderMechanicGroup      ::init();
 
     // Tool

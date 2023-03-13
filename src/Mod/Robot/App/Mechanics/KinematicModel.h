@@ -2,16 +2,14 @@
 #ifndef ROBOT_KINEMATICMODEL_H
 #define ROBOT_KINEMATICMODEL_H
 
+#include <Mod/Robot/App/PreCompiled.h>
 #include "Mod/Robot/App/kdl_cp/chain.hpp"
-//#include "Mod/Robot/App/kdl_cp/chainfksolver.hpp"
 #include "Mod/Robot/App/kdl_cp/chainfksolverpos_recursive.hpp"
 #include "Mod/Robot/App/kdl_cp/frames_io.hpp"
-//#include "Mod/Robot/App/kdl_cp/chainiksolver.hpp"
 #include "Mod/Robot/App/kdl_cp/chainiksolvervel_pinv.hpp"
 #include "Mod/Robot/App/kdl_cp/chainjnttojacsolver.hpp"
 #include "Mod/Robot/App/kdl_cp/chainiksolverpos_nr.hpp"
 #include "Mod/Robot/App/kdl_cp/chainiksolverpos_nr_jl.hpp"
-
 #include "Mod/Robot/App/trac_ik_cp/trac_ik.hpp"
 
 #include "Mod/Robot/App/kdl_cp/chain.hpp"
@@ -94,7 +92,7 @@ public:
 	virtual void Save (Base::Writer &/*writer*/) const;
     virtual void Restore(Base::XMLReader &/*reader*/);
     const bool initialized() const;
-    const uint getJointNumbers() const{
+    uint getJointNumbers() const{
         return m_KDLchain.getNrOfJoints();
     }
     void setMechanicType(const MechanicType& t_Type);

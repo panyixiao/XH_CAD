@@ -53,10 +53,6 @@
 #include <bitset>
 
 #include <Python.h>
-
-
-
-
 #endif // _PreComp_
 #endif
 

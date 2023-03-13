@@ -108,12 +108,12 @@ public:
 public:
     // Files
     App::PropertyString File_URDF;
-//    App::PropertyFileIncluded File_Mesh;
     App::PropertyString Path_CalibFile;
     // Obj Property
     App::PropertyString OriginReference;
     App::PropertyPlacement Pose_Reference;  // TODO: Use link property
     App::PropertyPlacement Pose_Ref2Base;
+
     App::PropertyBool Activated;
     App::PropertyBool isDriven;
     App::PropertyBool UseTracIK;

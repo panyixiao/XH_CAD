@@ -69,6 +69,12 @@ SET(Mod_SRCS
 )
 
 set(MechanicObj_SRC
+    Mechanics/MechanicBase.cpp
+    Mechanics/MechanicBase.h
+    Mechanics/MechanicPoser.cpp
+    Mechanics/MechanicPoser.h
+    Mechanics/MechanicRobot.cpp
+    Mechanics/MechanicRobot.h
     Mechanics/MechanicDatabase.cpp
     Mechanics/MechanicDatabase.h
     Mechanics/MechanicGroup.h

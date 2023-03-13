@@ -139,7 +139,7 @@ public:
 
 public:
     // Files
-    App::PropertyString File_URDF;
+    App::PropertyString FilePath_URDF;
 
     // Obj Property
     App::PropertyPlacement Pose_Ref2Base;

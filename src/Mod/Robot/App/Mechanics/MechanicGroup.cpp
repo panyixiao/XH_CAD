@@ -173,21 +173,6 @@ void MechanicGroup::onDocumentRestored()
 
 void MechanicGroup::updateAxisProperties()
 {
-//    auto totalNum = getJointNumbers();
-//    AxisValues.setSize(totalNum);
-//    std::vector<double> limitBuffer_U, limitBuffer_L;
-//    if(m_LinkedRobot_1){
-//        limitBuffer_U = m_LinkedRobot_1->getJointMaxAngles();
-//        limitBuffer_L = m_LinkedRobot_1->getJointMinAngles();
-//    }
-//    if(m_Positioner){
-//        for(auto limitVal : m_Positioner->getJointMaxAngles()){
-//            limitBuffer_U.push_back(limitVal);
-//        }
-//        for(auto limitVal : m_Positioner->getJointMinAngles()){
-//            limitBuffer_L.push_back(limitVal);
-//        }
-//    }
 }
 
 bool MechanicGroup::setTipPose(const Base::Placement &n_TipPose,

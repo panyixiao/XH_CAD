@@ -135,6 +135,8 @@ set(RobotGui_SRC_MechanicViewProvider
     Mechanics/ViewProviderRobot6AxisObject.h
     Mechanics/ViewProviderMechanicDevice.cpp
     Mechanics/ViewProviderMechanicDevice.h
+    Mechanics/ViewProviderMechanicBase.h
+    Mechanics/ViewProviderMechanicBase.cpp
     Mechanics/ViewProviderMechanicGroup.cpp
     Mechanics/ViewProviderMechanicGroup.h)
 

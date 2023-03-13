@@ -7,6 +7,7 @@
 #include <Gui/TaskView/TaskView.h>
 #include <Gui/TaskView/TaskSelectLinkProperty.h>
 #include "Mod/Robot/Gui/Utilites/WidgetUtility.h"
+#include "Mod/Robot/App/Mechanics/MechanicRobot.h"
 #include "Mod/Robot/App/Mechanics/Robot6AxisObject.h"
 
 class Ui_TaskBoxRobotTeachPanel;
@@ -18,7 +19,7 @@ class TaskBoxRobotTeachPanel : public Gui::TaskView::TaskBox {
   Q_OBJECT
 
 public:
-  TaskBoxRobotTeachPanel(Robot::Robot6AxisObject *t_robot,
+  TaskBoxRobotTeachPanel(Robot::MechanicRobot* t_robot,
                          Gui::TaskView::TaskSelectLinkProperty * t_FaceSelection,
                          Gui::TaskView::TaskSelectLinkProperty * t_EdgeSelection);
 
@@ -76,7 +77,8 @@ private Q_SLOTS:
 private:
   // Target
   App::Document *m_DocPtr = nullptr;
-  Robot::Robot6AxisObject* m_RobotPtr = nullptr;
+//  Robot::Robot6AxisObject* m_RobotPtr = nullptr;
+  Robot::MechanicRobot* m_RobotPtr = nullptr;
   // UI
   QWidget *m_proxy = nullptr;
   Ui_TaskBoxRobotTeachPanel *m_ui = nullptr;

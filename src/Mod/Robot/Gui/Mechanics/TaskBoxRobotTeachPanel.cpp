@@ -14,7 +14,7 @@
 
 using namespace RobotGui;
 
-TaskBoxRobotTeachPanel::TaskBoxRobotTeachPanel(Robot::Robot6AxisObject *t_robot,
+TaskBoxRobotTeachPanel::TaskBoxRobotTeachPanel(Robot::MechanicRobot *t_robot,
                                                Gui::TaskView::TaskSelectLinkProperty *t_FaceSelection,
                                                Gui::TaskView::TaskSelectLinkProperty *t_EdgeSelection)
     : TaskBox(Gui::BitmapFactory().pixmap("document-new"),
@@ -118,17 +118,17 @@ void TaskBoxRobotTeachPanel::initUi_TcpControlBox()
         m_ui->radioButton_Flan->setChecked(m_RobotPtr->CurrentToolIndex.getValue() == 0);
         QObject::connect(m_ui->radioButton_Flan, SIGNAL(clicked()),this, SLOT(slot_changeActivatedTool()));
 
-        m_ui->radioButton_Torch->setEnabled(m_RobotPtr->hasTorch());
-        m_ui->radioButton_Torch->setChecked(m_RobotPtr->CurrentToolIndex.getValue() == m_RobotPtr->TorchIndex.getValue());
-        QObject::connect(m_ui->radioButton_Torch, SIGNAL(clicked()),this, SLOT(slot_changeActivatedTool()));
+//        m_ui->radioButton_Torch->setEnabled(m_RobotPtr->hasTorch());
+//        m_ui->radioButton_Torch->setChecked(m_RobotPtr->CurrentToolIndex.getValue() == m_RobotPtr->TorchIndex.getValue());
+//        QObject::connect(m_ui->radioButton_Torch, SIGNAL(clicked()),this, SLOT(slot_changeActivatedTool()));
 
-        m_ui->radioButton_Scan->setEnabled(m_RobotPtr->hasScanner());
-        m_ui->radioButton_Scan->setChecked(m_RobotPtr->CurrentToolIndex.getValue() == m_RobotPtr->ScannerIndex.getValue());
-        m_ui->radioButton_Camera->setChecked(m_RobotPtr->CurrentToolIndex.getValue() == m_RobotPtr->CameraIndex.getValue());
-        QObject::connect(m_ui->radioButton_Scan, SIGNAL(clicked()),this, SLOT(slot_changeActivatedTool()));
+//        m_ui->radioButton_Scan->setEnabled(m_RobotPtr->hasScanner());
+//        m_ui->radioButton_Scan->setChecked(m_RobotPtr->CurrentToolIndex.getValue() == m_RobotPtr->ScannerIndex.getValue());
+//        m_ui->radioButton_Camera->setChecked(m_RobotPtr->CurrentToolIndex.getValue() == m_RobotPtr->CameraIndex.getValue());
+//        QObject::connect(m_ui->radioButton_Scan, SIGNAL(clicked()),this, SLOT(slot_changeActivatedTool()));
 
-        QObject::connect(m_ui->radioButton_Camera, SIGNAL(clicked()),this, SLOT(slot_changeActivatedTool()));
-        QObject::connect(m_ui->spinBox_ToolID, SIGNAL(valueChanged(int)), SLOT(slot_changeToolIndex()));
+//        QObject::connect(m_ui->radioButton_Camera, SIGNAL(clicked()),this, SLOT(slot_changeActivatedTool()));
+//        QObject::connect(m_ui->spinBox_ToolID, SIGNAL(valueChanged(int)), SLOT(slot_changeToolIndex()));
     }
 
 
@@ -172,11 +172,11 @@ void TaskBoxRobotTeachPanel::initUi_BaseSetupBox()
 void TaskBoxRobotTeachPanel::updateRef2BasePosePanel()
 {
     blockSignals_Basebox(true);
-    m_ui->doubleSpinBox_Ref2Base_X->setValue(m_RobotPtr->Pose_Ref2Base.getValue().getPosition().x);
-    m_ui->doubleSpinBox_Ref2Base_Y->setValue(m_RobotPtr->Pose_Ref2Base.getValue().getPosition().y);
-    m_ui->doubleSpinBox_Ref2Base_Z->setValue(m_RobotPtr->Pose_Ref2Base.getValue().getPosition().z);
+    m_ui->doubleSpinBox_Ref2Base_X->setValue(m_RobotPtr->Trans_Ref2Base.getValue().getPosition().x);
+    m_ui->doubleSpinBox_Ref2Base_Y->setValue(m_RobotPtr->Trans_Ref2Base.getValue().getPosition().y);
+    m_ui->doubleSpinBox_Ref2Base_Z->setValue(m_RobotPtr->Trans_Ref2Base.getValue().getPosition().z);
     double yaw, pit, roll;
-    m_RobotPtr->Pose_Ref2Base.getValue().getRotation().getYawPitchRoll(yaw,pit,roll);
+    m_RobotPtr->Trans_Ref2Base.getValue().getRotation().getYawPitchRoll(yaw,pit,roll);
     m_ui->doubleSpinBox_Ref2Base_C->setValue(roll);
     m_ui->doubleSpinBox_Ref2Base_B->setValue(pit);
     m_ui->doubleSpinBox_Ref2Base_A->setValue(yaw);
@@ -195,7 +195,7 @@ void TaskBoxRobotTeachPanel::slot_changeRef2BasePose() {
                           m_ui->doubleSpinBox_Ref2Base_B->value(),
                           m_ui->doubleSpinBox_Ref2Base_C->value());
   new_Pose.setRotation(rotate_);
-  m_RobotPtr->Pose_Ref2Base.setValue(new_Pose);
+  m_RobotPtr->Trans_Ref2Base.setValue(new_Pose);
 }
 
 void TaskBoxRobotTeachPanel::slot_changeReferenceBase()
@@ -205,11 +205,11 @@ void TaskBoxRobotTeachPanel::slot_changeReferenceBase()
             if (m_FaceSelection->isSelectionValid()) {
               m_FaceSelection->sendSelection2Property();
             }
-            m_RobotPtr->setBaseToSelectedFaceCenter();    // This will be called once
+//            m_RobotPtr->setBaseToSelectedFaceCenter();    // This will be called once
         }
         else{
-            if(!m_RobotPtr->ExternalAxisName.getStrValue().empty()){
-                auto t_DevicePtr = static_cast<Robot::MechanicDevice*>(m_DocPtr->getObject(m_RobotPtr->ExternalAxisName.getValue()));
+            if(!m_RobotPtr->ConnectedExtAxis.getStrValue().empty()){
+                auto t_DevicePtr = static_cast<Robot::MechanicDevice*>(m_DocPtr->getObject(m_RobotPtr->ConnectedExtAxis.getValue()));
                 t_DevicePtr->unloadRobot(m_RobotPtr->getNameInDocument());
             }
 
@@ -217,7 +217,7 @@ void TaskBoxRobotTeachPanel::slot_changeReferenceBase()
             auto t_DevicePtr = static_cast<Robot::MechanicDevice*>(m_DocPtr->getObject(extAxisDeviceName.c_str()));
             if(t_DevicePtr!=nullptr && t_DevicePtr->DeviceType.getValue() == (int)Robot::MechanicType::M_ExtAxis){
                 t_DevicePtr->loadRobot(m_RobotPtr->getNameInDocument());
-                m_RobotPtr->ExternalAxisName.setValue(t_DevicePtr->getNameInDocument());
+                m_RobotPtr->ConnectedExtAxis.setValue(t_DevicePtr->getNameInDocument());
             }
 
         }
@@ -240,8 +240,8 @@ void TaskBoxRobotTeachPanel::slot_targetConfigJointChanged()
     m_ui->doubleSpinBox_upperLimit->setMaximum(m_RobotPtr->getJointMaxAngle(jntID));
     m_ui->doubleSpinBox_lowerLimit->setValue(m_RobotPtr->getJointMinAngle(jntID));
     m_ui->doubleSpinBox_upperLimit->setValue(m_RobotPtr->getJointMaxAngle(jntID));
-    m_ui->radioButton_AxisDir_Norm->setChecked(!m_RobotPtr->JointDirInverted(jntID));
-    m_ui->radioButton_AxisDir_Invert->setChecked(m_RobotPtr->JointDirInverted(jntID));
+    m_ui->radioButton_AxisDir_Norm->setChecked(!m_RobotPtr->isAxisDirInverted(jntID));
+    m_ui->radioButton_AxisDir_Invert->setChecked(m_RobotPtr->isAxisDirInverted(jntID));
     m_ui->doubleSpinBox_lowerLimit->blockSignals(false);
     m_ui->doubleSpinBox_upperLimit->blockSignals(false);
 }
@@ -259,9 +259,9 @@ void TaskBoxRobotTeachPanel::slot_changeTargetJointLimits()
 
 void TaskBoxRobotTeachPanel::slot_changeArmConfig()
 {
-    m_RobotPtr->Wrist_NonFlip.setValue(m_ui->comboBox_config_wrist->currentText()==tr("NonFlip"));
-    m_RobotPtr->ForeArm_onRight.setValue(m_ui->comboBox_config_forearm->currentText()==tr("OnRight"));
-    m_RobotPtr->Elbow_Upward.setValue(m_ui->comboBox_config_elbow->currentText()==tr("Upward"));
+//    m_RobotPtr->Wrist_NonFlip.setValue(m_ui->comboBox_config_wrist->currentText()==tr("NonFlip"));
+//    m_RobotPtr->ForeArm_onRight.setValue(m_ui->comboBox_config_forearm->currentText()==tr("OnRight"));
+//    m_RobotPtr->Elbow_Upward.setValue(m_ui->comboBox_config_elbow->currentText()==tr("Upward"));
 }
 
 void TaskBoxRobotTeachPanel::slot_flipAxisDirection()
@@ -285,7 +285,7 @@ void TaskBoxRobotTeachPanel::slot_updatePanelWidgets() {
 
 void TaskBoxRobotTeachPanel::slot_updateTipPosePanel()
 {
-    Base::Placement t_Pose = m_RobotPtr->getCurrentTipPose();
+    Base::Placement t_Pose = m_RobotPtr->getCurrentTipPose(Robot::CoordOrigin::World);
 
     blockSignals_TCPbox(true);
     m_ui->doubleSpinBox_X->setValue(t_Pose.getPosition().x);
@@ -328,15 +328,15 @@ void TaskBoxRobotTeachPanel::slot_changeActivatedTool()
     }
     if(m_ui->radioButton_Torch->isChecked()){
         m_RobotPtr->setCurrentToolType(Robot::ToolType::WeldTorch);
-        m_ui->spinBox_ToolID->setValue(m_RobotPtr->TorchIndex.getValue());
+//        m_ui->spinBox_ToolID->setValue(m_RobotPtr->TorchIndex.getValue());
     }
     if(m_ui->radioButton_Scan->isChecked()){
         m_RobotPtr->setCurrentToolType(Robot::ToolType::Scanner);
-        m_ui->spinBox_ToolID->setValue(m_RobotPtr->ScannerIndex.getValue());
+//        m_ui->spinBox_ToolID->setValue(m_RobotPtr->ScannerIndex.getValue());
     }
     if(m_ui->radioButton_Camera->isChecked()){
         m_RobotPtr->setCurrentToolType(Robot::ToolType::DepthCamera);
-        m_ui->spinBox_ToolID->setValue(m_RobotPtr->CameraIndex.getValue());
+//        m_ui->spinBox_ToolID->setValue(m_RobotPtr->CameraIndex.getValue());
     }
 
     slot_updateTipPosePanel();
@@ -344,7 +344,7 @@ void TaskBoxRobotTeachPanel::slot_changeActivatedTool()
 
 void TaskBoxRobotTeachPanel::slot_setRobotToHomePose()
 {
-    m_RobotPtr->restoreHomePose();
+    m_RobotPtr->resAxisHomePose();
 }
 
 void TaskBoxRobotTeachPanel::slot_changeToolIndex()
@@ -352,13 +352,13 @@ void TaskBoxRobotTeachPanel::slot_changeToolIndex()
     int val = m_ui->spinBox_ToolID->value();
     switch(m_RobotPtr->getCurrentTool()){
     case Robot::ToolType::WeldTorch:
-        m_RobotPtr->TorchIndex.setValue(val);
+//        m_RobotPtr->TorchIndex.setValue(val);
         break;
     case Robot::ToolType::Scanner:
-        m_RobotPtr->ScannerIndex.setValue(val);
+//        m_RobotPtr->ScannerIndex.setValue(val);
         break;
     case Robot::ToolType::DepthCamera:
-        m_RobotPtr->CameraIndex.setValue(val);
+//        m_RobotPtr->CameraIndex.setValue(val);
         break;
     }
 }
@@ -370,7 +370,7 @@ void TaskBoxRobotTeachPanel::slot_openToolSetupBox()
 
 
 void TaskBoxRobotTeachPanel::slot_setCurrentPoseAsHomePosition() {
-  m_RobotPtr->setCurrentPoseAsHome();
+  m_RobotPtr->setAxisHomePose();
 }
 
 void TaskBoxRobotTeachPanel::sliderPositionChanged(int t_Index) {

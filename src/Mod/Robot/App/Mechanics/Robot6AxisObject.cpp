@@ -29,7 +29,7 @@ Robot6AxisObject::Robot6AxisObject()
     ADD_PROPERTY_TYPE(Activated,(false),"Property",Prop_None,"Is robot activated");
     ADD_PROPERTY_TYPE(Visible,(true),"Property",Prop_None,"Is Robot Visiable");
 
-    ADD_PROPERTY_TYPE(File_URDF,(""),"Files",Prop_None,"Included file with robot definition about robot model");
+    ADD_PROPERTY_TYPE(FilePath_URDF,(""),"Files",Prop_None,"Included file with robot definition about robot model");
 
     ADD_PROPERTY_TYPE(ExternalAxisName,(""),"Property",Prop_None,"The Name of Assembled External Axis");
     ADD_PROPERTY_TYPE(Pose_Reference,(Base::Placement()),"Property",Prop_None,"Pose of Reference Origin");
@@ -121,8 +121,8 @@ PyObject *Robot6AxisObject::getPyObject()
 
 void Robot6AxisObject::onChanged(const Property* prop)
 {
-   if(prop == &File_URDF){
-        auto result = m_kinematicModel.readURDFfiles(File_URDF.getValue());
+   if(prop == &FilePath_URDF){
+        auto result = m_kinematicModel.readURDFfiles(FilePath_URDF.getValue());
         if(!result){
             // Export Warning
         }

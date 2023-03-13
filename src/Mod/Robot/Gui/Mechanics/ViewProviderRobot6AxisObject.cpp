@@ -254,8 +254,8 @@ bool ViewProviderRobot6AxisObject::doubleClicked()
 void ViewProviderRobot6AxisObject::updateData(const App::Property* prop)
 {
     Robot::Robot6AxisObject* robObj = static_cast<Robot::Robot6AxisObject*>(pcObject);
-    if (prop == &robObj->File_URDF) {
-        generateLinkMeshNodes_fromURDF(robObj->File_URDF.getValue());
+    if (prop == &robObj->FilePath_URDF) {
+        generateLinkMeshNodes_fromURDF(robObj->FilePath_URDF.getValue());
         robObj->updateAxisValues();
     }
 
