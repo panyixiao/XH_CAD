@@ -323,7 +323,7 @@ void TaskBoxRobotTeachPanel::slot_changeTargetRobotTipPose()
 void TaskBoxRobotTeachPanel::slot_changeActivatedTool()
 {
     if(m_ui->radioButton_Flan->isChecked()){
-        m_RobotPtr->setCurrentToolType(Robot::ToolType::Flan);
+        m_RobotPtr->setCurrentToolType(Robot::ToolType::NoTool);
         m_ui->spinBox_ToolID->setValue(0);
     }
     if(m_ui->radioButton_Torch->isChecked()){

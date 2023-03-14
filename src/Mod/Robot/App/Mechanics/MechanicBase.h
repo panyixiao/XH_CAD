@@ -44,8 +44,6 @@ public:
     const Base::Placement getOriginPose() const;
     // TODO: Add Tool Function Back
     const Base::Placement getCurrentTipPose() const;
-    const Base::Placement getTeachDraggerPose() const;
-
     const Base::Placement getJointTransformation(const int jntID) const;
 
     // Joint/Axis operations
@@ -59,7 +57,7 @@ public:
 
     bool isAxisDirInverted(uint jntID);
     bool flipAxisDirection(uint jntID, bool invert);
-    void restoreJointLimits();
+    void updateJointLimits();
     const std::vector<double> getJointAngles() const;
     const std::vector<double> getJointMaxAngles() const;
     const std::vector<double> getJointMinAngles() const;
@@ -68,16 +66,13 @@ public:
     float getJointMaxAngle(const uint JointID) const;
     float getJointMinAngle(const uint JointID) const;
 
-    // Base Placement
-    void moveToSelectedFaceCenter();
-
 public:
     // Files
     App::PropertyString FilePath_URDF;
     App::PropertyString FilePath_Calibration;
 
     // IK Trigger
-    App::PropertyPlacement Pose_RefOrigin;  // TODO: Use link property
+    App::PropertyPlacement Pose_Referece;  // TODO: Use link property
     App::PropertyPlacement Trans_Ref2Base;
     App::PropertyPlacement Pose_Tip;
 
@@ -106,7 +101,6 @@ public:
     App::PropertyInteger   DeviceType;
 
     // Switch
-    App::PropertyBool InteractiveTeach;
     App::PropertyBool Visiable;
 
 protected:

@@ -3,11 +3,30 @@
 #ifndef ROBOT_VIEWPROVIDER_MECHANIC_H
 #define ROBOT_VIEWPROVIDER_MECHANIC_H
 
-#include <Inventor/VRMLnodes/SoVRMLTransform.h>
+#ifndef _PreComp_
+# include <Inventor/SoDB.h>
+# include <Inventor/SoInput.h>
+# include <Inventor/SbVec3f.h>
+# include <Inventor/nodes/SoSeparator.h>
+# include <Inventor/nodes/SoTransform.h>
+# include <Inventor/nodes/SoSphere.h>
+# include <Inventor/nodes/SoRotation.h>
+# include <Inventor/actions/SoSearchAction.h>
+# include <Inventor/draggers/SoJackDragger.h>
+# include <Inventor/draggers/SoTrackballDragger.h>
+# include <Inventor/VRMLnodes/SoVRMLTransform.h>
+#include <QFile>
+#include <QFileInfo>
+#endif
+
+#include <Gui/Application.h>
+#include <Gui/Control.h>
+#include <Gui/Command.h>
 #include <Gui/ViewProviderGeometryObject.h>
 #include <Gui/SoFCSelection.h>
 #include <Gui/SoFCCSysDragger.h>
 #include <Base/Placement.h>
+#include "TaskDlgMechanicControl.h"
 #include <Mod/Robot/App/Utilites/MeshUtility.h>
 #include "Mod/Robot/Gui/Utilites/DraggerUtility.h"
 
@@ -41,8 +60,8 @@ public:
     virtual std::vector<App::DocumentObject *> claimChildren(void) const override;
 
 protected:
-    void DraggerMotionCallback(InteractiveDragger *t_dragger);
-    void DraggerFinishCallback(InteractiveDragger *t_dragger);
+//    void DraggerMotionCallback(InteractiveDragger *t_dragger);
+//    void DraggerFinishCallback(InteractiveDragger *t_dragger);
     bool generateLinkMeshNodes_fromURDF(const std::string& filePath_urdf);
     bool updatelinkmeshPoses();
     bool callbackRegistered();
@@ -57,9 +76,9 @@ protected:
     // TIPS
     SoGroup               * m_TcpRoot = nullptr;
     InteractiveDragger    * pcDragger = nullptr;
-    // view provider of the toolshape if set
-    App::DocumentObject   * toolShapeObj = nullptr;
-    Gui::ViewProvider     * toolShapeVP = nullptr;
+//    // view provider of the toolshape if set
+//    App::DocumentObject   * toolShapeObj = nullptr;
+//    Gui::ViewProvider     * toolShapeVP = nullptr;
 
     std::function<void()> callBack_UpdatePanelWidgets = nullptr;
 };

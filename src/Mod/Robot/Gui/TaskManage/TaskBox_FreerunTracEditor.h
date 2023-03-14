@@ -65,7 +65,7 @@ private:
   Robot::RobotTracObject* m_FreeTrac = nullptr;
   Robot::MechanicGroup* m_MechGroup = nullptr;
 //  Robot::Robot6AxisObject* m_RobotPtr = nullptr;
-  Robot::ToolType m_TeachTool = Robot::ToolType::Flan;
+  Robot::ToolType m_TeachTool = Robot::ToolType::NoTool;
   bool switchOn = false;
 };
 }

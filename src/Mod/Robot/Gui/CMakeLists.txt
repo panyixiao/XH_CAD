@@ -135,10 +135,12 @@ set(RobotGui_SRC_MechanicViewProvider
     Mechanics/ViewProviderRobot6AxisObject.h
     Mechanics/ViewProviderMechanicDevice.cpp
     Mechanics/ViewProviderMechanicDevice.h
-    Mechanics/ViewProviderMechanicBase.h
     Mechanics/ViewProviderMechanicBase.cpp
+    Mechanics/ViewProviderMechanicBase.h
     Mechanics/ViewProviderMechanicGroup.cpp
-    Mechanics/ViewProviderMechanicGroup.h)
+    Mechanics/ViewProviderMechanicGroup.h
+    Mechanics/ViewProviderMechanicRobot.cpp
+    Mechanics/ViewProviderMechanicRobot.h)
 
 set(RobotGui_SRC_MechanicsTaskBox
     Mechanics/TaskBoxMechanicGroupPanel.cpp

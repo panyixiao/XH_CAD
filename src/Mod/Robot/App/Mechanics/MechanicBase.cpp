@@ -32,7 +32,7 @@ MechanicBase::MechanicBase()
     ADD_PROPERTY_TYPE(isEditing,(0),"Property",Prop_None, "Identify is Target is Editing");
     ADD_PROPERTY_TYPE(DeviceType,(0),"Property",Prop_None, "Current Teach Coord Index");
 
-    ADD_PROPERTY_TYPE(Pose_RefOrigin,(Base::Placement()),"Kinematics",Prop_None,"The Placement of Reference");
+    ADD_PROPERTY_TYPE(Pose_Referece,(Base::Placement()),"Kinematics",Prop_None,"The Placement of Reference");
     ADD_PROPERTY_TYPE(Trans_Ref2Base,(Base::Placement()),"Kinematics",Prop_None,"Transformation from Reference Origin to Base");
     ADD_PROPERTY_TYPE(Pose_Tip,(Base::Placement()),"Kinematics",Prop_None,"The pose of current active Tcp in WorldFrame");
 
@@ -51,11 +51,10 @@ MechanicBase::MechanicBase()
     LinkedEdgeFeature.setStatus(App::Property::Status::Hidden, true);
     ADD_PROPERTY(LinkedFaceFeature, (0));
     LinkedFaceFeature.setStatus(App::Property::Status::Hidden, true);
-    ADD_PROPERTY(InteractiveTeach,(false));
-    InteractiveTeach.setStatus(App::Property::Status::Hidden, true);
+//    ADD_PROPERTY(InteractiveDraggerOn,(false));
+//    InteractiveDraggerOn.setStatus(App::Property::Status::Hidden, true);
 
     m_kinematicModel.setIKsolverType(IK_SolverType::TRAC_IK);
-    m_kinematicModel.setKinematicModelConfig(ConfigType::NON);
 }
 
 MechanicBase::~MechanicBase()
@@ -91,21 +90,17 @@ PyObject *MechanicBase::getPyObject()
 void MechanicBase::onChanged(const Property* prop)
 {
    if(prop == &FilePath_URDF){
-        auto result = m_kinematicModel.readURDFfiles(FilePath_URDF.getValue());
-        if(!result){
-            // Export Warning
-        }
-        else{
-            auto J_Num = m_kinematicModel.getJointNumbers();
-            HomePose.setSize(J_Num);
-            AxisValues.setSize(J_Num);
-            UpperLimits_Real.setValues(m_kinematicModel.getJointMaxAngles());
-            UpperLimits_Soft.setValues(m_kinematicModel.getJointMaxAngles());
-            LowerLimits_Real.setValues(m_kinematicModel.getJointMinAngles());
-            LowerLimits_Soft.setValues(m_kinematicModel.getJointMinAngles());
-            AxisRatedSpeed.setValues(m_kinematicModel.getJointSpeedLimits());
-            m_AxisOrigins = std::vector<Base::Placement>(J_Num, Base::Placement());
-        }
+       if(m_kinematicModel.readURDFfiles(FilePath_URDF.getValue())){
+           auto J_Num = m_kinematicModel.getJointNumbers();
+           HomePose.setSize(J_Num);
+           AxisValues.setSize(J_Num);
+           UpperLimits_Real.setValues(m_kinematicModel.getJointMaxAngles());
+           UpperLimits_Soft.setValues(m_kinematicModel.getJointMaxAngles());
+           LowerLimits_Real.setValues(m_kinematicModel.getJointMinAngles());
+           LowerLimits_Soft.setValues(m_kinematicModel.getJointMinAngles());
+           AxisRatedSpeed.setValues(m_kinematicModel.getJointSpeedLimits());
+           m_AxisOrigins = std::vector<Base::Placement>(J_Num, Base::Placement());
+       }
     }
     else if(prop == &UpperLimits_Soft){
         m_kinematicModel.setJointMaxLimits(UpperLimits_Soft.getValues());
@@ -151,13 +146,20 @@ const Base::Placement MechanicBase::getCurrentTipPose() const
     Base::Placement abs_TcpPose = m_kinematicModel.getTcp();
     c_TipPose= Base::Placement(getOriginPose().toMatrix() * abs_TcpPose.toMatrix());
     return c_TipPose;
+//    Base::Placement result, tool_transform;
+//    tool_transform = getToolTipTranslation();
+//    result = Base::Placement(getCurrentFlanPose(ref_Origin,
+//                                                origin_Pose).toMatrix() *
+//                             tool_transform.toMatrix());
+
+//    return result;
 }
 
 
-const Base::Placement MechanicBase::getTeachDraggerPose() const
-{
-    return getCurrentTipPose();
-}
+//const Base::Placement MechanicBase::getTeachDraggerPose() const
+//{
+//    return getCurrentTipPose();
+//}
 
 bool MechanicBase::setAxisHomePose()
 {
@@ -198,7 +200,7 @@ const std::vector<double> MechanicBase::getJointMinAngles() const
 }
 
 
-void MechanicBase::restoreJointLimits()
+void MechanicBase::updateJointLimits()
 {
     m_kinematicModel.setJointMaxLimits(UpperLimits_Real.getValues());
     m_kinematicModel.setJointMinLimits(LowerLimits_Real.getValues());
@@ -254,7 +256,7 @@ const Base::Placement MechanicBase::getAxisOriginPose(const uint t_AxisID)
 
 const Base::Placement MechanicBase::getOriginPose() const
 {
-    return Pose_RefOrigin.getValue()*Trans_Ref2Base.getValue();
+    return Pose_Referece.getValue()*Trans_Ref2Base.getValue();
 }
 
 bool MechanicBase::flipAxisDirection(uint jntID, bool invert)
@@ -331,15 +333,6 @@ float MechanicBase::getJointAngle(const int JointID) const
 const std::vector<double> MechanicBase::getJointAngles() const
 {
     return m_kinematicModel.getJointAngles();
-}
-
-void MechanicBase::moveToSelectedFaceCenter()
-{
-//    auto targetEntity = dynamic_cast<Part::Feature *>(LinkedFaceFeature.getValue());
-//    if (targetEntity != nullptr)
-//        targetEntity->setAttachedObj(this);
-//    auto newCenter = CAD_Utility::calculateLinkedFaceCenter(LinkedFaceFeature);
-    //    Pose_Ref2Base.setValue(Base::Placement(newCenter.toMatrix() /** offset.toMatrix()*/));
 }
 
 

@@ -117,8 +117,8 @@ private:
             Base::Console().Error(msg.c_str());
             throw Py::Exception();
         }        
-        auto t_RobotPtr = static_cast<Robot::Robot6AxisObject*>(pcDoc->addObject("Robot::Robot6AxisObject",ModelName.c_str()));
-//        auto t_RobotPtr = static_cast<Robot::MechanicRobot*>(pcDoc->addObject("Robot::MechanicRobot",ModelName.c_str()));
+//        auto t_RobotPtr = static_cast<Robot::Robot6AxisObject*>(pcDoc->addObject("Robot::Robot6AxisObject",ModelName.c_str()));
+        auto t_RobotPtr = static_cast<Robot::MechanicRobot*>(pcDoc->addObject("Robot::MechanicRobot",ModelName.c_str()));
         if(t_RobotPtr == nullptr){
             Base::Console().Error("Failed to insert Robot Object into Document\n");
             throw Py::Exception();

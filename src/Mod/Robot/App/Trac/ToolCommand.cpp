@@ -19,7 +19,7 @@ ToolCommand::ToolCommand()
 {
     m_CmdType = CommandType::ChgTool;
     m_CoordType = CordType::TCS;
-    m_ToolType = ToolType::Flan;
+    m_ToolType = ToolType::NoTool;
 }
 
 ToolCommand::ToolCommand(const ToolCommand &rhs)

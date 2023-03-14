@@ -14,7 +14,6 @@
 #include <Base/Reader.h>
 #include <Base/Writer.h>
 
-
 using namespace App;
 using namespace Robot;
 //using namespace RD_CAD_Utility;
@@ -24,7 +23,6 @@ PROPERTY_SOURCE(Robot::ScannerObject, Robot::ToolObject)
 ScannerObject::ScannerObject() {
 
     m_Type = ToolType::Scanner;
-
     ADD_PROPERTY_TYPE(ScanDistance,(400.0),"Property",Prop_None, "A distance that Scanners can detect");
     ADD_PROPERTY_TYPE(ScanAmplitute,(15.0),"Property",Prop_None, "Angle Amplitute Scanners can detect");
     ADD_PROPERTY_TYPE(LaserOn, (false),"Property", Prop_None, "Switch to Turn on Laser");
@@ -34,17 +32,16 @@ ScannerObject::ScannerObject() {
 ScannerObject::~ScannerObject() {}
 
 
-bool ScannerObject::attachObject(DocumentObject *t_obj) {
-    return ToolObject::attachObject(t_obj);
-}
+//bool ScannerObject::attachObject(DocumentObject *t_obj) {
+//    return ToolObject::attachObject(t_obj);
+//}
 
-bool ScannerObject::detachObjcet(DocumentObject *t_obj) {
-    return ToolObject::detachObjcet(t_obj);
-}
+//bool ScannerObject::detachObjcet(DocumentObject *t_obj) {
+//    return ToolObject::detachObjcet(t_obj);
+//}
 
 
 void ScannerObject::Save(Base::Writer &writer) const {
-
   ToolObject::Save(writer);
 }
 
@@ -70,7 +67,6 @@ void ScannerObject::onDocumentRestored() {
 
 void ScannerObject::updateTip2FrontTrans()
 {
-//    bool flip = false;
     double distance = ScanDistance.getValue();
     double y,p,r;
     Trans_M2T.getValue().getRotation().getYawPitchRoll(y,p,r);

@@ -150,7 +150,7 @@ Gui::ToolBarItem* Workbench::setupToolBars() const
 
     Gui::ToolBarItem* robot = new Gui::ToolBarItem(root);
     robot->setCommand("Robot");
-    *robot << "Robot_Insert6AxisRobot"
+    *robot << "Robot_InsertMechanicRobot"
            << "Robot_InsertPositioner"
            << "Robot_InsertExtAxisDevice"
            << "Separator";
@@ -179,7 +179,7 @@ Gui::MenuItem* Workbench::setupMenuBar() const
     // analyze
     Gui::MenuItem* insertRobots = new Gui::MenuItem;
     insertRobots->setCommand("Insert Robots");
-    *insertRobots << "Robot_InsertGoogolBa006n"
+    *insertRobots << "Robot_InsertMechanicRobot"
                   << "Separator"
 //                  << "Robot_AddToolShape"
                   ;

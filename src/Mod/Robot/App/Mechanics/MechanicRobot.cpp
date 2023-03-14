@@ -27,11 +27,10 @@ MechanicRobot::MechanicRobot()
     ADD_PROPERTY_TYPE(EnableArmConfiguration ,(false), "Kinematics",Prop_None,"Identify is using configuration constraint while calc IK results");
     ADD_PROPERTY_TYPE(ConnectedExtAxis,(""),"Property",Prop_None,"The Name of Attached External Axis");
     ADD_PROPERTY_TYPE(TeachCoordIndex,(0),"Interactive",Prop_None, "Current Teach Coord Index");
-//    ADD_PROPERTY(Pose_Flan,(Base::Placement()));
-//    Pose_Flan.setStatus(App::Property::Status::Hidden, true);
-    // Tool
+    ADD_PROPERTY_TYPE(InteractiveDraggerOn,(false),"Interactive",Prop_None, "Trigger On Interactive Dragger");
     ADD_PROPERTY_TYPE(CurrentToolIndex,(0),"Tool Setup", Prop_None,"Current ID of Selected Tool");
     m_kinematicModel.setMechanicType(MechanicType::M_Robot);
+    m_kinematicModel.setIKsolverType(IK_SolverType::TRAC_IK);
 }
 
 MechanicRobot::~MechanicRobot()
@@ -76,7 +75,6 @@ void MechanicRobot::onChanged(const Property* prop)
         else
             m_kinematicModel.setIKsolverType(IK_SolverType::KDL_IK);
    }
-
 }
 
 void MechanicRobot::onDocumentRestored()
@@ -157,6 +155,26 @@ bool MechanicRobot::setRobotTipPose(const Base::Placement &n_TipPose, CoordOrigi
     }
 
     return success;
+}
+
+const Base::Placement MechanicRobot::getTeachDraggerPose() const
+{
+    auto result = getCurrentTipPose(CoordOrigin::World);
+    Base::Rotation t_Rot;
+    switch (m_TeachCoord) {
+    case TeachCoord::World:
+        t_Rot = Base::Rotation();
+        break;
+    case  TeachCoord::RobotBase:
+        t_Rot = getCurrentBasePose().getRotation();
+        break;
+    case  TeachCoord::Tip:
+        t_Rot = result.getRotation();
+    default:
+        break;
+    }
+    result.setRotation(t_Rot);
+    return result;
 }
 
 const Base::Placement MechanicRobot::getToolTipTranslation() const
@@ -247,7 +265,7 @@ void MechanicRobot::setCurrentToolActive(bool activated)
 
 ToolType MechanicRobot::getCurrentTool() const
 {
-    ToolType c_Type;
+    ToolType c_Type = ToolType::NoTool;
     return c_Type;
 }
 
@@ -259,13 +277,19 @@ std::vector<DocumentObject *> MechanicRobot::getChildrenList() const
 
 const Base::Placement MechanicRobot::getCurrentBasePose() const
 {
-    return Base::Placement(Pose_RefOrigin.getValue() * Trans_Ref2Base.getValue());
+    return Base::Placement(Pose_Referece.getValue() * Trans_Ref2Base.getValue());
 }
 
 const Base::Placement MechanicRobot::getSelectedFeatureCenter() const
 {
     // TODO: Consider Edge Center as well
     return CAD_Utility::calculateLinkedFaceCenter(LinkedFaceFeature);
+}
+
+void MechanicRobot::setTeachCoordType(const TeachCoord &t_coord)
+{
+    m_TeachCoord = t_coord;
+    TeachCoordIndex.setValue(t_coord);
 }
 
 void MechanicRobot::Save(Base::Writer &writer) const
@@ -386,12 +410,12 @@ void MechanicRobot::setTipPoseByDraggerPose(const Base::Placement &n_DraggerPose
         break;
     }
 
-    Base::Placement toolTrans = getToolTipTranslation();
     auto base_inv = getOriginPose().inverse();
-
     auto tipPose_RbtFrame = base_inv * n_TipPose;
-    Pose_Tip.setValue(Base::Placement(tipPose_RbtFrame.toMatrix()*
-                                      toolTrans.inverse().toMatrix()));
+//    Base::Placement toolTrans = getToolTipTranslation();
+//    Pose_Tip.setValue(Base::Placement(tipPose_RbtFrame.toMatrix()*
+//                                      toolTrans.inverse().toMatrix()));
+    Pose_Tip.setValue(tipPose_RbtFrame);
 }
 
 void MechanicRobot::setTipPoseByDiff(const Base::Placement &movement)
@@ -401,48 +425,48 @@ void MechanicRobot::setTipPoseByDiff(const Base::Placement &movement)
     Base::Placement trans_stp = Base::Placement(movement.getPosition(), Base::Rotation());
     Base::Placement rotat_stp = Base::Placement(Base::Vector3d(), movement.getRotation());
 
-//    switch(m_TeachCoord){
-//    case TeachCoord::World:{
-//        c_TipPose = getCurrentTipPose(CoordOrigin::World);
-//        Base::Placement trans_org = Base::Placement(c_TipPose.getPosition(), Base::Rotation());
-//        Base::Placement rotat_org = Base::Placement(Base::Vector3d(), c_TipPose.getRotation());
-//        Pose_Flan.setValue(Base::Placement(getCurrentBasePose().inverse().toMatrix() *
-//                                            trans_stp.toMatrix()*
-//                                            trans_org.toMatrix()*
-//                                            rotat_stp.toMatrix()*
-//                                            rotat_org.toMatrix()*
-//                                            toolTrans.inverse().toMatrix()));
-//    }
-//        break;
-//    case TeachCoord::RobotBase:{
-//        c_TipPose = getCurrentTipPose(CoordOrigin::Robot);
-//        Base::Placement trans_org = Base::Placement(c_TipPose.getPosition(), Base::Rotation());
-//        Base::Placement rotat_org = Base::Placement(Base::Vector3d(), c_TipPose.getRotation());
-//        Pose_Flan.setValue(Base::Placement(trans_stp.toMatrix()*
-//                                           trans_org.toMatrix()*
-//                                           rotat_stp.toMatrix()*
-//                                           rotat_org.toMatrix()*
-//                                           toolTrans.inverse().toMatrix()));
-//    }
-//        break;
-//    case TeachCoord::Tip:
-//        c_TipPose = getCurrentTipPose(CoordOrigin::World);
-//        Base::Placement trans_org = Base::Placement(c_TipPose.getPosition(), Base::Rotation());
-//        Base::Placement rotat_org = Base::Placement(Base::Vector3d(), c_TipPose.getRotation());
-//        Pose_Flan.setValue(Base::Placement(getCurrentBasePose().inverse().toMatrix() *
-//                                            trans_org.toMatrix()*
-//                                            rotat_org.toMatrix()*
-//                                            trans_stp.toMatrix()*
-//                                            rotat_stp.toMatrix()*
-//                                            toolTrans.inverse().toMatrix()));
-//        break;
-//    }
+    switch(m_TeachCoord){
+    case TeachCoord::World:{
+        c_TipPose = getCurrentTipPose(CoordOrigin::World);
+        Base::Placement trans_org = Base::Placement(c_TipPose.getPosition(), Base::Rotation());
+        Base::Placement rotat_org = Base::Placement(Base::Vector3d(), c_TipPose.getRotation());
+        Pose_Tip.setValue(Base::Placement(getCurrentBasePose().inverse().toMatrix() *
+                                            trans_stp.toMatrix()*
+                                            trans_org.toMatrix()*
+                                            rotat_stp.toMatrix()*
+                                            rotat_org.toMatrix()/**
+                                            toolTrans.inverse().toMatrix()*/));
+    }
+        break;
+    case TeachCoord::RobotBase:{
+        c_TipPose = getCurrentTipPose(CoordOrigin::Robot);
+        Base::Placement trans_org = Base::Placement(c_TipPose.getPosition(), Base::Rotation());
+        Base::Placement rotat_org = Base::Placement(Base::Vector3d(), c_TipPose.getRotation());
+        Pose_Tip.setValue(Base::Placement(trans_stp.toMatrix()*
+                                           trans_org.toMatrix()*
+                                           rotat_stp.toMatrix()*
+                                           rotat_org.toMatrix()/**
+                                           toolTrans.inverse().toMatrix()*/));
+    }
+        break;
+    case TeachCoord::Tip:
+        c_TipPose = getCurrentTipPose(CoordOrigin::World);
+        Base::Placement trans_org = Base::Placement(c_TipPose.getPosition(), Base::Rotation());
+        Base::Placement rotat_org = Base::Placement(Base::Vector3d(), c_TipPose.getRotation());
+        Pose_Tip.setValue(Base::Placement(getCurrentBasePose().inverse().toMatrix() *
+                                            trans_org.toMatrix()*
+                                            rotat_org.toMatrix()*
+                                            trans_stp.toMatrix()*
+                                            rotat_stp.toMatrix()/**
+                                            toolTrans.inverse().toMatrix()*/));
+        break;
+    }
 }
 
 void MechanicRobot::moveToSelectedFaceCenter()
 {
     auto newCenter = CAD_Utility::calculateLinkedFaceCenter(LinkedFaceFeature);
-    Pose_RefOrigin.setValue(Base::Placement(newCenter.toMatrix()));
+    Pose_Referece.setValue(Base::Placement(newCenter.toMatrix()));
 }
 
 

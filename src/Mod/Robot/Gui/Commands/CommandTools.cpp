@@ -16,9 +16,6 @@
 #include <Gui/Control.h>
 #include <Gui/View3DInventor.h>
 
-
-
-
 using namespace std;
 
 //===========================================================================
@@ -47,7 +44,7 @@ void CmdInsertWeldTorch::activated(int iMsg) {
   filter << QString::fromLatin1("IGES (*.igs *.iges)");
   filter << QString::fromLatin1("IGES with colors (*.igs *.iges)");
   filter << QString::fromLatin1("BREP (*.brp *.brep)");
-  filter << QString::fromLatin1("torch (*.tor)");
+  filter << QString::fromLatin1("torch (*.torch)");
   QString select;
   QString fn = Gui::FileDialog::getOpenFileName(Gui::getMainWindow(),
                                                 QString(),
@@ -95,7 +92,7 @@ void CmdInsertLaserScanner::activated(int iMsg) {
   filter << QString::fromLatin1("IGES (*.igs *.iges)");
   filter << QString::fromLatin1("IGES with colors (*.igs *.iges)");
   filter << QString::fromLatin1("BREP (*.brp *.brep)");
-  filter << QString::fromLatin1("laser (*.lsr)");
+  filter << QString::fromLatin1("laser (*.laser)");
   QString select;
   QString fn = Gui::FileDialog::getOpenFileName(
       Gui::getMainWindow(), QString(), QString(),
@@ -141,7 +138,7 @@ void CmdInsert3DCamera::activated(int iMsg) {
   filter << QString::fromLatin1("IGES (*.igs *.iges)");
   filter << QString::fromLatin1("IGES with colors (*.igs *.iges)");
   filter << QString::fromLatin1("BREP (*.brp *.brep)");
-  filter << QString::fromLatin1("camer (*.cam)");
+  filter << QString::fromLatin1("camer (*.camera)");
   QString select;
   QString fn = Gui::FileDialog::getOpenFileName(
       Gui::getMainWindow(), QString(), QString(),

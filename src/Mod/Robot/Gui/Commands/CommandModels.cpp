@@ -37,9 +37,6 @@
 #include <Gui/Control.h>
 #include <Gui/View3DInventor.h>
 
-#include <Mod/Robot/App/Tool/ToolObject.h>
-
-
 using namespace std;
 
 //===========================================================================

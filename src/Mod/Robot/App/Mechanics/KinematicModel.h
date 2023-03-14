@@ -126,7 +126,7 @@ public:
     void updateJointFrames();
     /// calculate the new Tcp out of the Axis
     const Base::Placement getTcp(void) const;
-    void setKinematicModelConfig(const ConfigType& t_Type);
+    void updateKinematicModelByConfig(const ConfigType& t_Type);
     const ConfigType& getConfigType() const;
 
     //void setKinematik(const std::vector<std::vector<float> > &KinTable);

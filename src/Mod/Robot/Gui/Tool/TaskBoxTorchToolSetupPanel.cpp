@@ -125,7 +125,7 @@ void TaskBoxTorchToolSetupPanel::initUi_AssembleWidgets()
         m_ui->pushButton_Assemble->setText(tr("Install"));
     }
     else{
-        m_ui->comboBox_RobotList->addItem(tr(m_TorchPtr->ParentRobotName.getValue()));
+        m_ui->comboBox_RobotList->addItem(tr(m_TorchPtr->MountedRobot.getValue()));
         m_ui->comboBox_RobotList->setEnabled(false);
         m_ui->pushButton_Assemble->setText(tr("Uninstall"));
     }
@@ -159,7 +159,7 @@ void TaskBoxTorchToolSetupPanel::slot_getSelectedCenter()
 void TaskBoxTorchToolSetupPanel::slot_assembleTool2Robot()
 {
 
-    if(m_TorchPtr->ParentRobotName.isEmpty()){
+    if(m_TorchPtr->MountedRobot.isEmpty()){
         auto selectedRobotName = m_ui->comboBox_RobotList->currentText().toStdString();
         m_TorchPtr->assembleToRobot(selectedRobotName);
     }

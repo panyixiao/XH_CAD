@@ -101,7 +101,7 @@ void TaskBox_FreerunTracEditor::initUi_ToolBox()
     m_ui->radioButton_useTorch->setEnabled(m_MechGroup->hasTorch());
     m_ui->radioButton_useScanner->setEnabled(m_MechGroup->hasScanner());
     switch(m_MechGroup->getCurrentTool()){
-    case Robot::ToolType::Flan:
+    case Robot::ToolType::NoTool:
         m_ui->radioButton_NoTool->setChecked(true);
         break;
     case Robot::ToolType::WeldTorch:
@@ -132,7 +132,7 @@ void TaskBox_FreerunTracEditor::initUi_ToolBox()
 void TaskBox_FreerunTracEditor::slot_changeOperatorTool()
 {
     if(m_ui->radioButton_NoTool->isChecked()){
-        m_MechGroup->setCurrentToolType(Robot::ToolType::Flan);
+        m_MechGroup->setCurrentToolType(Robot::ToolType::NoTool);
         m_ui->pushButton_ToolSwitch->setEnabled(false);
     }
     else{
@@ -152,13 +152,13 @@ void TaskBox_FreerunTracEditor::slot_insertCommand_OperateTool()
 {
     Robot::ToolType t_Type;
     if(m_ui->radioButton_NoTool->isChecked())
-        t_Type = Robot::ToolType::Flan;
+        t_Type = Robot::ToolType::NoTool;
     if(m_ui->radioButton_useTorch->isChecked())
         t_Type = Robot::ToolType::WeldTorch;
     if(m_ui->radioButton_useScanner->isChecked())
         t_Type = Robot::ToolType::Scanner;
 
-    if(t_Type!= Robot::ToolType::Flan){
+    if(t_Type!= Robot::ToolType::NoTool){
         if(!switchOn){
             slot_insertCommand_ChangeTool();
             slot_insertCommand_Move();
@@ -290,7 +290,7 @@ void TaskBox_FreerunTracEditor::slot_insertCommand_ChangeTool()
 {
     Robot::ToolType t_Type;
     if(m_ui->radioButton_NoTool->isChecked())
-        t_Type = Robot::ToolType::Flan;
+        t_Type = Robot::ToolType::NoTool;
     if(m_ui->radioButton_useTorch->isChecked())
         t_Type = Robot::ToolType::WeldTorch;
     if(m_ui->radioButton_useScanner->isChecked())

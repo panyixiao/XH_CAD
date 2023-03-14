@@ -8,14 +8,10 @@
 #include <App/PropertyFile.h>
 #include <App/PropertyGeo.h>
 #include <App/PropertyLinks.h>
-//#include
 
 #include "KinematicModel.h"
+#include "Mod/Robot/App/Tool/ToolObject.h"
 #include "Mod/Robot/App/Mechanics/MechanicBase.h"
-#include "Mod/Robot/App/Trac/RobotWaypoint.h"
-#include "Mod/Robot/App/Utilites/FrameObject.h"
-#include "Mod/Robot/App/Tool/ScannerObject.h"
-#include "Mod/Robot/App/Tool/TorchObject.h"
 
 namespace Robot
 {
@@ -31,7 +27,7 @@ public:
     // Document Obejct Operations
     /// returns the type name of the ViewProvider
     virtual const char* getViewProviderName(void) const {
-        return "RobotGui::ViewProviderMechanicBase";
+        return "RobotGui::ViewProviderMechanicRobot";
     }
     virtual void Save (Base::Writer &/*writer*/) const;
     virtual void Restore(Base::XMLReader &/*reader*/);
@@ -47,6 +43,7 @@ public:
                          Base::Placement origin_Pose = Base::Placement());
 
 
+    const Base::Placement getTeachDraggerPose() const;
     const Base::Placement getToolTipTranslation() const;
     const Base::Placement getToolFrameTrans(const uint ToolID) const;
     const Base::Placement getCurrentTipPose(const CoordOrigin &ref_Origin) const;
@@ -65,20 +62,9 @@ public:
     const Base::Placement getCurrentBasePose() const;
     const Base::Placement getSelectedFeatureCenter() const;
 
-    void setTeachCoordType(const TeachCoord& t_coord){
-        m_TeachCoord = t_coord;
-        TeachCoordIndex.setValue(t_coord);
-    }
-
+    void setTeachCoordType(const TeachCoord& t_coord);
     const TeachCoord& getCurrentTeachCoord() const {
         return m_TeachCoord;
-    }
-
-    bool ScannerAssembled() const{
-        return false;
-    }
-    bool TorchAssembled() const{
-        return false;
     }
 
 public:
@@ -89,7 +75,8 @@ public:
     // IK Trigger
     App::PropertyInteger     TeachCoordIndex;
     // Tool
-    App::PropertyInteger   CurrentToolIndex;
+    App::PropertyInteger     CurrentToolIndex;
+    App::PropertyBool        InteractiveDraggerOn;
 
 protected:
     /// get called by the container when a property has changed

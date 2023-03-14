@@ -327,7 +327,7 @@ const std::string RobotProgram::generateCMDstr_Tool(RobotCommand_sptr t_Command)
     auto cmd_ptr = static_cast<Robot::ToolCommand*>(t_Command.get());
     if(cmd_ptr->getType() == Robot::CommandType::ChgTool){
         switch(cmd_ptr->getToolType()){
-        case ToolType::Flan:
+        case ToolType::NoTool:
             result_str+="SetTool=Flan";
             break;
         case ToolType::WeldTorch:
@@ -342,7 +342,7 @@ const std::string RobotProgram::generateCMDstr_Tool(RobotCommand_sptr t_Command)
     }
     else if(cmd_ptr->getType() == Robot::CommandType::OptTool){
         switch(cmd_ptr->getToolType()){
-        case ToolType::Flan:
+        case ToolType::NoTool:
             break;
         case ToolType::WeldTorch:
             result_str+="Arc";

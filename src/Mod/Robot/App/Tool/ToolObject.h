@@ -13,7 +13,7 @@ namespace Robot {
 class Robot6AxisObject;
 
 enum class ToolType{
-    Flan = 0,
+    NoTool = 0,
     WeldTorch,
     Scanner,
     DepthCamera,
@@ -60,16 +60,11 @@ public:
   const Base::Placement getPose_ABSToolTip() const;
   const Base::Placement getPose_ABSToolFront() const;
 
-
   bool isFloating();
   bool assembleToRobot(const std::string &robotName);
   bool detachToolFromRobot();
   void updateToolMountPose(const Base::Placement& t_Pose);
   void updateToolPose();
-
-//  // Tool Operation
-  bool attachObject(App::DocumentObject *t_obj);
-  bool detachObjcet(App::DocumentObject *t_obj);
 
   virtual void Save(Base::Writer &writer) const;
   virtual void Restore(Base::XMLReader &reader);
@@ -82,7 +77,6 @@ protected:
   /// get called by the container when a property has changed
   virtual void onChanged (const App::Property* prop);
   void onDocumentRestored() override;
-//  virtual void
 
 public:
   // Translation
@@ -91,10 +85,10 @@ public:
   App::PropertyPlacement Trans_M2T; // Translation, Mount to Tip
   App::PropertyPlacement Trans_T2F; // Translation, Tip to Front
   // Shape
-  App::PropertyString    CAD_File;
-  App::PropertyString    FilePath;
+  App::PropertyString    File_Solid;
+  App::PropertyString    File_Param;
   // Assemble
-  App::PropertyString    ParentRobotName;
+  App::PropertyString    MountedRobot;
   App::PropertyInteger   Type;
   // Linked Feature
   App::PropertyLinkSub   LinkedFaceFeature;
@@ -102,10 +96,8 @@ public:
   App::PropertyBool      setEdit;
 
 protected:
-  ToolType m_Type = ToolType::Flan;
-  Base::Placement        m_OriginBase;
-
-//  Robot::Robot6AxisObject   *m_assembledRobot = nullptr;
+  ToolType m_Type = ToolType::NoTool;
+//  Base::Placement        m_OriginBase;
 };
 }
 

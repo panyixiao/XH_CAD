@@ -24,12 +24,14 @@ public:
   virtual void Save(Base::Writer &writer) const;
   virtual void Restore(Base::XMLReader &reader);
 
-  App::PropertyBool SparkOn;
 
 protected:
   /// get called by the container when a property has changed
   virtual void onChanged (const App::Property* prop);
   void onDocumentRestored() override;
+
+public:
+  App::PropertyBool SparkOn;
 };
 }
 

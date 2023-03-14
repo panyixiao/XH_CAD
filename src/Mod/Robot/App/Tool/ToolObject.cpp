@@ -43,9 +43,9 @@ Base::Vector3d rotateByEigenMatrix(const Eigen::Affine3d &mat,
 }
 
 ToolObject::ToolObject() {
-  ADD_PROPERTY_TYPE(CAD_File, (""), "File", Prop_None, "Path to Model File");
-  ADD_PROPERTY_TYPE(FilePath, (""), "File", Prop_None, "Path to Tool File");
-  ADD_PROPERTY_TYPE(ParentRobotName, (""), "Assemble", Prop_None, "Assembled Robot Name");
+  ADD_PROPERTY_TYPE(File_Solid, (""), "File", Prop_None, "Path to Model File");
+  ADD_PROPERTY_TYPE(File_Param, (""), "File", Prop_None, "Path to Tool File");
+  ADD_PROPERTY_TYPE(MountedRobot, (""), "Assemble", Prop_None, "Assembled Robot Name");
   ADD_PROPERTY_TYPE(Type, (0), "Property", Prop_None, "Tool Type");
 
   ADD_PROPERTY(Pose_Mount, (Base::Placement()));
@@ -53,9 +53,9 @@ ToolObject::ToolObject() {
   ADD_PROPERTY(Trans_M2T, (Base::Placement()));
   ADD_PROPERTY(Trans_T2F, (Base::Placement()));
   ADD_PROPERTY(setEdit, (false));
-  CAD_File.setStatus(App::Property::Status::ReadOnly, true);
-  FilePath.setStatus(App::Property::Status::ReadOnly, true);
-  ParentRobotName.setStatus(App::Property::Status::ReadOnly, true);
+  File_Solid.setStatus(App::Property::Status::ReadOnly, true);
+  File_Param.setStatus(App::Property::Status::ReadOnly, true);
+  MountedRobot.setStatus(App::Property::Status::ReadOnly, true);
   Placement.setStatus(App::Property::Status::Hidden, true);
 
   setEdit.setStatus(App::Property::Status::ReadOnly, true);
@@ -99,8 +99,8 @@ bool ToolObject::setupToolObject(const string &filePath,
                                  const string &cad_Path,
                                  const Base::Placement &tf_f2c,
                                  const Base::Placement &tf_f2t) {
-  FilePath.setValue(filePath);
-  CAD_File.setValue(cad_Path);
+  File_Param.setValue(filePath);
+  File_Solid.setValue(cad_Path);
   return true;
 }
 
@@ -180,7 +180,7 @@ const Base::Placement ToolObject::getPose_ABSToolFront() const
 
 bool ToolObject::isFloating()
 {
-    return ParentRobotName.isEmpty();
+    return MountedRobot.isEmpty();
 }
 
 bool ToolObject::assembleToRobot(const string &robotName) {
@@ -191,7 +191,7 @@ bool ToolObject::assembleToRobot(const string &robotName) {
   if(targetRobot_Ptr == nullptr)
       return false;
   targetRobot_Ptr->installTool(this->getNameInDocument());
-  ParentRobotName.setValue(targetRobot_Ptr->getNameInDocument());
+  MountedRobot.setValue(targetRobot_Ptr->getNameInDocument());
   return true;
 }
 
@@ -201,21 +201,12 @@ void ToolObject::updateToolMountPose(const Base::Placement &t_Pose)
 }
 
 bool ToolObject::detachToolFromRobot() {
-    auto targetRobot_Ptr = dynamic_cast<Robot::Robot6AxisObject*>(getDocument()->getObject(ParentRobotName.getValue()));
+    auto targetRobot_Ptr = dynamic_cast<Robot::Robot6AxisObject*>(getDocument()->getObject(MountedRobot.getValue()));
     if(targetRobot_Ptr == nullptr)
         return false;
     targetRobot_Ptr->uninstallTool(this);
-    ParentRobotName.setValue("");
+    MountedRobot.setValue("");
     return true;
-}
-
-
-bool ToolObject::attachObject(DocumentObject *t_obj) {
-  return true;
-}
-
-bool ToolObject::detachObjcet(DocumentObject *t_obj) {
-  return true;
 }
 
 void ToolObject::Save(Base::Writer &writer) const {
@@ -235,8 +226,8 @@ void ToolObject::onChanged(const Property *prop)
 }
 
 void ToolObject::onDocumentRestored() {
-    if(!ParentRobotName.isEmpty()){
-        assembleToRobot(std::string(ParentRobotName.getValue()));
+    if(!MountedRobot.isEmpty()){
+        assembleToRobot(std::string(MountedRobot.getValue()));
     }
     Part::Feature::onDocumentRestored();
 }

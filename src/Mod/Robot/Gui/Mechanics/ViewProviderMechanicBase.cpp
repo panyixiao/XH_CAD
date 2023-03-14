@@ -1,37 +1,18 @@
 
 #include "Mod/Robot/Gui/PreCompiled.h"
-#ifndef _PreComp_
-# include <Inventor/SoDB.h>
-# include <Inventor/SoInput.h>
-# include <Inventor/SbVec3f.h>
-# include <Inventor/nodes/SoSeparator.h>
-# include <Inventor/nodes/SoTransform.h>
-# include <Inventor/nodes/SoSphere.h>
-# include <Inventor/nodes/SoRotation.h>
-# include <Inventor/actions/SoSearchAction.h>
-# include <Inventor/draggers/SoJackDragger.h>
-# include <Inventor/draggers/SoTrackballDragger.h>
-# include <Inventor/VRMLnodes/SoVRMLTransform.h>
-#include <QFile>
-#include <QFileInfo>
-#endif
 
-#include <Mod/Robot/App/Mechanics/MechanicBase.h>
 #include <Mod/Part/App/PartFeature.h>
 #include <Mod/Part/Gui/ViewProvider.h>
 #include <App/Document.h>
-#include <App/VRMLObject.h>
-#include <Gui/Application.h>
-#include <Gui/Control.h>
-#include <Gui/Command.h>
 #include <Base/FileInfo.h>
 #include <Base/Stream.h>
 #include <Base/Console.h>
 #include <sstream>
-#include <Mod/Robot/App/Utilites/DS_Utility.h>
 
 #include "ViewProviderMechanicBase.h"
-#include "TaskDlgMechanicControl.h"
+
+#include <Mod/Robot/App/Utilites/DS_Utility.h>
+#include <Mod/Robot/App/Mechanics/MechanicBase.h>
 
 using namespace Gui;
 using namespace RobotGui;
@@ -40,7 +21,7 @@ PROPERTY_SOURCE(RobotGui::ViewProviderMechanicBase,
                 Gui::ViewProviderGeometryObject)
 
 ViewProviderMechanicBase::ViewProviderMechanicBase()
-  : pcDragger(0),toolShapeVP(0)
+  : pcDragger(0)
 {
     pcRoot = new Gui::SoFCSelection();
     pcRoot->highlightMode = Gui::SoFCSelection::OFF;
@@ -136,9 +117,6 @@ bool ViewProviderMechanicBase::updatelinkmeshPoses()
                                        newPos.getRotation()[2], newPos.getRotation()[3]),
                             SbVec3f(1, 1, 1));
             transNode->setMatrix(M);
-            if(toolShapeVP){
-                toolShapeVP->setTransformation(t_MechanicObj->getCurrentTipPose().toMatrix());
-            }
         }
     }
     return true;
@@ -160,32 +138,32 @@ void ViewProviderMechanicBase::attach(App::DocumentObject *pcObj)
 {
     ViewProviderGeometryObject::attach(pcObj);
 
-    addDisplayMaskMode(pcRoot, "On");
+    addDisplayMaskMode(pcRoot, "Visiable");
     pcRoot->objectName = pcObj->getNameInDocument();
     pcRoot->documentName = pcObj->getDocument()->getName();
     pcRoot->subElementName = "Main";
     pcRoot->addChild(m_LinkMeshs);
     pcRoot->addChild(m_TcpRoot);
 
-    addDisplayMaskMode(m_LinkMeshs, "Off");
+    addDisplayMaskMode(m_LinkMeshs, "Invisiable");
     m_LinkMeshs->addChild(m_TcpRoot);
 }
 
 void ViewProviderMechanicBase::setDisplayMode(const char* ModeName)
 {
-    if ( strcmp("On",ModeName)==0 )
-        setDisplayMaskMode("On");
+    if ( strcmp("Visiable",ModeName)==0 )
+        setDisplayMaskMode("Visiable");
 
-    if ( strcmp("Off",ModeName)==0 )
-        setDisplayMaskMode("Off");
+    if ( strcmp("Invisiable",ModeName)==0 )
+        setDisplayMaskMode("Invisiable");
     ViewProviderGeometryObject::setDisplayMode( ModeName );
 }
 
 std::vector<std::string> ViewProviderMechanicBase::getDisplayModes(void) const
 {
     std::vector<std::string> StrList;
-    StrList.push_back("On");
-    StrList.push_back("Off");
+    StrList.push_back("Visiable");
+    StrList.push_back("Invisiable");
     return StrList;
 }
 
@@ -240,28 +218,22 @@ void ViewProviderMechanicBase::updateData(const App::Property* prop)
             callBack_UpdatePanelWidgets();
         }
         if(pcDragger!=nullptr){
-            pcDragger->setDraggerPosition(t_Mechanics->getTeachDraggerPose());
+            pcDragger->setDraggerPosition(t_Mechanics->getCurrentTipPose());
         }
     }
-
-//    else if(prop == &t_Mechanics->TeachCoordIndex){
-//        if(pcDragger!=nullptr){
-//            pcDragger->setDraggerPosition(t_Mechanics->getTeachDraggerPose());
-//        }
-//    }
 
     else if(prop == &t_Mechanics->Visiable){
         setVisible(t_Mechanics->Visiable.getValue());
     }
 
-    // Move RobotBase
-    else if(prop == &t_Mechanics->Trans_Ref2Base || prop == &t_Mechanics->Pose_RefOrigin){
+    // Move Base
+    else if(prop == &t_Mechanics->Trans_Ref2Base || prop == &t_Mechanics->Pose_Referece){
         updatelinkmeshPoses();
         if(callbackRegistered()){
             callBack_UpdatePanelWidgets();
         }
         if(pcDragger!=nullptr){
-            pcDragger->setDraggerPosition(t_Mechanics->getTeachDraggerPose());
+            pcDragger->setDraggerPosition(t_Mechanics->getCurrentTipPose());
         }
     }
 
@@ -272,71 +244,41 @@ void ViewProviderMechanicBase::updateData(const App::Property* prop)
         else{
             unsetEdit(0);
         }
-        t_Mechanics->InteractiveTeach.setValue(t_Mechanics->Activated.getValue());
-    }
-
-    else if (prop == &t_Mechanics->InteractiveTeach) {
-        if (t_Mechanics->InteractiveTeach.getValue()) {
-            if (pcDragger == nullptr){
-                pcDragger = new InteractiveDragger(this->getRoot(),
-                                                   t_Mechanics->getTeachDraggerPose(),
-                                                   DraggerUsage::Interaction);
-                pcDragger->setup_incCallback(std::bind(&ViewProviderMechanicBase::DraggerMotionCallback,
-                                                       this, std::placeholders::_1));
-                pcDragger->setup_finishCallback(std::bind(&ViewProviderMechanicBase::DraggerFinishCallback,
-                                                          this, std::placeholders::_1));
-                pcDragger->setAttachingViewProvider(this);
-            }
-        }
-        else {
-            if(pcDragger!=nullptr){
-                pcDragger->destroyDragger();
-                pcDragger = nullptr;
-            }
-        }
     }
 }
 
 bool ViewProviderMechanicBase::setEdit(int ModNum){
     auto t_Mechanics = static_cast<Robot::MechanicBase *>(pcObject);
-    t_Mechanics->InteractiveTeach.setValue(true);
     auto dlg = new TaskDlgMechanicControl(t_Mechanics);
     if (dlg == nullptr)
       return false;
     callBack_UpdatePanelWidgets = std::bind(&TaskDlgMechanicControl::signal_updatePanelWidgets, dlg);
     Gui::Control().showDialog(dlg);
     t_Mechanics->isEditing.setValue(true);
+    if (pcDragger == nullptr){
+        pcDragger = new InteractiveDragger(this->getRoot(),
+                                           t_Mechanics->getCurrentTipPose(),
+                                           DraggerUsage::Display);
+        pcDragger->setAttachingViewProvider(this);
+    }
     return true;
 }
 
 void ViewProviderMechanicBase::unsetEdit(int ModeNum)
 {
     Robot::MechanicBase* t_Mechanics = static_cast<Robot::MechanicBase*>(pcObject);
-    t_Mechanics->InteractiveTeach.setValue(false);
     callBack_UpdatePanelWidgets = nullptr;
     Gui::Control().closeDialog();
     t_Mechanics->isEditing.setValue(false);
+    if(pcDragger!=nullptr){
+        pcDragger->destroyDragger();
+        pcDragger = nullptr;
+    }
 }
 
 std::vector<App::DocumentObject *> ViewProviderMechanicBase::claimChildren() const
 {
     Robot::MechanicBase* t_Mechanics = static_cast<Robot::MechanicBase*>(pcObject);
     return std::vector<App::DocumentObject *>();
-}
-
-void ViewProviderMechanicBase::DraggerMotionCallback(InteractiveDragger *t_dragger)
-{
-    Robot::MechanicBase* t_Mechanic = static_cast<Robot::MechanicBase*>(pcObject);
-    auto diff = t_dragger->getLastPose().inverse() * t_dragger->getCurrentPose();
-    if(t_Mechanic->isDerivedFrom(Robot::MechanicRobot::getClassTypeId())){
-        auto t_RobotPtr = static_cast<Robot::MechanicRobot*>(t_Mechanic);
-        t_RobotPtr->setTipPoseByDiff(diff);
-    }
-}
-
-void ViewProviderMechanicBase::DraggerFinishCallback(InteractiveDragger *t_dragger)
-{
-    Robot::MechanicBase* t_Mechanics = static_cast<Robot::MechanicBase*>(pcObject);
-    t_dragger->setDraggerPosition(t_Mechanics->getTeachDraggerPose());
 }
 

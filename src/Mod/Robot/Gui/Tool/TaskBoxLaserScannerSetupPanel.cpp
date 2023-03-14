@@ -160,7 +160,7 @@ void TaskBoxLaserScannerSetupPanel::initUi_AssembleWidgets()
         m_ui->pushButton_Assemble->setText(tr("Install"));
     }
     else{
-        m_ui->comboBox_RobotList->addItem(tr(m_ScannerPtr->ParentRobotName.getValue()));
+        m_ui->comboBox_RobotList->addItem(tr(m_ScannerPtr->MountedRobot.getValue()));
         m_ui->comboBox_RobotList->setEnabled(false);
         m_ui->pushButton_Assemble->setText(tr("Uninstall"));
     }
@@ -194,7 +194,7 @@ void TaskBoxLaserScannerSetupPanel::slot_getSelectedCenter()
 
 void TaskBoxLaserScannerSetupPanel::slot_assembleTool2Robot()
 {
-    if(m_ScannerPtr->ParentRobotName.isEmpty()){
+    if(m_ScannerPtr->MountedRobot.isEmpty()){
         auto selectedRobotName = m_ui->comboBox_RobotList->currentText().toStdString();
         m_ScannerPtr->assembleToRobot(selectedRobotName);
     }

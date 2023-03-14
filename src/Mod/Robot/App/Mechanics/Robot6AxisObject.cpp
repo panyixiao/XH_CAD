@@ -86,7 +86,7 @@ Robot6AxisObject::Robot6AxisObject()
 
     m_kinematicModel.setIKsolverType(IK_SolverType::TRAC_IK);
     m_kinematicModel.setMechanicType(MechanicType::M_Robot);
-    m_kinematicModel.setKinematicModelConfig(ConfigType::NON);
+    m_kinematicModel.updateKinematicModelByConfig(ConfigType::NON);
 }
 
 Robot6AxisObject::~Robot6AxisObject()
@@ -224,9 +224,9 @@ void Robot6AxisObject::updateRobotConfiguration()
         }
     }
     if(EnableArmConfiguration.getValue())
-       m_kinematicModel.setKinematicModelConfig(t_Type);
+       m_kinematicModel.updateKinematicModelByConfig(t_Type);
     else
-       m_kinematicModel.setKinematicModelConfig(ConfigType::NON);
+       m_kinematicModel.updateKinematicModelByConfig(ConfigType::NON);
 }
 
 bool Robot6AxisObject::setRobotTipPose(const Base::Placement &n_TipPose,
@@ -467,7 +467,7 @@ void Robot6AxisObject::udpateToolPosition()
 void Robot6AxisObject::setCurrentToolType(const ToolType &t_Type)
 {
     switch(t_Type){
-    case ToolType::Flan:
+    case ToolType::NoTool:
         CurrentToolIndex.setValue(0);
         break;
     case ToolType::WeldTorch:
@@ -485,7 +485,7 @@ void Robot6AxisObject::setCurrentToolType(const ToolType &t_Type)
 void Robot6AxisObject::setCurrentToolActive(bool activated)
 {
     switch(getCurrentTool()){
-    case ToolType::Flan:
+    case ToolType::NoTool:
         break;
     case ToolType::WeldTorch:
         if(m_Torch){
@@ -510,7 +510,7 @@ const ToolType Robot6AxisObject::getCurrentTool() const
     else if(CurrentToolIndex.getValue() == CameraIndex.getValue())
         c_Type = ToolType::DepthCamera;
     else
-        c_Type = ToolType::Flan;
+        c_Type = ToolType::NoTool;
     return c_Type;
 }
 

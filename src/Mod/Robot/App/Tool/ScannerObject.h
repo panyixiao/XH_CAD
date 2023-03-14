@@ -22,9 +22,9 @@ public:
     return "RobotGui::ViewProviderScannerObject";
   }
 
-  // Tool Operation
-  bool attachObject(App::DocumentObject *t_obj);
-  bool detachObjcet(App::DocumentObject *t_obj);
+//  // Tool Operation
+//  bool attachObject(App::DocumentObject *t_obj);
+//  bool detachObjcet(App::DocumentObject *t_obj);
 
   virtual void Save(Base::Writer &writer) const;
   virtual void Restore(Base::XMLReader &reader);

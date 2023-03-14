@@ -21,10 +21,10 @@
 
 
 // #####################################################################################################
-DEF_STD_CMD_A(CmdRobotInsert6AxisRobot);
+DEF_STD_CMD_A(CmdRobotInsertMechanicRobot);
 
-CmdRobotInsert6AxisRobot::CmdRobotInsert6AxisRobot()
-    :Command("Robot_Insert6AxisRobot")
+CmdRobotInsertMechanicRobot::CmdRobotInsertMechanicRobot()
+    :Command("Robot_InsertMechanicRobot")
 {
     sAppModule      = "Robot";
     sGroup          = QT_TR_NOOP("Robot");
@@ -36,7 +36,7 @@ CmdRobotInsert6AxisRobot::CmdRobotInsert6AxisRobot()
 }
 
 
-void CmdRobotInsert6AxisRobot::activated(int iMsg)
+void CmdRobotInsertMechanicRobot::activated(int iMsg)
 {
     App::Document *pDoc = getDocument();
     if (!pDoc)
@@ -46,7 +46,7 @@ void CmdRobotInsert6AxisRobot::activated(int iMsg)
     Gui::Control().show_TaskManageDialog(t_SelectionPtr, false);
 }
 
-bool CmdRobotInsert6AxisRobot::isActive(void)
+bool CmdRobotInsertMechanicRobot::isActive(void)
 {
     return true;
 }
@@ -113,95 +113,12 @@ bool CmdRobotInsertExtAxisDevice::isActive(void)
     return true;
 }
 
-
-
-// #####################################################################################################
-DEF_STD_CMD_A(CmdRobotSetHomePos);
-
-CmdRobotSetHomePos::CmdRobotSetHomePos()
-    :Command("Robot_SetHomePos")
-{
-    sAppModule      = "Robot";
-    sGroup          = QT_TR_NOOP("Robot");
-    sMenuText       = QT_TR_NOOP("Set the home position");
-    sToolTipText    = QT_TR_NOOP("Set the home position");
-    sWhatsThis      = "Robot_SetHomePos";
-    sStatusTip      = sToolTipText;
-    sPixmap         = "Robot_SetHomePos";
-}
-
-void CmdRobotSetHomePos::activated(int iMsg)
-{
-   const char * SelFilter = "SELECT Robot::Robot6AxisObject COUNT 1 ";
-
-    Gui::SelectionFilter filter(SelFilter);
-    Robot::Robot6AxisObject *pcRobotObject;
-    if (filter.match()) {
-        pcRobotObject = static_cast<Robot::Robot6AxisObject*>(filter.Result[0][0].getObject());
-    }
-    else {
-        QMessageBox::warning(Gui::getMainWindow(),
-                             QObject::tr("Wrong selection"),
-                             QObject::tr("Select one Robot to set home postion"));
-        return;
-    }
-
-    pcRobotObject->setCurrentPoseAsHome();
-}
-
-bool CmdRobotSetHomePos::isActive(void)
-{
-    return hasActiveDocument();
-}
-
-
-// #####################################################################################################
-DEF_STD_CMD_A(CmdRobotRestoreHomePos);
-
-CmdRobotRestoreHomePos::CmdRobotRestoreHomePos()
-    :Command("Robot_RestoreHomePos")
-{
-    sAppModule      = "Robot";
-    sGroup          = QT_TR_NOOP("Robot");
-    sMenuText       = QT_TR_NOOP("Move to home");
-    sToolTipText    = QT_TR_NOOP("Move to home");
-    sWhatsThis      = "Robot_RestoreHomePos";
-    sStatusTip      = sToolTipText;
-    sPixmap         = "Robot_RestoreHomePos";
-}
-
-
-void CmdRobotRestoreHomePos::activated(int iMsg)
-{
-    const char * SelFilter = "SELECT Robot::Robot6AxisObject COUNT 1 ";
-
-    Gui::SelectionFilter filter(SelFilter);
-    Robot::Robot6AxisObject *pcRobotObject;
-    if (filter.match()) {
-        pcRobotObject = static_cast<Robot::Robot6AxisObject*>(filter.Result[0][0].getObject());
-    }
-    else {
-        QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
-            QObject::tr("Select one Robot"));
-        return;
-    }
-    pcRobotObject->restoreHomePose();
-    pcRobotObject->updateAxisValues();
-}
-
-bool CmdRobotRestoreHomePos::isActive(void)
-{
-    return hasActiveDocument();
-}
-
 // #####################################################################################################
 
 void CreateRobotCommandsMechOperation(void)
 {
     Gui::CommandManager &rcCmdMgr = Gui::Application::Instance->commandManager();
-    rcCmdMgr.addCommand(new CmdRobotInsert6AxisRobot());
+    rcCmdMgr.addCommand(new CmdRobotInsertMechanicRobot());
     rcCmdMgr.addCommand(new CmdRobotInsertPositioner());
     rcCmdMgr.addCommand(new CmdRobotInsertExtAxisDevice());
-    rcCmdMgr.addCommand(new CmdRobotRestoreHomePos());
-    rcCmdMgr.addCommand(new CmdRobotSetHomePos());
 }

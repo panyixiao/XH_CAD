@@ -105,10 +105,9 @@ bool KinematicModel::readURDFfiles(const char *FileName)
     m_RobotModel = urdf::parseURDFFile(std::string(FileName));
     if(m_RobotModel==nullptr)
         return false;
-//    if(updateKDLChain())
-//        setKinematicModelConfig(ConfigType::NON);
-//    return true;
-    return updateKDLChain();
+    if(updateKDLChain())
+        updateKinematicModelByConfig(m_ConfigType);
+    return true;
 }
 
 bool KinematicModel::updateKDLChain()
@@ -247,7 +246,7 @@ void KinematicModel::Restore(XMLReader &reader)
     reader.readElement("ConfigType");
     if(reader.hasAttribute("Type"))
         m_ConfigType = (ConfigType)reader.getAttributeAsInteger("Type");
-    setKinematicModelConfig(m_ConfigType);
+    updateKinematicModelByConfig(m_ConfigType);
     reader.readEndElement("Segments");
 }
 
@@ -331,7 +330,7 @@ const Placement KinematicModel::getTcp(void) const
             Base::Rotation(x,y,z,w));
 }
 
-void KinematicModel::setKinematicModelConfig(const ConfigType &t_Type)
+void KinematicModel::updateKinematicModelByConfig(const ConfigType &t_Type)
 {
     if(m_MechanicType != MechanicType::M_Robot)
         m_ConfigType = ConfigType::NON;
