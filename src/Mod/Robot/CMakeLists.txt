@@ -61,6 +61,14 @@ SET(Robot_Resources
     Lib/Model/ExtAx/RotateBase/meshes/base_link.STL
     Lib/Model/ExtAx/RotateBase/meshes/Link1.STL
 
+    Lib/Model/Tools/Torch/Torch_180.stp
+    Lib/Model/Tools/Torch/Torch_220.stp
+    Lib/Model/Tools/Torch/Torch_350.stp
+    Lib/Model/Tools/Torch/Torch_430.stp
+    Lib/Model/Tools/Torch/Torch_440.stp
+
+    Lib/Model/Tools/Sensor/Scanner/ScannerV1_withInstall.STEP
+    Lib/Model/Tools/Sensor/Scanner/ScannerV2_withInstall.STEP
     )
 
 add_custom_target(RobotScripts ALL

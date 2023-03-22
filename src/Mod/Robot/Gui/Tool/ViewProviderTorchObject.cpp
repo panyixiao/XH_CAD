@@ -43,14 +43,14 @@ void ViewProviderTorchObject::updateData(const App::Property *prop) {
 }
 
 bool ViewProviderTorchObject::setEdit(int ModNum) {
-  if (ModNum == Gui::ViewProvider::EditMode::Default) {
-    auto m_tool = static_cast<Robot::TorchObject *>(pcObject);
-    Gui::TaskView::TaskDialog *dlg = new TaskDlgToolObject(m_tool);
-    if(dlg == nullptr)
-        return false;
-    Gui::Control().showDialog(dlg);
-  }
-  return true;
+//  if (ModNum == Gui::ViewProvider::EditMode::Default) {
+//    auto m_tool = static_cast<Robot::TorchObject *>(pcObject);
+//    Gui::TaskView::TaskDialog *dlg = new TaskDlgToolObject(m_tool);
+//    if(dlg == nullptr)
+//        return false;
+//    Gui::Control().showDialog(dlg);
+//  }
+  return ViewProviderToolObject::setEdit(ModNum);
 }
 
 void ViewProviderTorchObject::setDisplayMode(const char *displayModeName) {

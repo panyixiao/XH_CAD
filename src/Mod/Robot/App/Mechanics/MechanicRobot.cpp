@@ -222,6 +222,15 @@ const Base::Placement MechanicRobot::getCurrentFlanPose(const CoordOrigin &ref_O
     return c_flanPose;
 }
 
+bool MechanicRobot::TorchAssembled()
+{
+    for(const auto& iter : m_AssembledTools){
+        if(iter.second->getToolType() == ToolType::WeldTorch)
+            return true;
+    }
+    return false;
+}
+
 
 void MechanicRobot::installTool(const char *tool_Name)
 {
@@ -234,7 +243,7 @@ void MechanicRobot::installTool(const char *tool_Name)
     case ToolType::WeldTorch:
 
         break;
-    case ToolType::Scanner:
+    case ToolType::_2DScanner:
 
         break;
     default:
@@ -265,7 +274,7 @@ void MechanicRobot::setCurrentToolActive(bool activated)
 
 ToolType MechanicRobot::getCurrentTool() const
 {
-    ToolType c_Type = ToolType::NoTool;
+    ToolType c_Type = ToolType::Undefined;
     return c_Type;
 }
 

@@ -387,7 +387,7 @@ void MechanicGroup::setCurrentToolActive(bool activated)
 
 const ToolType MechanicGroup::getCurrentTool() const
 {
-    ToolType c_Type = ToolType::NoTool;
+    ToolType c_Type = ToolType::Undefined;
     if(m_ActiveRobotPtr)
         c_Type = m_ActiveRobotPtr->getCurrentTool();
     return c_Type;

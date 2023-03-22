@@ -37,7 +37,7 @@ bool FileIO_Utility::splitProgramBySequence()
         if (cmdPtr->getType() == Robot::CommandType::OptTool) {
             auto toolCmdPtr = static_cast<Robot::ToolCommand*>(cmdPtr.get());
             switch(toolCmdPtr->getToolType()){
-            case Robot::ToolType::Scanner:
+            case Robot::ToolType::_2DScanner:
                 // Laser On
                 if(toolCmdPtr->getToolStatus()){
                     vec_scanCmdLineID.push_back(cmdID_count - 1);
@@ -536,7 +536,7 @@ bool FileIO_Utility::exportCommand(const std::vector<RobotCommand_sptr>& command
         else if (t_cmmdPtr->getType() == Robot::CommandType::OptTool) {
             auto toolCmmdPtr = static_cast<Robot::ToolCommand*>(t_cmmdPtr.get());
             switch (toolCmmdPtr->getToolType()) {
-            case Robot::ToolType::Scanner:
+            case Robot::ToolType::_2DScanner:
                 if(toolCmmdPtr->getToolStatus()){
                     m_fwriter << "SOCKCLOSE ID=1 B=1" << "\n";
                     m_fwriter << "TIMER T=250" << "\n";

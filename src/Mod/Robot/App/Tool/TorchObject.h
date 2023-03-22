@@ -2,12 +2,10 @@
 #ifndef ROBOT_TORCHTOOLOBJECT_H
 #define ROBOT_TORCHTOOLOBJECT_H
 
+#include <Mod/Robot/App/Database/ToolDatabase.h>
 #include <App/GeoFeature.h>
 #include <Eigen/Geometry>
 #include <Mod/Part/App/PartFeature.h>
-
-//#include "Mod/Robot/App/Utilites/FrameObject.h"
-
 #include "ToolObject.h"
 
 namespace Robot {
@@ -21,6 +19,8 @@ public:
     return "RobotGui::ViewProviderTorchObject";
   }
 
+  bool saveTool();
+  bool loadTool(const std::string& filePath);
   virtual void Save(Base::Writer &writer) const;
   virtual void Restore(Base::XMLReader &reader);
 
@@ -32,6 +32,7 @@ protected:
 
 public:
   App::PropertyBool SparkOn;
+  ToolInfo_WeldTorch m_Info;
 };
 }
 

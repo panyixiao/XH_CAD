@@ -7,8 +7,6 @@
 #include <string>
 #include <vector>
 #include <map>
-
-//#include <Mod/Robot/App/Utilites/EnumUtility.h>
 #include <Base/Placement.h>
 
 #define stringify(name) #name

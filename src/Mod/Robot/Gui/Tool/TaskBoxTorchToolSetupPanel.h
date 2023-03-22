@@ -11,6 +11,7 @@
 #include <QSignalMapper>
 #include <QSlider>
 #include <QWidget>
+#include <QMessageBox>
 #include <Gui/TaskView/TaskView.h>
 #include <Gui/TaskView/TaskSelectLinkProperty.h>
 #include "Mod/Robot/Gui/Utilites/DraggerUtility.h"
@@ -28,8 +29,8 @@ class TaskBoxTorchToolSetupPanel : public Gui::TaskView::TaskBox
 
 public:
   TaskBoxTorchToolSetupPanel(Robot::ToolObject *t_toolPtr,
-                                Gui::TaskView::TaskSelectLinkProperty * t_FaceSelection,
-                                Gui::TaskView::TaskSelectLinkProperty * t_EdgeSelection);
+                             Gui::TaskView::TaskSelectLinkProperty * t_FaceSelection,
+                             Gui::TaskView::TaskSelectLinkProperty * t_EdgeSelection);
 
 Q_SIGNALS:
   void Signal_finishSetup();
@@ -49,6 +50,7 @@ private:
   void blockPosePanelSignals(bool block);
 
   void initUi_AssembleWidgets();
+  bool checkIfTorchInfoFullfilled();
 
 private Q_SLOTS:
   void slot_getSelectedCenter();
@@ -60,8 +62,7 @@ private Q_SLOTS:
   // Visualization
   void slot_setsparkOn();
   void slot_changeTorchVisualEffect();
-
-  void slot_finishSetup();
+  void slot_finishSetupButtonClicked();
 
 
 private:
@@ -71,6 +72,7 @@ private:
   Gui::TaskView::TaskSelectLinkProperty *m_FaceRef = nullptr;
   Gui::TaskView::TaskSelectLinkProperty *m_EdgeRef = nullptr;
   Robot::TorchObject* m_TorchPtr = nullptr;
+  bool creatingMode = false;
 };
 }
 

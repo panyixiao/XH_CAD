@@ -53,7 +53,7 @@ bool TaskBox_EdgeBasedTracEditor::initEdgeTracEditor(Robot::RobotTracObject *t_T
         m_EdgeTracPtr->CurrentExternalAxis.setValues(m_GroupPtr->getCurrentExtAxisValue());
         switch(m_EdgeTracPtr->getTracType()){
         case Robot::TracType::SCANTRAC:
-            m_GroupPtr->setCurrentToolType(Robot::ToolType::Scanner);
+            m_GroupPtr->setCurrentToolType(Robot::ToolType::_2DScanner);
             m_GroupPtr->setCurrentToolActive(true);
             break;
         case Robot::TracType::SEAMTRAC:

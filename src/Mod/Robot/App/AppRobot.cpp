@@ -42,15 +42,18 @@
 #include "Mechanics/KinematicModel.h"
 #include "Mechanics/Robot6AxisObject.h"
 #include "Mechanics/MechanicGroup.h"
-#include "Mechanics/MechanicDatabase.h"
+
+#include "Database/FileOperator.h"
+#include "Database/ToolDatabase.h"
+#include "Database/MechanicDatabase.h"
 
 #include "Utilites/PartUtility.h"
 #include "Utilites/FileIO_Utility.h"
 #include "Utilites/FrameObject.h"
 
 #include "Tool/ToolObject.h"
-#include "Tool/ScannerObject.h"
 #include "Tool/TorchObject.h"
+#include "Tool/ScannerObject.h"
 
 #include "PlanningObj/PlanningObject.h"
 
@@ -70,18 +73,24 @@
 namespace Robot {
 class Module : public Py::ExtensionModule<Module>
 {
+private:
     MechanicDatabase m_ModelDatabase;
+    ToolDatabase m_ToolDatabase;
 public:
     Module() : Py::ExtensionModule<Module>("Robot")
     {
-        add_varargs_method("insert_ROBOT", &Module::insert_Robot);
-        add_varargs_method("insert_POSER", &Module::insert_Poser);
-        add_varargs_method("insert_EXTAX", &Module::insert_ExtAx);
+        add_varargs_method("insert_ROBOT", &Module::insertMech_Robot);
+        add_varargs_method("insert_POSER", &Module::insertMech_Poser);
+        add_varargs_method("insert_EXTAX", &Module::insertMech_ExtAx);
         add_varargs_method("insert_Solid", &Module::insert_Solid);
-        add_varargs_method("insert_Tool", &Module::insert_Tool);
-        add_varargs_method("insert_Torch", &Module::insert_Torch);
-        add_varargs_method("insert_LaserScanner", &Module::insert_LaserScanner);
-        add_varargs_method("insert_3dCamera", &Module::insert_3dCamera);
+
+        add_varargs_method("insert_WeldTorch", &Module::insertTool_WeldTorch);
+        add_varargs_method("insert_2DScanner", &Module::insertTool_2DScanner);
+        add_varargs_method("insert_3DCamera", &Module::insertTool_3DCamera);
+        add_varargs_method("create_WeldTorch", &Module::createTool_WeldTorch);
+        add_varargs_method("create_2DScanner", &Module::createTool_2DScanner);
+        add_varargs_method("create_3DCamera", &Module::createTool_3DCamera);
+
         initialize("This module is the Robot module."); // register with Python
     }
 
@@ -91,7 +100,7 @@ private:
 
     Py::Object setHomePos(const Py::Tuple &args){}
 
-    Py::Object insert_Robot(const Py::Tuple & args){
+    Py::Object insertMech_Robot(const Py::Tuple & args){
         char *ModelInfo;
         const char*DocName;
         if (!PyArg_ParseTuple(args.ptr(), "ets","utf-8",
@@ -116,8 +125,7 @@ private:
             std::string msg = "Failed to get" + std::string(ModelBrand) + " " + ModelName + " from Database\n";
             Base::Console().Error(msg.c_str());
             throw Py::Exception();
-        }        
-//        auto t_RobotPtr = static_cast<Robot::Robot6AxisObject*>(pcDoc->addObject("Robot::Robot6AxisObject",ModelName.c_str()));
+        }
         auto t_RobotPtr = static_cast<Robot::MechanicRobot*>(pcDoc->addObject("Robot::MechanicRobot",ModelName.c_str()));
         if(t_RobotPtr == nullptr){
             Base::Console().Error("Failed to insert Robot Object into Document\n");
@@ -126,8 +134,7 @@ private:
         t_RobotPtr->FilePath_URDF.setValue(t_ItemInfo.model_FilePath.c_str());
         return Py::None();
     }
-
-    Py::Object insert_Poser(const Py::Tuple & args){
+    Py::Object insertMech_Poser(const Py::Tuple & args){
         char *ModelInfo;
         const char*DocName;
         if (!PyArg_ParseTuple(args.ptr(), "ets","utf-8",
@@ -161,8 +168,7 @@ private:
         t_RobotPtr->File_URDF.setValue(t_ItemInfo.model_FilePath.c_str());
         return Py::None();
     }
-
-    Py::Object insert_ExtAx(const Py::Tuple & args){
+    Py::Object insertMech_ExtAx(const Py::Tuple & args){
         char *ModelInfo;
         const char*DocName;
         if (!PyArg_ParseTuple(args.ptr(), "ets","utf-8",
@@ -216,7 +222,7 @@ private:
         auto objPtr = pcDoc->getObject(result->getNameInDocument());
         if (objPtr != nullptr &&
             objPtr->isDerivedFrom(Robot::PlanningObject::getClassTypeId())) {
-          auto planningObj = dynamic_cast<Robot::PlanningObject *>(objPtr);
+//          auto planningObj = dynamic_cast<Robot::PlanningObject *>(objPtr);
 //          planningObj->insertIntoCollisionWorld();
         } else {
           Base::Console().Error("Can't Find Object in Document\n");
@@ -227,38 +233,21 @@ private:
       return Py::None();
     }
 
-    Py::Object insert_Torch(const Py::Tuple &args){
-
+    Py::Object insertTool_WeldTorch(const Py::Tuple &args){
         auto result = argParser(args);
-        auto FileName = result[0];
-        auto DocName = result[1];
-        App::Document *pcDoc = App::GetApplication().getDocument(DocName.c_str());
-        Base::FileInfo file(FileName.c_str());
+        auto str_fileName = result[0];
+        auto str_docName = result[1];
+        App::Document *pcDoc = App::GetApplication().getDocument(str_docName.c_str());
+        Base::FileInfo file(str_fileName.c_str());
         if (file.extension().empty())
           throw Py::RuntimeError("No file extension");
-        // LOAD A TOOLOBJECT from File
-        if (file.hasExtension("tor")) {
-            Robot::ToolObject::loadTool(pcDoc, FileName);
-        }else{
+        if (file.hasExtension("tor")) {            
             auto torchPtr = static_cast<Robot::TorchObject*>(pcDoc->addObject("Robot::TorchObject", file.fileNamePure().c_str()));
-            if(torchPtr == nullptr){
-                throw Py::RuntimeError("Failed to Insert Object");
-            }
-            if(file.hasExtension("stp") || file.hasExtension("step")){
-                torchPtr->loadShape(FileName, Robot::ShapeType::STP_Shape);
-            }
-            else if(file.hasExtension("igs") || file.hasExtension("iges")){
-                torchPtr->loadShape(FileName, Robot::ShapeType::IGS_Shape);
-            }
-            else if(file.hasExtension("obj") || file.hasExtension("stl")){
-                torchPtr->loadShape(FileName, Robot::ShapeType::MSH_Shape);
-            }
-//            torchPtr->setEdit.setValue(true);
+            torchPtr->loadTool(str_fileName);
         }
         return Py::None();
     }
-
-    Py::Object insert_LaserScanner(const Py::Tuple &args){        
+    Py::Object insertTool_2DScanner(const Py::Tuple &args){
         auto result = argParser(args);
         auto FileName = result[0];
         auto DocName = result[1];
@@ -268,27 +257,11 @@ private:
           throw Py::RuntimeError("No file extension");
         // LOAD A TOOLOBJECT from File
         if (file.hasExtension("lsr")) {
-            Robot::ToolObject::loadTool(pcDoc, FileName);
-        }
-        else{
-            auto scannerPtr = static_cast<Robot::ScannerObject*>(pcDoc->addObject("Robot::ScannerObject", file.fileNamePure().c_str()));
-            if(scannerPtr == nullptr){
-                throw Py::RuntimeError("Failed to Insert Object");
-            }
-            if(file.hasExtension("stp") || file.hasExtension("step")){
-                scannerPtr->loadShape(FileName, Robot::ShapeType::STP_Shape);
-            }
-            else if(file.hasExtension("igs") || file.hasExtension("iges")){
-                scannerPtr->loadShape(FileName, Robot::ShapeType::IGS_Shape);
-            }
-            else if(file.hasExtension("obj") || file.hasExtension("stl")){
-                scannerPtr->loadShape(FileName, Robot::ShapeType::MSH_Shape);
-            }
+//            Robot::ScannerObject::loadTool(pcDoc, FileName);
         }
         return Py::None();
     }
-
-    Py::Object insert_3dCamera(const Py::Tuple &args){
+    Py::Object insertTool_3DCamera(const Py::Tuple &args){
         auto result = argParser(args);
         auto FileName = result[0];
         auto DocName = result[1];
@@ -296,59 +269,88 @@ private:
         Base::FileInfo file(FileName.c_str());
         if (file.extension().empty())
           throw Py::RuntimeError("No file extension");
-        // LOAD A TOOLOBJECT from File
         if (file.hasExtension("cam")) {
-            Robot::ToolObject::loadTool(pcDoc, FileName);
-        }else if(file.hasExtension("stp")){
-
-        }else if(file.hasExtension("iges")){
-
+//            Robot::ToolObject::loadTool(FileName);
         }
         return Py::None();
     }
 
-    Py::Object insert_Tool(const Py::Tuple &args) {
-      auto result = argParser(args);
-      auto FileName = result[0];
-      auto DocName = result[1];
-      App::Document *pcDoc = App::GetApplication().getDocument(DocName.c_str());
-      Base::FileInfo file(result[0].c_str());
-      if (file.extension().empty())
-        throw Py::RuntimeError("No file extension");
-      // LOAD A TOOLOBJECT from File
-      if (file.hasExtension("tor")||
-          file.hasExtension("lsr")||
-          file.hasExtension("cam")) {
-          Robot::ToolObject::loadTool(pcDoc, FileName);
-      }
-      // GENERATE A NEW Tool
-      else {
-          Base::FileInfo fi(FileName);
-          if (!fi.exists()) {
-            std::stringstream str;
-            str << "File '" << FileName << "' does not exist!";
-            throw Base::RuntimeError(str.str().c_str());
-          }
-          auto toolObjPtr = static_cast<Robot::ToolObject*>(pcDoc->addObject("Robot::ToolObject", fi.fileNamePure().c_str()));
-      }
-      return Py::None();
+    Py::Object createTool_WeldTorch(const Py::Tuple & args){
+        auto result = argParser(args);
+        auto modelPath = result[0];
+        auto DocName = result[1];
+        App::Document *pcDoc = App::GetApplication().getDocument(DocName.c_str());
+        Base::FileInfo file(modelPath.c_str());
+        if (file.extension().empty())
+          throw Py::RuntimeError("No file extension");
+        auto torchPtr = static_cast<Robot::TorchObject*>(pcDoc->addObject("Robot::TorchObject", file.fileNamePure().c_str()));
+        if(torchPtr == nullptr){
+            throw Py::RuntimeError("Failed to Insert Object");
+        }
+        if(file.hasExtension("stp") || file.hasExtension("step")){
+            torchPtr->loadShape(modelPath, Robot::ShapeType::STP_Shape);
+        }
+        else if(file.hasExtension("igs") || file.hasExtension("iges")){
+            torchPtr->loadShape(modelPath, Robot::ShapeType::IGS_Shape);
+        }
+        else if(file.hasExtension("obj") || file.hasExtension("stl")){
+            torchPtr->loadShape(modelPath, Robot::ShapeType::MSH_Shape);
+        }
+        torchPtr->setEdit.setValue(true);
+        torchPtr->FilePath_Solid.setValue(modelPath);
+        torchPtr->FilePath_Param.setValue(m_ToolDatabase.getResFilePath());
+        torchPtr->CurToolType.setValue((int)ToolType::WeldTorch);
+        return Py::None();
     }
+    Py::Object createTool_2DScanner(const Py::Tuple & args){
+
+    }
+    Py::Object createTool_3DCamera(const Py::Tuple & args){
+
+    }
+
+//    Py::Object insert_Tool(const Py::Tuple &args) {
+//      auto result = argParser(args);
+//      auto FileName = result[0];
+//      auto DocName = result[1];
+//      App::Document *pcDoc = App::GetApplication().getDocument(DocName.c_str());
+//      Base::FileInfo file(result[0].c_str());
+//      if (file.extension().empty())
+//        throw Py::RuntimeError("No file extension");
+//      // LOAD A TOOLOBJECT from File
+//      if (file.hasExtension("tor")||
+//          file.hasExtension("lsr")||
+//          file.hasExtension("cam")) {
+//          Robot::ToolObject::loadTool(pcDoc, FileName);
+//      }
+//      // GENERATE A NEW Tool
+//      else {
+//          Base::FileInfo fi(FileName);
+//          if (!fi.exists()) {
+//            std::stringstream str;
+//            str << "File '" << FileName << "' does not exist!";
+//            throw Base::RuntimeError(str.str().c_str());
+//          }
+//          auto toolObjPtr = static_cast<Robot::ToolObject*>(pcDoc->addObject("Robot::ToolObject", fi.fileNamePure().c_str()));
+//      }
+//      return Py::None();
+//    }
 
     std::vector<string> argParser(const Py::Tuple &args){
         std::vector<string> result;
-        char *filePath;
-        const char *DocName;
-        if (!PyArg_ParseTuple(args.ptr(), "ets", "utf-8", &filePath, &DocName))
+        char *arg_part1;
+        const char *arg_part2;
+        if (!PyArg_ParseTuple(args.ptr(), "ets", "utf-8", &arg_part1, &arg_part2))
           throw Py::Exception();
         // Ensure there is a doc
-        App::Document *pcDoc = App::GetApplication().getDocument(DocName);
+        App::Document *pcDoc = App::GetApplication().getDocument(arg_part2);
         if (!pcDoc) {
-          pcDoc = App::GetApplication().newDocument(DocName);
+          pcDoc = App::GetApplication().newDocument(arg_part2);
         }
         // Deal with file
-        result.push_back(std::string(filePath));
-        PyMem_Free(filePath);
-        result.push_back(std::string(DocName));
+        result.push_back(std::string(arg_part1));
+        PyMem_Free(arg_part1);
+        result.push_back(std::string(arg_part2));
         return result;
     }
 };

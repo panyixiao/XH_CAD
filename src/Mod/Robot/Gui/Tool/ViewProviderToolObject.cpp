@@ -45,12 +45,8 @@ void ViewProviderToolObject::updateData(const App::Property *prop) {
 //  else if (prop == &toolPtr->CAD_File){
 //      auto filePath = toolPtr->CAD_File.getValue();
 //  }
-   if(prop == &m_tool->setEdit){
-        if(m_tool->setEdit.getValue()){
-  //          Gui::Command::doCommand(Gui::Command::Gui,
-  //                                  "Gui.activeDocument().activeView().viewAxonometric()");
-  //          Gui::Command::doCommand(Gui::Command::Gui,
-  //                                  "Gui.SendMsgToActiveView(\"ViewFit\")");
+   if(prop == &toolPtr->setEdit){
+        if(toolPtr->setEdit.getValue()){
             this->setEdit(Gui::ViewProvider::EditMode::Default);
         }
     }
@@ -67,8 +63,8 @@ void ViewProviderToolObject::attach(App::DocumentObject *obj) {
 
 bool ViewProviderToolObject::setEdit(int ModNum) {
   if (ModNum == Gui::ViewProvider::EditMode::Default) {
-    auto t_Torch = static_cast<Robot::ToolObject *>(pcObject);
-    Gui::TaskView::TaskDialog *dlg = new TaskDlgToolObject(t_Torch);
+    auto t_ToolPtr = static_cast<Robot::ToolObject *>(pcObject);
+    Gui::TaskView::TaskDialog *dlg = new TaskDlgToolObject(t_ToolPtr);
     if(dlg == nullptr)
         return false;
     Gui::Control().showDialog(dlg);

@@ -1,7 +1,7 @@
 #ifndef MECHANIC_SELECTIONPANEL_H
 #define MECHANIC_SELECTIONPANEL_H
 
-#include <Mod/Robot/App/Mechanics/MechanicDatabase.h>
+#include <Mod/Robot/App/Database/MechanicDatabase.h>
 #include <Mod/Robot/App/Mechanics/MechanicDevice.h>
 #include <Mod/Robot/App/Mechanics/Robot6AxisObject.h>
 #include <Gui/TaskManagePanel/TaskManageDialog.h>
@@ -52,6 +52,8 @@ protected:
     bool insertMechanics();
 
 private:
+    Robot::MechanicDatabase* m_DatabasePtr = nullptr;
+
     Ui_MechanicSelectionPanel* m_ui = nullptr;
     QWidget * m_proxy = nullptr;
     App::Document* m_DocPtr = nullptr;
@@ -59,7 +61,6 @@ private:
     QStringListModel *m_stringListModel = nullptr;
     QItemSelectionModel *m_SelectionModel = nullptr;
     Robot::MechanicType m_Type;
-    Robot::MechanicDatabase* m_DatabasePtr = nullptr;
     std::string m_selectedModelBrand;
     std::string m_selectedModelName;
 };

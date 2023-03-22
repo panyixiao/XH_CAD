@@ -35,6 +35,11 @@ TaskManageDialog::~TaskManageDialog(){
     }
 }
 
+void TaskManageDialog::showButtonBox(bool flag)
+{
+    m_DlgCtrl->showButtons(flag);
+}
+
 void TaskManageDialog::dlg_finished(int command){
     Q_EMIT finished(command);
 }

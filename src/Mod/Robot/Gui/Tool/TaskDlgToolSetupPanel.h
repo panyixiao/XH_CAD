@@ -25,12 +25,13 @@ public:
   TaskDlgToolObject(Robot::ToolObject *targetTool,
                     QWidget *parent = 0);
   QDialogButtonBox::StandardButtons getStandardButtons() const {
-    return QDialogButtonBox::Ok | QDialogButtonBox::Cancel;
+//    return QDialogButtonBox::Ok | QDialogButtonBox::Cancel;
+      return QDialogButtonBox::NoButton;
   }
-  bool accept();
-  bool reject();
 
 private Q_SLOTS:
+  bool accept();
+  bool reject();
   void slot_updateDraggerPose(const Base::Placement newPlacement);
   // Dragger
   bool createDragger(const Base::Placement& init_Pose);

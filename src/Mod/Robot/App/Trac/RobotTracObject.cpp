@@ -92,7 +92,7 @@ void RobotTracObject::insertCMD_SwitchTool(const std::string executorName,
         case Robot::ToolType::WeldTorch:
             coordID = t_Robot->TorchIndex.getValue();
             break;
-        case Robot::ToolType::Scanner:
+        case Robot::ToolType::_2DScanner:
             coordID = t_Robot->ScannerIndex.getValue();
             break;
         default:

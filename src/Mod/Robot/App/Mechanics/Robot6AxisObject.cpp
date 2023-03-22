@@ -425,7 +425,7 @@ void Robot6AxisObject::installTool(const char *tool_Name)
         TorchName.setValue(t_Tool->getNameInDocument());
         CurrentToolIndex.setValue(TorchIndex.getValue());
         break;
-    case ToolType::Scanner:
+    case ToolType::_2DScanner:
         m_Scanner = static_cast<Robot::ScannerObject*>(t_Tool);
         ScannerName.setValue(t_Tool->getNameInDocument());
         CurrentToolIndex.setValue(ScannerIndex.getValue());
@@ -445,7 +445,7 @@ void Robot6AxisObject::uninstallTool(ToolObject *t_Tool)
         m_Torch = nullptr;
         TorchName.setValue("");
         break;
-    case ToolType::Scanner:
+    case ToolType::_2DScanner:
         m_Scanner = nullptr;
         ScannerName.setValue("");
         break;
@@ -467,13 +467,13 @@ void Robot6AxisObject::udpateToolPosition()
 void Robot6AxisObject::setCurrentToolType(const ToolType &t_Type)
 {
     switch(t_Type){
-    case ToolType::NoTool:
+    case ToolType::Undefined:
         CurrentToolIndex.setValue(0);
         break;
     case ToolType::WeldTorch:
         CurrentToolIndex.setValue(TorchIndex.getValue());
         break;
-    case ToolType::Scanner:
+    case ToolType::_2DScanner:
         CurrentToolIndex.setValue(ScannerIndex.getValue());
         break;
     default:
@@ -485,14 +485,14 @@ void Robot6AxisObject::setCurrentToolType(const ToolType &t_Type)
 void Robot6AxisObject::setCurrentToolActive(bool activated)
 {
     switch(getCurrentTool()){
-    case ToolType::NoTool:
+    case ToolType::Undefined:
         break;
     case ToolType::WeldTorch:
         if(m_Torch){
             m_Torch->SparkOn.setValue(activated);
         }
         break;
-    case ToolType::Scanner:
+    case ToolType::_2DScanner:
         if(m_Scanner){
             m_Scanner->LaserOn.setValue(activated);
         }
@@ -506,11 +506,11 @@ const ToolType Robot6AxisObject::getCurrentTool() const
     if(CurrentToolIndex.getValue() == TorchIndex.getValue())
         c_Type = ToolType::WeldTorch;
     else if(CurrentToolIndex.getValue() == ScannerIndex.getValue())
-        c_Type = ToolType::Scanner;
+        c_Type = ToolType::_2DScanner;
     else if(CurrentToolIndex.getValue() == CameraIndex.getValue())
-        c_Type = ToolType::DepthCamera;
+        c_Type = ToolType::_3DCamera;
     else
-        c_Type = ToolType::NoTool;
+        c_Type = ToolType::Undefined;
     return c_Type;
 }
 

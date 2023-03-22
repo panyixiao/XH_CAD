@@ -323,7 +323,7 @@ void TaskBoxRobotTeachPanel::slot_changeTargetRobotTipPose()
 void TaskBoxRobotTeachPanel::slot_changeActivatedTool()
 {
     if(m_ui->radioButton_Flan->isChecked()){
-        m_RobotPtr->setCurrentToolType(Robot::ToolType::NoTool);
+        m_RobotPtr->setCurrentToolType(Robot::ToolType::Undefined);
         m_ui->spinBox_ToolID->setValue(0);
     }
     if(m_ui->radioButton_Torch->isChecked()){
@@ -331,11 +331,11 @@ void TaskBoxRobotTeachPanel::slot_changeActivatedTool()
 //        m_ui->spinBox_ToolID->setValue(m_RobotPtr->TorchIndex.getValue());
     }
     if(m_ui->radioButton_Scan->isChecked()){
-        m_RobotPtr->setCurrentToolType(Robot::ToolType::Scanner);
+        m_RobotPtr->setCurrentToolType(Robot::ToolType::_2DScanner);
 //        m_ui->spinBox_ToolID->setValue(m_RobotPtr->ScannerIndex.getValue());
     }
     if(m_ui->radioButton_Camera->isChecked()){
-        m_RobotPtr->setCurrentToolType(Robot::ToolType::DepthCamera);
+        m_RobotPtr->setCurrentToolType(Robot::ToolType::_3DCamera);
 //        m_ui->spinBox_ToolID->setValue(m_RobotPtr->CameraIndex.getValue());
     }
 
@@ -354,10 +354,10 @@ void TaskBoxRobotTeachPanel::slot_changeToolIndex()
     case Robot::ToolType::WeldTorch:
 //        m_RobotPtr->TorchIndex.setValue(val);
         break;
-    case Robot::ToolType::Scanner:
+    case Robot::ToolType::_2DScanner:
 //        m_RobotPtr->ScannerIndex.setValue(val);
         break;
-    case Robot::ToolType::DepthCamera:
+    case Robot::ToolType::_3DCamera:
 //        m_RobotPtr->CameraIndex.setValue(val);
         break;
     }

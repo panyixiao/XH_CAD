@@ -3,7 +3,6 @@
 #include "Mod/Robot/App/PreCompiled.h"
 
 #ifndef _PreComp_
-
 #endif
 
 #include <stdio.h>

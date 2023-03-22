@@ -30,6 +30,6 @@ public:
   std::vector<App::DocumentObject *> claimChildren() const;
 
 private:
-  Robot::ToolObject *m_tool = nullptr;
+//  Robot::ToolObject *m_tool = nullptr;
 };
 }

@@ -1,28 +1,29 @@
 // Created by Yixiao 2022/04/24
 #ifndef ROBOT_TOOLOBJECT_H
 #define ROBOT_TOOLOBJECT_H
+
+#include "Mod/Robot/App/PreCompiled.h"
 #include <App/GeoFeature.h>
 #include <Eigen/Geometry>
-#include <Mod/Robot/App/Utilites/CAD_Utility.h>
 #include <Mod/Part/App/PartFeature.h>
-
+#include <Mod/Robot/App/Database/ToolDatabase.h>
+#include <Mod/Robot/App/Database/FileOperator.h>
+#include <Mod/Robot/App/Utilites/CAD_Utility.h>
 #include "Mod/Robot/App/Utilites/FrameObject.h"
 
 namespace Robot {
 
-class Robot6AxisObject;
+//class Robot6AxisObject;
 
 enum class ToolType{
-    NoTool = 0,
+    Undefined = 0,
     WeldTorch,
-    Scanner,
-    DepthCamera,
+    _2DScanner,
+    _3DCamera,
     RGBCamera,
     Gripper,
     Sucker
 };
-
-//enum class PosePosition { Tip, Flan };
 
 class ToolObject : public Part::Feature {
   PROPERTY_HEADER(Robot::ToolObject);
@@ -35,11 +36,14 @@ public:
   }
   virtual const std::string getToolNameInDocument() const;
   // TOOL Setup
-  static bool loadTool(App::Document *pcDoc, std::string const &filePath);
-  bool setupToolObject(const std::string &filePath,
-                       const std::string &cad_Path,
-                       const Base::Placement &tf_f2c,
-                       const Base::Placement &tf_f2t);
+  bool loadTool(const std::string& param_FilePath);
+  bool saveTool();
+//  static Tool_BasicParam parsingToolDescriptionFile(const std::string& t_filepath);
+
+//  bool setupToolObject(const std::string &filePath,
+//                       const std::string &cad_Path,
+//                       const Base::Placement &tf_f2c,
+//                       const Base::Placement &tf_f2t);
 
   bool loadStepShape(const std::string& filePath);
   bool loadIgesShape(const std::string& filePath);
@@ -57,6 +61,7 @@ public:
   // Placement
   const Base::Placement getTransform_Origin2Front() const;
   const Base::Placement getTransform_Mount2Front() const;
+  const Base::Placement getPose_ABSToolMount() const;
   const Base::Placement getPose_ABSToolTip() const;
   const Base::Placement getPose_ABSToolFront() const;
 
@@ -79,26 +84,27 @@ protected:
   void onDocumentRestored() override;
 
 public:
+  App::PropertyString ToolBrand;
   // Translation
   App::PropertyPlacement Pose_Mount;
   App::PropertyPlacement Trans_O2M; // Translation, Origin to Mount
   App::PropertyPlacement Trans_M2T; // Translation, Mount to Tip
   App::PropertyPlacement Trans_T2F; // Translation, Tip to Front
   // Shape
-  App::PropertyString    File_Solid;
-  App::PropertyString    File_Param;
+  App::PropertyString    FilePath_Solid;
+  App::PropertyString    FilePath_Param;
   // Assemble
   App::PropertyString    MountedRobot;
-  App::PropertyInteger   Type;
+  App::PropertyInteger   CurToolType;
   // Linked Feature
   App::PropertyLinkSub   LinkedFaceFeature;
   App::PropertyLinkSub   LinkedEdgeFeature;
   App::PropertyBool      setEdit;
 
 protected:
-  ToolType m_Type = ToolType::NoTool;
-//  Base::Placement        m_OriginBase;
+  ToolType m_Type = ToolType::Undefined;
+  FileOperator m_FileOperator;
 };
 }
 
-#endif // ROBOT_TOOLOBJECT_H
+#endif

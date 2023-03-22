@@ -184,7 +184,7 @@ bool EdgebasedTracObject::generateProgram(const uint t_ID)
     float trac_speed = 0.0;
     switch(m_TYPE){
     case TracType::SCANTRAC:
-        t_ToolType = ToolType::Scanner;
+        t_ToolType = ToolType::_2DScanner;
         insertCMD_SwitchTool(executorName,t_ToolType);
         trac_speed = ScanSpeed.getValue();
         break;
@@ -272,7 +272,7 @@ bool EdgebasedTracObject::regenerateProgram()
     float trac_speed = 0.0;
     switch(m_TYPE){
     case TracType::SCANTRAC:
-        t_Type = ToolType::Scanner;
+        t_Type = ToolType::_2DScanner;
         trac_speed = ScanSpeed.getValue();
         break;
     case TracType::SEAMTRAC:

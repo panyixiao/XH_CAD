@@ -5,12 +5,15 @@
 #include "TaskBoxTorchToolSetupPanel.h"
 
 #include <Base/Console.h>
+#include <Gui/Command.h>
 #include <Gui/BitmapFactory.h>
 #include <Gui/Application.h>
 #include <Gui/Document.h>
 #include <QPushButton>
 
-#include <Mod/Robot/App/Mechanics/Robot6AxisObject.h>
+//#include <Mod/Robot/App/Mechanics/Robot6AxisObject.h>
+#include <Mod/Robot/App/Mechanics/MechanicRobot.h>
+#include <Mod/Robot/App/Mechanics/MechanicPoser.h>
 #include <Mod/Robot/App/Utilites/CAD_Utility.h>
 #include <Mod/Robot/Gui/Tool/ViewProviderTorchObject.h>
 #include "Mod/Robot/App/Utilites/DS_Utility.h"
@@ -19,14 +22,16 @@
 using namespace RobotGui;
 
 TaskBoxTorchToolSetupPanel::TaskBoxTorchToolSetupPanel(Robot::ToolObject *t_toolPtr,
-                                                   Gui::TaskView::TaskSelectLinkProperty *t_FaceSelection,
-                                                   Gui::TaskView::TaskSelectLinkProperty *t_EdgeSelection)
+                                                       Gui::TaskView::TaskSelectLinkProperty *t_FaceSelection,
+                                                       Gui::TaskView::TaskSelectLinkProperty *t_EdgeSelection)
     : TaskBox(Gui::BitmapFactory().pixmap("document-new"),tr("Torch Tool Setup")) {
   if (t_toolPtr == nullptr || t_EdgeSelection == nullptr || t_FaceSelection == nullptr)
     return;
 
   m_DocPtr = t_toolPtr->getDocument();
   m_TorchPtr = static_cast<Robot::TorchObject*>(t_toolPtr);
+  if(m_TorchPtr->FilePath_Param.getStrValue().empty())
+      creatingMode = true;
   m_FaceRef = t_FaceSelection;
   m_EdgeRef = t_EdgeSelection;
 
@@ -49,8 +54,19 @@ void TaskBoxTorchToolSetupPanel::initUi() {
                    this, SLOT(slot_assembleTool2Robot()));
   initUi_PoseBox();
   initUi_VisualizeBox();
+  if(creatingMode){
+      m_ui->pushButton_finishSetup->setText(tr("Save Tool"));
+  }else{
+      m_ui->lineEdit_brand->setEnabled(false);
+      m_ui->lineEdit_brand->setText(tr(m_TorchPtr->ToolBrand.getStrValue().c_str()));
+      m_ui->comboBox_tubeType->setEnabled(false);
+      m_ui->comboBox_tubeType->setCurrentIndex((int)m_TorchPtr->m_Info.tube_Type);
+      m_ui->doubleSpinBox_tubeLength->setEnabled(false);
+      m_ui->doubleSpinBox_tubeLength->setValue(m_TorchPtr->m_Info.tube_Length);
+      m_ui->pushButton_finishSetup->setText(tr("Finish Edit"));
+  }
   QObject::connect(m_ui->pushButton_finishSetup, SIGNAL(clicked()),
-                   this, SLOT(slot_finishSetup()));
+                   this, SLOT(slot_finishSetupButtonClicked()));
 }
 
 void TaskBoxTorchToolSetupPanel::initUi_PoseBox()
@@ -60,8 +76,6 @@ void TaskBoxTorchToolSetupPanel::initUi_PoseBox()
     QObject::connect(m_ui->radioButton_Tip, SIGNAL(clicked(bool)),
                      this,SLOT(slot_setTatgetChanged()));
     m_ui->radioButton_Base->setChecked(true);
-//    m_ui->radioButton_Tip->setEnabled(false);
-
     QObject::connect(m_ui->doubleSpinBox_Torch_tX, SIGNAL(valueChanged(double)), this,
                      SLOT(slot_updatePose()));
     QObject::connect(m_ui->doubleSpinBox_Torch_tY, SIGNAL(valueChanged(double)), this,
@@ -76,6 +90,7 @@ void TaskBoxTorchToolSetupPanel::initUi_PoseBox()
                      SLOT(slot_updatePose()));
     QObject::connect(m_ui->pushButton_CalcCenter, SIGNAL(clicked()),
                      this, SLOT(slot_getSelectedCenter()));
+    updatePoseBox(m_TorchPtr->Trans_O2M.getValue());
 }
 
 void TaskBoxTorchToolSetupPanel::initUi_VisualizeBox()
@@ -105,7 +120,6 @@ void TaskBoxTorchToolSetupPanel::updatePoseBox(const Base::Placement& c_Pose)
     m_ui->doubleSpinBox_Torch_rX->setValue(r);
     m_ui->doubleSpinBox_Torch_rY->setValue(p);
     m_ui->doubleSpinBox_Torch_rZ->setValue(y);
-
     blockPosePanelSignals(false);
 }
 
@@ -116,8 +130,8 @@ void TaskBoxTorchToolSetupPanel::initUi_AssembleWidgets()
         m_ui->comboBox_RobotList->clear();
         auto objList = m_DocPtr->getObjects();
         for(auto objPtr : objList){
-            if(objPtr->isDerivedFrom(Robot::Robot6AxisObject::getClassTypeId())){
-                if(!static_cast<Robot::Robot6AxisObject*>(objPtr)->TorchAssembled()){
+            if(objPtr->isDerivedFrom(Robot::MechanicRobot::getClassTypeId())){
+                if(!static_cast<Robot::MechanicRobot*>(objPtr)->TorchAssembled()){
                     m_ui->comboBox_RobotList->addItem(tr(objPtr->getNameInDocument()));
                 }
             }
@@ -129,6 +143,16 @@ void TaskBoxTorchToolSetupPanel::initUi_AssembleWidgets()
         m_ui->comboBox_RobotList->setEnabled(false);
         m_ui->pushButton_Assemble->setText(tr("Uninstall"));
     }
+}
+
+bool TaskBoxTorchToolSetupPanel::checkIfTorchInfoFullfilled()
+{
+    bool isValid = true;
+    isValid &= !m_TorchPtr->Trans_O2M.getValue().isIdentity();
+    isValid &= !m_TorchPtr->Trans_M2T.getValue().isIdentity();
+    isValid &= !m_ui->lineEdit_brand->text().isEmpty();
+    isValid &= m_ui->doubleSpinBox_tubeLength->value() != 0;
+    return isValid;
 }
 
 void TaskBoxTorchToolSetupPanel::slot_getSelectedCenter()
@@ -146,13 +170,11 @@ void TaskBoxTorchToolSetupPanel::slot_getSelectedCenter()
     if(m_ui->radioButton_Base->isChecked()){
         m_TorchPtr->setNewMountOrigin(selectedCenter);
         updatePoseBox(m_TorchPtr->Trans_O2M.getValue());
-//        m_ui->radioButton_Tip->setEnabled(true);
     }
     else if(m_ui->radioButton_Tip->isChecked()){
         m_TorchPtr->setNewTipPosition(selectedCenter);
         updatePoseBox(m_TorchPtr->Trans_M2T.getValue());
     }
-
     Q_EMIT Signal_updateDraggerPose(selectedCenter);
 }
 
@@ -167,7 +189,7 @@ void TaskBoxTorchToolSetupPanel::slot_assembleTool2Robot()
         m_TorchPtr->detachToolFromRobot();
     }
     initUi_AssembleWidgets();
-    Q_EMIT Signal_updateDraggerPose(m_TorchPtr->Pose_Mount.getValue());
+    Q_EMIT Signal_updateDraggerPose(m_TorchPtr->getPose_ABSToolMount());
 }
 
 void TaskBoxTorchToolSetupPanel::slot_updatePose()
@@ -186,7 +208,7 @@ void TaskBoxTorchToolSetupPanel::slot_updatePose()
     Base::Placement displayPose;
     if(m_ui->radioButton_Base->isChecked()){
         m_TorchPtr->Trans_O2M.setValue(newPose);
-        displayPose = m_TorchPtr->Pose_Mount.getValue();
+        displayPose = m_TorchPtr->getPose_ABSToolMount();
     }
     else if(m_ui->radioButton_Tip->isChecked()){
         m_TorchPtr->Trans_M2T.setValue(newPose);
@@ -201,7 +223,7 @@ void TaskBoxTorchToolSetupPanel::slot_setTatgetChanged()
     Base::Placement t_Pose;
     if(m_ui->radioButton_Base->isChecked()){
         t_Pose = m_TorchPtr->Trans_O2M.getValue();
-        Q_EMIT Signal_updateDraggerPose(m_TorchPtr->Pose_Mount.getValue());
+        Q_EMIT Signal_updateDraggerPose(m_TorchPtr->getPose_ABSToolMount());
     }
     else if(m_ui->radioButton_Tip->isChecked()){
         t_Pose = m_TorchPtr->Trans_M2T.getValue();
@@ -228,8 +250,25 @@ void TaskBoxTorchToolSetupPanel::slot_changeTorchVisualEffect()
 
 }
 
-void TaskBoxTorchToolSetupPanel::slot_finishSetup()
+void TaskBoxTorchToolSetupPanel::slot_finishSetupButtonClicked()
 {
+    if(creatingMode){
+        if(!checkIfTorchInfoFullfilled()){
+            QMessageBox::warning(this, tr("Warning"),tr("Torch Tool key information is missing, Please Check Panels!"));
+            return;
+        }
+        m_TorchPtr->ToolBrand.setValue(m_ui->lineEdit_brand->text().toStdString().c_str());
+        m_TorchPtr->m_Info.tube_Type = (Robot::Type_TorchTube)m_ui->comboBox_tubeType->currentIndex();
+        m_TorchPtr->m_Info.tube_Length = m_ui->doubleSpinBox_tubeLength->value();
+        m_TorchPtr->m_Info.torch_Name = m_TorchPtr->ToolBrand.getStrValue() + "_" +
+                                        std::to_string(m_TorchPtr->m_Info.tube_Length) + "_" +
+                                        Robot::StrList_TorchTubeType[(int)m_TorchPtr->m_Info.tube_Type];
+        if(m_TorchPtr->saveTool()){
+            QString msg = tr("Torch param file is saved as:") + tr(m_TorchPtr->FilePath_Param.getValue());
+            QMessageBox::information(NULL, tr("Message"),msg);
+        }
+    }
+//    this->close();
     Q_EMIT Signal_finishSetup();
 }
 

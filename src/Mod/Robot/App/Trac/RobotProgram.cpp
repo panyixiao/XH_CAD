@@ -327,14 +327,14 @@ const std::string RobotProgram::generateCMDstr_Tool(RobotCommand_sptr t_Command)
     auto cmd_ptr = static_cast<Robot::ToolCommand*>(t_Command.get());
     if(cmd_ptr->getType() == Robot::CommandType::ChgTool){
         switch(cmd_ptr->getToolType()){
-        case ToolType::NoTool:
+        case ToolType::Undefined:
             result_str+="SetTool=Flan";
             break;
         case ToolType::WeldTorch:
             result_str+="SetTool=Torch";
             hasStatus = true;
             break;
-        case ToolType::Scanner:
+        case ToolType::_2DScanner:
             result_str+="SetTool=Scanner";
             hasStatus = true;
             break;
@@ -342,13 +342,13 @@ const std::string RobotProgram::generateCMDstr_Tool(RobotCommand_sptr t_Command)
     }
     else if(cmd_ptr->getType() == Robot::CommandType::OptTool){
         switch(cmd_ptr->getToolType()){
-        case ToolType::NoTool:
+        case ToolType::Undefined:
             break;
         case ToolType::WeldTorch:
             result_str+="Arc";
             hasStatus = true;
             break;
-        case ToolType::Scanner:
+        case ToolType::_2DScanner:
             result_str+="Laser";
             hasStatus = true;
             break;

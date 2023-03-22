@@ -91,7 +91,9 @@ SET(RobotGui_SRC_ToolViewProvider
 
 set(RobotGui_SRC_ToolTaskDlg
     Tool/TaskDlgToolSetupPanel.h
-    Tool/TaskDlgToolSetupPanel.cpp)
+    Tool/TaskDlgToolSetupPanel.cpp
+    Tool/ToolOperationPanel.cpp
+    Tool/ToolOperationPanel.h)
 
 set(RobotGui_SRC_ToolTaskBox
     Tool/TaskBoxTorchToolSetupPanel.cpp
@@ -100,6 +102,7 @@ set(RobotGui_SRC_ToolTaskBox
     Tool/TaskBoxLaserScannerSetupPanel.h)
 
 set(RobotGui_UIC_Tool
+    Tool/ToolOperationPanel.ui
     Tool/TaskDlgToolSetupPanel.ui
     Tool/TaskBoxLaserScannerSetupPanel.ui
     Tool/TaskBoxTorchToolSetupPanel.ui)

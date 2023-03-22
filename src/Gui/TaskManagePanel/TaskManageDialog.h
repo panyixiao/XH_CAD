@@ -21,6 +21,8 @@ public:
   TaskManageDialog(QWidget *parent = 0,QString dlg_name = QObject::tr("Task Manager"),App::Document* pDoc = 0);
   ~TaskManageDialog();
 
+  void showButtonBox(bool flag);
+
   const std::vector<QWidget*> &getDialogContent(void) const{
       return m_Content;
   }
@@ -66,7 +68,7 @@ protected:
     /// List of TaskBoxes of that dialog
     std::vector<QWidget*> m_Content;
     std::shared_ptr<QBoxLayout> m_Layout;
-    TaskManageDlg_Ctrl* m_DlgCtrl;
+    TaskManageDlg_Ctrl* m_DlgCtrl = nullptr;
 
 private:
     std::string documentName = "";

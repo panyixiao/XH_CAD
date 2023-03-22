@@ -43,18 +43,19 @@ Base::Vector3d rotateByEigenMatrix(const Eigen::Affine3d &mat,
 }
 
 ToolObject::ToolObject() {
-  ADD_PROPERTY_TYPE(File_Solid, (""), "File", Prop_None, "Path to Model File");
-  ADD_PROPERTY_TYPE(File_Param, (""), "File", Prop_None, "Path to Tool File");
+  ADD_PROPERTY_TYPE(ToolBrand, (""),"Property", Prop_None,"Name of Tool Brand");
+  ADD_PROPERTY_TYPE(FilePath_Solid, (""), "File", Prop_None, "Path to Model File");
+  ADD_PROPERTY_TYPE(FilePath_Param, (""), "File", Prop_None, "Path to Tool File");
   ADD_PROPERTY_TYPE(MountedRobot, (""), "Assemble", Prop_None, "Assembled Robot Name");
-  ADD_PROPERTY_TYPE(Type, (0), "Property", Prop_None, "Tool Type");
+  ADD_PROPERTY_TYPE(CurToolType, (0), "Property", Prop_None, "Tool Type");
 
   ADD_PROPERTY(Pose_Mount, (Base::Placement()));
   ADD_PROPERTY(Trans_O2M, (Base::Placement()));
   ADD_PROPERTY(Trans_M2T, (Base::Placement()));
   ADD_PROPERTY(Trans_T2F, (Base::Placement()));
   ADD_PROPERTY(setEdit, (false));
-  File_Solid.setStatus(App::Property::Status::ReadOnly, true);
-  File_Param.setStatus(App::Property::Status::ReadOnly, true);
+  FilePath_Solid.setStatus(App::Property::Status::ReadOnly, true);
+  FilePath_Param.setStatus(App::Property::Status::ReadOnly, true);
   MountedRobot.setStatus(App::Property::Status::ReadOnly, true);
   Placement.setStatus(App::Property::Status::Hidden, true);
 
@@ -68,25 +69,30 @@ ToolObject::ToolObject() {
 
 ToolObject::~ToolObject() {}
 
-bool ToolObject::loadTool(App::Document *pcDoc, const string &filePath) {
-  if (pcDoc == nullptr || filePath.empty())
-    return false;
-
-  string cad_filePath;
-  Base::Placement tf_F2C;
-  Base::Placement tf_F2T;
-
-  auto result = PartUtility::importCADFile( pcDoc, cad_filePath, Robot::As_ToolOBJ);
-  if (result) {
-    auto toolPtr = dynamic_cast<ToolObject *>(
-        pcDoc->getObject(result->getNameInDocument()));
-    if (toolPtr == nullptr)
+bool ToolObject::loadTool(const string &param_FilePath) {
+  if (param_FilePath.empty())
       return false;
-    return toolPtr->setupToolObject(filePath, cad_filePath, tf_F2C, tf_F2T);
-  } else {
-    Base::Console().Error("Tool Model File import Error!\n");
+  if(!m_FileOperator.openFile(param_FilePath, QIODevice::ReadOnly))
+      return false;
+  Trans_O2M.setValue(m_FileOperator.readPosePropFromFile(QObject::tr("Trans_O2M")));
+  Trans_M2T.setValue(m_FileOperator.readPosePropFromFile(QObject::tr("Trans_M2T")));
+  Trans_T2F.setValue(m_FileOperator.readPosePropFromFile(QObject::tr("Trans_T2F")));
+  FilePath_Param.setValue(m_FileOperator.readStringPropFromFile(QObject::tr("FilePath_Param")));
+  FilePath_Solid.setValue(m_FileOperator.readStringPropFromFile(QObject::tr("FilePath_Solid")));
+  ToolBrand.setValue(m_FileOperator.readStringPropFromFile(QObject::tr("ToolBrand")));
+  CurToolType.setValue(m_FileOperator.readNumberPropFromFile(QObject::tr("CurrentType")));
+  m_FileOperator.closeFile();
+
+  bool result = false;
+  auto modelFilePath = FilePath_Solid.getStrValue();
+  Base::FileInfo file(modelFilePath.c_str());
+  if(file.hasExtension("stp") || file.hasExtension("step")){
+      result = loadShape(modelFilePath, Robot::ShapeType::STP_Shape);
   }
-  return false;
+  else if(file.hasExtension("igs") || file.hasExtension("iges")){
+      result = loadShape(modelFilePath, Robot::ShapeType::IGS_Shape);
+  }
+  return result;
 }
 
 const std::string ToolObject::getToolNameInDocument() const {
@@ -95,14 +101,27 @@ const std::string ToolObject::getToolNameInDocument() const {
   return string();
 }
 
-bool ToolObject::setupToolObject(const string &filePath,
-                                 const string &cad_Path,
-                                 const Base::Placement &tf_f2c,
-                                 const Base::Placement &tf_f2t) {
-  File_Param.setValue(filePath);
-  File_Solid.setValue(cad_Path);
-  return true;
+bool ToolObject::saveTool()
+{
+    m_FileOperator.openFile(FilePath_Param.getStrValue());
+    m_FileOperator.insertItem(QObject::tr("Trans_O2M"),FileOperator::poseToJsonObject(Trans_O2M.getValue()));
+    m_FileOperator.insertItem(QObject::tr("Trans_M2T"),FileOperator::poseToJsonObject(Trans_M2T.getValue()));
+    m_FileOperator.insertItem(QObject::tr("Trans_T2F"),FileOperator::poseToJsonObject(Trans_T2F.getValue()));
+    m_FileOperator.insertItem(QObject::tr("FilePath_Solid"),QString::fromLocal8Bit(FilePath_Solid.getValue()));
+    m_FileOperator.insertItem(QObject::tr("FilePath_Param"),QString::fromLocal8Bit(FilePath_Param.getValue()));
+    m_FileOperator.insertItem(QObject::tr("ToolBrand"),QString::fromLocal8Bit(ToolBrand.getValue()));
+    m_FileOperator.insertItem(QObject::tr("CurrentType"),QString::number(CurToolType.getValue()));
+    return m_FileOperator.saveFile();
 }
+
+//bool ToolObject::setupToolObject(const string &filePath,
+//                                 const string &cad_Path,
+//                                 const Base::Placement &tf_f2c,
+//                                 const Base::Placement &tf_f2t) {
+//  FilePath_Param.setValue(filePath);
+//  FilePath_Solid.setValue(cad_Path);
+//  return true;
+//}
 
 bool ToolObject::loadShape(const string &filePath, const ShapeType t_Type)
 {
@@ -168,14 +187,19 @@ const Base::Placement ToolObject::getTransform_Mount2Front() const
     return Trans_M2T.getValue() * Trans_T2F.getValue();
 }
 
+const Base::Placement ToolObject::getPose_ABSToolMount() const
+{
+    return Placement.getValue() * Trans_O2M.getValue();
+}
+
 const Base::Placement ToolObject::getPose_ABSToolTip() const
 {
-    return Pose_Mount.getValue() * Trans_M2T.getValue();
+    return getPose_ABSToolMount() * Trans_M2T.getValue();
 }
 
 const Base::Placement ToolObject::getPose_ABSToolFront() const
 {
-    return Pose_Mount.getValue() * Trans_M2T.getValue() * Trans_T2F.getValue();
+    return getPose_ABSToolTip() * Trans_T2F.getValue();
 }
 
 bool ToolObject::isFloating()
@@ -221,6 +245,9 @@ void ToolObject::onChanged(const Property *prop)
 {
     if(prop == &Trans_O2M || prop == &Pose_Mount){
        updateToolPose();
+    }
+    else if(prop == &CurToolType){
+        m_Type = (ToolType)CurToolType.getValue();
     }
     Part::Feature::onChanged(prop);
 }

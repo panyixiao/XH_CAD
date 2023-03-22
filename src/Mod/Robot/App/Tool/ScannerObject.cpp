@@ -22,7 +22,7 @@ PROPERTY_SOURCE(Robot::ScannerObject, Robot::ToolObject)
 
 ScannerObject::ScannerObject() {
 
-    m_Type = ToolType::Scanner;
+    m_Type = ToolType::_2DScanner;
     ADD_PROPERTY_TYPE(ScanDistance,(400.0),"Property",Prop_None, "A distance that Scanners can detect");
     ADD_PROPERTY_TYPE(ScanAmplitute,(15.0),"Property",Prop_None, "Angle Amplitute Scanners can detect");
     ADD_PROPERTY_TYPE(LaserOn, (false),"Property", Prop_None, "Switch to Turn on Laser");

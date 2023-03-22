@@ -15,6 +15,7 @@
 #include <Gui/Selection.h>
 #include <Gui/SelectionFilter.h>
 
+#include <Mod/Robot/App/Database/MechanicDatabase.h>
 #include <Mod/Robot/App/Mechanics/MechanicGroup.h>
 #include <Mod/Robot/App/Mechanics/Robot6AxisObject.h>
 #include <Mod/Robot/Gui/Mechanics/MechanicSelectionPanel.h>

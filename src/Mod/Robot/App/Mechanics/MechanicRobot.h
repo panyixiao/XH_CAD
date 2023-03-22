@@ -50,6 +50,7 @@ public:
     const Base::Placement getCurrentFlanPose(const CoordOrigin &ref_Origin) const;
 
     // Tool Setting
+    bool TorchAssembled();
     void installTool(const char* tool_Name);
     void uninstallTool(Robot::ToolObject* t_Tool);
     void udpateTools();

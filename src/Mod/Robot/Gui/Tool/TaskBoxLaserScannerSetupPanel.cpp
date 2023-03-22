@@ -362,8 +362,9 @@ void TaskBoxLaserScannerSetupPanel::slot_calibLenPose()
 }
 
 void TaskBoxLaserScannerSetupPanel::slot_finishSetup()
-{
+{    
     Q_EMIT Signal_finishSetup();
+//    this->close();
 }
 
 

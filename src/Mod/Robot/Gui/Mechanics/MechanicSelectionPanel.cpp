@@ -109,6 +109,8 @@ void MechanicSelectionPanel::slot_brandSelected()
     case Robot::MechanicType::M_ExtAxis:
         m_selectedModelBrand = std::string(Robot::ExtAxBrand_str[m_ui->comboBox_brand->currentIndex()]);
         break;
+    default:
+        break;
     }
     update_MechTypeList();
     update_MechDofList();
@@ -168,6 +170,8 @@ void MechanicSelectionPanel::update_MechTypeList()
         }
     }
         break;
+    default:
+        break;
     }
 }
 
@@ -176,33 +180,35 @@ void MechanicSelectionPanel::update_MechPayloadList()
     m_ui->comboBox_payload->clear();
     m_ui->comboBox_payload->addItem(QString::number(0));
     switch(m_Type){
-        case Robot::MechanicType::M_Robot:{
-            auto t_payloads = m_DatabasePtr->getAvailableRobot_Payload((Robot::RobotBrand)m_ui->comboBox_brand->currentIndex(),
-                                                                       (Robot::RobotType)m_ui->comboBox_MechType->currentIndex(),
-                                                                       (uint)m_ui->comboBox_MechDof->currentText().toInt());
-            for(auto t_payload : t_payloads){
-                m_ui->comboBox_payload->addItem(QString::number(t_payload));
-            }
+    case Robot::MechanicType::M_Robot:{
+        auto t_payloads = m_DatabasePtr->getAvailableRobot_Payload((Robot::RobotBrand)m_ui->comboBox_brand->currentIndex(),
+                                                                   (Robot::RobotType)m_ui->comboBox_MechType->currentIndex(),
+                                                                   (uint)m_ui->comboBox_MechDof->currentText().toInt());
+        for(auto t_payload : t_payloads){
+            m_ui->comboBox_payload->addItem(QString::number(t_payload));
         }
-            break;
-        case Robot::MechanicType::M_Positioner:{
-            auto t_payloads = m_DatabasePtr->getAvailablePoser_Payload((Robot::PoserBrand)m_ui->comboBox_brand->currentIndex(),
-                                                                       (Robot::PoserType)m_ui->comboBox_MechType->currentIndex(),
-                                                                       (uint)m_ui->comboBox_MechDof->currentText().toInt());
-            for(auto t_payload : t_payloads){
-                m_ui->comboBox_payload->addItem(QString::number(t_payload));
-            }
+    }
+        break;
+    case Robot::MechanicType::M_Positioner:{
+        auto t_payloads = m_DatabasePtr->getAvailablePoser_Payload((Robot::PoserBrand)m_ui->comboBox_brand->currentIndex(),
+                                                                   (Robot::PoserType)m_ui->comboBox_MechType->currentIndex(),
+                                                                   (uint)m_ui->comboBox_MechDof->currentText().toInt());
+        for(auto t_payload : t_payloads){
+            m_ui->comboBox_payload->addItem(QString::number(t_payload));
         }
-            break;
-        case Robot::MechanicType::M_ExtAxis:{
-            auto t_payloads = m_DatabasePtr->getAvailableExtAx_Payload((Robot::ExtAxBrand)m_ui->comboBox_brand->currentIndex(),
-                                                                       (Robot::ExtAxType)m_ui->comboBox_MechType->currentIndex(),
-                                                                       (uint)m_ui->comboBox_MechDof->currentText().toInt());
-            for(auto t_payload : t_payloads){
-                m_ui->comboBox_payload->addItem(QString::number(t_payload));
-            }
+    }
+        break;
+    case Robot::MechanicType::M_ExtAxis:{
+        auto t_payloads = m_DatabasePtr->getAvailableExtAx_Payload((Robot::ExtAxBrand)m_ui->comboBox_brand->currentIndex(),
+                                                                   (Robot::ExtAxType)m_ui->comboBox_MechType->currentIndex(),
+                                                                   (uint)m_ui->comboBox_MechDof->currentText().toInt());
+        for(auto t_payload : t_payloads){
+            m_ui->comboBox_payload->addItem(QString::number(t_payload));
         }
-            break;
+    }
+        break;
+    default:
+        break;
     }
 }
 
@@ -235,6 +241,8 @@ void MechanicSelectionPanel::update_MechDofList()
         }
     }
         break;
+    default:
+        break;
     }
 }
 
@@ -247,7 +255,7 @@ void MechanicSelectionPanel::update_MechNameList()
                                                             (Robot::RobotType)m_ui->comboBox_MechType->currentIndex(),
                                                             (uint)m_ui->comboBox_MechDof->currentText().toInt(),
                                                             (float)m_ui->comboBox_payload->currentText().toFloat());
-        for(auto t_item : t_items){
+        for(auto& t_item : t_items){
             m_stringList->append(QString::fromStdString(t_item.model_Name));
         }
     }
@@ -257,7 +265,7 @@ void MechanicSelectionPanel::update_MechNameList()
                                                             (Robot::PoserType)m_ui->comboBox_MechType->currentIndex(),
                                                             (uint)m_ui->comboBox_MechDof->currentText().toInt(),
                                                             (float)m_ui->comboBox_payload->currentText().toFloat());
-        for(auto t_item : t_items){
+        for(auto& t_item : t_items){
             m_stringList->append(QString::fromStdString(t_item.model_Name));
         }
     }
@@ -267,10 +275,12 @@ void MechanicSelectionPanel::update_MechNameList()
                                                             (Robot::ExtAxType)m_ui->comboBox_MechType->currentIndex(),
                                                             (uint)m_ui->comboBox_MechDof->currentText().toInt(),
                                                             (float)m_ui->comboBox_payload->currentText().toFloat());
-        for(auto t_item : t_items){
+        for(auto& t_item : t_items){
             m_stringList->append(QString::fromStdString(t_item.model_Name));
         }
     }
+        break;
+    default:
         break;
     }
     m_stringListModel->setStringList(*m_stringList);
@@ -314,15 +324,17 @@ bool MechanicSelectionPanel::insertMechanics() {
                               model_info.c_str(),
                               m_DocPtr->getName());
       break;
+  default:
+      break;
   }
 
   Gui::Command::doCommand(Gui::Command::Gui, "Gui.SendMsgToActiveView(\"ViewFit\")");
   if (m_DocPtr->getObjects().size() == 1) {
-    Gui::Command::doCommand(Gui::Command::Gui,"Gui.activeDocument().activeView().viewAxonometric()");
+      Gui::Command::doCommand(Gui::Command::Gui,"Gui.activeDocument().activeView().viewAxonometric()");
   }
   Gui::Command::commitCommand();
   return true;
 }
 
 
-#include "moc_MechanicSelectionPanel.cpp";
+#include "moc_MechanicSelectionPanel.cpp"
