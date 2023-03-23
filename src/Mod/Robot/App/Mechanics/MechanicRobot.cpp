@@ -48,7 +48,8 @@ void MechanicRobot::onChanged(const Property* prop)
             // Update RobotModel
             m_kinematicModel.setJointAngles(AxisValues.getValues());
             Pose_Tip.setValue(getCurrentTipPose(CoordOrigin::World));
-            udpateTools();
+            Pose_Flan.setValue(getCurrentFlanPose(CoordOrigin::World));
+            updateAssembledToolPose();
             flag_updateJntVals = false;
         }
         // Change RobotState By set TCP pose
@@ -60,12 +61,12 @@ void MechanicRobot::onChanged(const Property* prop)
         // Update KinematicModel JntVals
        auto tipToolTrans_inv = getToolTipTranslation().toMatrix();
        tipToolTrans_inv.inverse();
-       auto Pose_Flan = Pose_Tip.getValue().toMatrix() * tipToolTrans_inv;
-       if(m_kinematicModel.setTo(Base::Placement(Pose_Flan))){
+       Pose_Flan.setValue(Pose_Tip.getValue().toMatrix() * tipToolTrans_inv);
+       if(m_kinematicModel.setTo(Pose_Flan.getValue())){
             // Update JntVals to AxisValues
             flag_updateTcpPose = true;
             updateAxisValues();
-            udpateTools();
+            updateAssembledToolPose();
             flag_updateTcpPose = false;
         }
    }
@@ -232,35 +233,43 @@ bool MechanicRobot::TorchAssembled()
 }
 
 
-void MechanicRobot::installTool(const char *tool_Name)
+bool MechanicRobot::installTool(const char *tool_Name)
+{
+    if(tool_Name == nullptr)
+        return false;
+    auto t_ToolPtr = static_cast<Robot::ToolObject*>(getDocument()->getObject(tool_Name));
+    if(t_ToolPtr == nullptr)
+        return false;
+    for(const auto& t_ToolInfo : m_AssembledTools){
+        if(t_ToolInfo.second->CurToolType.getValue() == t_ToolPtr->CurToolType.getValue())
+            return false;
+    }
+
+//    auto dynProp = t_ToolPtr->addDynamicProperty("App::PropertyLinkSubList", "Link");
+//    App::PropertyLinkSubList* t_LinkPtr = static_cast<App::PropertyLinkSubList*>(dynProp);
+//    t_LinkPtr->setValues(std::vector<App::DocumentObject*>({this, t_ToolPtr}),
+//                         std::vector<std::string>({"Pose_Flan","Pose_Mount"}));
+
+    m_AssembledTools.insert(std::make_pair(m_AssembledTools.size(),t_ToolPtr));
+    updateAssembledToolPose();
+    return true;
+}
+
+void MechanicRobot::uninstallTool(const char *tool_Name)
 {
     if(tool_Name == nullptr)
         return;
-    auto t_Tool = static_cast<Robot::ToolObject*>(getDocument()->getObject(tool_Name));
-    if(t_Tool == nullptr)
-        return;
-    switch(t_Tool->getToolType()){
-    case ToolType::WeldTorch:
-
-        break;
-    case ToolType::_2DScanner:
-
-        break;
-    default:
-        break;
+    for(auto t_Iter = m_AssembledTools.begin(); t_Iter!=m_AssembledTools.end(); t_Iter++){
+        if(std::strcmp(t_Iter->second->getNameInDocument(), tool_Name) == 0)
+            m_AssembledTools.erase(t_Iter);
     }
-    udpateTools();
 }
 
-void MechanicRobot::uninstallTool(ToolObject *t_Tool)
+void MechanicRobot::updateAssembledToolPose()
 {
-    if(t_Tool == nullptr)
-        return;
-}
-
-void MechanicRobot::udpateTools()
-{
-
+    for(auto t_ToolIter : m_AssembledTools){
+        t_ToolIter.second->Pose_Mount.setValue(Pose_Flan.getValue());
+    }
 }
 
 void MechanicRobot::setCurrentToolType(const ToolType &t_Type)
@@ -280,7 +289,11 @@ ToolType MechanicRobot::getCurrentTool() const
 
 std::vector<DocumentObject *> MechanicRobot::getChildrenList() const
 {
-    return std::vector<DocumentObject *>();
+    std::vector<DocumentObject *> children;
+    for(const auto& t_ToolPtr : m_AssembledTools){
+        children.push_back(t_ToolPtr.second);
+    }
+    return children;
 }
 
 

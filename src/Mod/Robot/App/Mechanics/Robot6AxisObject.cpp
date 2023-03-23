@@ -488,9 +488,9 @@ void Robot6AxisObject::setCurrentToolActive(bool activated)
     case ToolType::Undefined:
         break;
     case ToolType::WeldTorch:
-        if(m_Torch){
-            m_Torch->SparkOn.setValue(activated);
-        }
+//        if(m_Torch){
+//            m_Torch->SparkOn.setValue(activated);
+//        }
         break;
     case ToolType::_2DScanner:
         if(m_Scanner){

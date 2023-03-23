@@ -194,63 +194,61 @@ unsigned int KinematicModel::getMemSize (void) const
 void KinematicModel::Save (Writer &writer) const
 {
     writer.Stream() << writer.ind();
-    writer.Stream() << "<Segments Count=\""<<jointNumber-1<<"\">";
-    saveChain(writer);
-    writer.Stream() <<  "</Segments>"<<std::endl;
+//    writer.Stream() << "<Segments Count=\""<<jointNumber<<"\">";
+//    saveChain(writer);
+//    writer.Stream() <<  "</Segments>"<<std::endl;
     writer.Stream() << "<MechanicType Type= \""<<(int)m_MechanicType<<"\"/>"<<std::endl;
     writer.Stream() << "<ConfigType Type= \""<<(int)m_ConfigType<<"\"/>"<<std::endl;
 }
 
 void KinematicModel::Restore(XMLReader &reader)
 {
-    reader.readElement("Segments");
-    if(reader.hasAttribute("Count")){
-        jointNumber = reader.getAttributeAsInteger("Count")+1;
-
-        m_JointValues = KDL::JntArray(jointNumber);
-
-        m_JointLowerLimits = KDL::JntArray(jointNumber);
-        m_JointUpperLimits = KDL::JntArray(jointNumber);
-
-        m_JointSpeedLimits = KDL::JntArray(jointNumber);
-        m_JointRotDir = KDL::JntArray(jointNumber);
-
-        jointFrameVec.resize(jointNumber);
-
-        for(unsigned int i=0;i<jointNumber;i++){
-            // read my Element
-            reader.readElement("Axis");
-            // get the value of the placement
-            auto axisOrigin =  Base::Placement(Base::Vector3d(reader.getAttributeAsFloat("Px"),
-                                                              reader.getAttributeAsFloat("Py"),
-                                                              reader.getAttributeAsFloat("Pz")),
-                                               Base::Rotation(reader.getAttributeAsFloat("Q0"),
-                                                              reader.getAttributeAsFloat("Q1"),
-                                                              reader.getAttributeAsFloat("Q2"),
-                                                              reader.getAttributeAsFloat("Q3")));
-            m_KDLchain.addSegment(Segment(Joint(Joint::RotZ),toFrame(axisOrigin)));
-            m_JointRotDir(i) = reader.getAttributeAsInteger("rotDir");
-            // read the axis constraints
-            m_JointLowerLimits(i)  = reader.getAttributeAsFloat("minAngle")* (M_PI/180);
-            m_JointUpperLimits(i)  = reader.getAttributeAsFloat("maxAngle")* (M_PI/180);
-            m_JointSpeedLimits(i) = reader.getAttributeAsFloat("AxisVelocity");
-            m_JointValues(i) = reader.getAttributeAsFloat("JointPos");
-        }
-        m_FkSolverPtr = new KDL::ChainFkSolverPos_recursive(m_KDLchain);
-        m_IkVelSolverPtr = new KDL::ChainIkSolverVel_pinv(m_KDLchain);
-    }
+//    reader.readElement("Segments");
+//    if(reader.hasAttribute("Count")){
+//        jointNumber = reader.getAttributeAsInteger("Count");
+//        m_JointValues = KDL::JntArray(jointNumber);
+//        m_JointLowerLimits = KDL::JntArray(jointNumber);
+//        m_JointUpperLimits = KDL::JntArray(jointNumber);
+//        m_JointSpeedLimits = KDL::JntArray(jointNumber);
+//        m_JointRotDir = KDL::JntArray(jointNumber);
+//        jointFrameVec.resize(jointNumber);
+//        for(unsigned int i=0;i<jointNumber;i++){
+//            // read my Element
+//            reader.readElement("Axis");
+//            // get the value of the placement
+//            auto axisOrigin =  Base::Placement(Base::Vector3d(reader.getAttributeAsFloat("Px"),
+//                                                              reader.getAttributeAsFloat("Py"),
+//                                                              reader.getAttributeAsFloat("Pz")),
+//                                               Base::Rotation(reader.getAttributeAsFloat("Q0"),
+//                                                              reader.getAttributeAsFloat("Q1"),
+//                                                              reader.getAttributeAsFloat("Q2"),
+//                                                              reader.getAttributeAsFloat("Q3")));
+//            m_KDLchain.addSegment(Segment(Joint(Joint::RotZ),toFrame(axisOrigin)));
+//            m_JointRotDir(i) = reader.getAttributeAsInteger("rotDir");
+//            // read the axis constraints
+//            m_JointLowerLimits(i)  = reader.getAttributeAsFloat("minAngle")* (M_PI/180);
+//            m_JointUpperLimits(i)  = reader.getAttributeAsFloat("maxAngle")* (M_PI/180);
+//            m_JointSpeedLimits(i) = reader.getAttributeAsFloat("AxisVelocity");
+//            m_JointValues(i) = reader.getAttributeAsFloat("JointPos");
+//        }
+//        m_FkSolverPtr = new KDL::ChainFkSolverPos_recursive(m_KDLchain);
+//        m_IkVelSolverPtr = new KDL::ChainIkSolverVel_pinv(m_KDLchain);
+//    }
+//    reader.readEndElement("Segments");
     reader.readElement("MechanicType");
     if(reader.hasAttribute("Type"))
         m_MechanicType = (MechanicType)reader.getAttributeAsInteger("Type");
+//    reader.readEndElement("MechanicType");
 
     reader.readElement("ConfigType");
     if(reader.hasAttribute("Type"))
         m_ConfigType = (ConfigType)reader.getAttributeAsInteger("Type");
+//    reader.readEndElement("ConfigType");
+
     updateKinematicModelByConfig(m_ConfigType);
-    reader.readEndElement("Segments");
 }
 
-const bool KinematicModel::initialized() const
+bool KinematicModel::initialized() const
 {
     return m_tracik_solver!=nullptr &&
            m_kdl_solver!=nullptr &&
@@ -389,7 +387,7 @@ void KinematicModel::saveChain(Writer &writer) const
 {
     if(m_KDLchain.getNrOfJoints() == 0)
         return;
-    for(unsigned int i=0;i<jointNumber-1;i++){
+    for(unsigned int i=0;i<jointNumber;i++){
         Base::Placement t_AxisOriginPose = toPlacement(m_KDLchain.getSegment(i).getFrameToTip());
         writer.Stream() << writer.ind();
         writer.Stream() << "<Axis "

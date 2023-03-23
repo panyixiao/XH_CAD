@@ -84,7 +84,8 @@ protected:
   void onDocumentRestored() override;
 
 public:
-  App::PropertyString ToolBrand;
+//  App::PropertyLink
+  App::PropertyString    ToolBrand;
   // Translation
   App::PropertyPlacement Pose_Mount;
   App::PropertyPlacement Trans_O2M; // Translation, Origin to Mount

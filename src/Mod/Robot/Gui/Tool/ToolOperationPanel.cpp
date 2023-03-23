@@ -3,6 +3,8 @@
 #include "ui_ToolOperationPanel.h"
 #include <Gui/Command.h>
 #include <QMessageBox>
+#include <Mod/Robot/App/Mechanics/MechanicRobot.h>
+#include <Mod/Robot/App/Mechanics/MechanicPoser.h>
 
 using namespace RobotGui;
 
@@ -47,6 +49,7 @@ void ToolOperationPanel::initUi_framework() {
   default:
       break;
   }
+//  update_AssembleTargetList();
   connectSignals();
 }
 
@@ -294,7 +297,7 @@ void ToolOperationPanel::slot_ImportSelectedTool() {
     Gui::Command::doCommand(Gui::Command::DoCmd_Type::Gui, "Gui.activeDocument().activeView().viewAxonometric()");
     Gui::Command::doCommand(Gui::Command::DoCmd_Type::Gui, "Gui.SendMsgToActiveView(\"ViewFit\")");
     Gui::Command::commitCommand();
-  return accept();
+    return accept();
 }
 
 void ToolOperationPanel::slot_CancelOperation()

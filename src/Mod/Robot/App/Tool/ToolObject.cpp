@@ -7,7 +7,8 @@
 #include "Mod/Robot/App/Utilites/MeshUtility.h"
 #include "Mod/Robot/App/Utilites/DS_Utility.h"
 #include "Mod/Robot/App/Utilites/PartUtility.h"
-#include "Mod/Robot/App/Mechanics/Robot6AxisObject.h"
+//#include "Mod/Robot/App/Mechanics/Robot6AxisObject.h"
+#include "Mod/Robot/App/Mechanics/MechanicRobot.h"
 
 #include <App/Property.h>
 #include <Base/Console.h>
@@ -114,15 +115,6 @@ bool ToolObject::saveTool()
     return m_FileOperator.saveFile();
 }
 
-//bool ToolObject::setupToolObject(const string &filePath,
-//                                 const string &cad_Path,
-//                                 const Base::Placement &tf_f2c,
-//                                 const Base::Placement &tf_f2t) {
-//  FilePath_Param.setValue(filePath);
-//  FilePath_Solid.setValue(cad_Path);
-//  return true;
-//}
-
 bool ToolObject::loadShape(const string &filePath, const ShapeType t_Type)
 {
     if(filePath.empty())
@@ -211,12 +203,14 @@ bool ToolObject::assembleToRobot(const string &robotName) {
   if (robotName.empty()) {
     return false;
   }
-  auto targetRobot_Ptr = dynamic_cast<Robot::Robot6AxisObject*>(getDocument()->getObject(robotName.c_str()));
+  auto targetRobot_Ptr = dynamic_cast<Robot::MechanicRobot*>(getDocument()->getObject(robotName.c_str()));
   if(targetRobot_Ptr == nullptr)
       return false;
-  targetRobot_Ptr->installTool(this->getNameInDocument());
-  MountedRobot.setValue(targetRobot_Ptr->getNameInDocument());
-  return true;
+  if(targetRobot_Ptr->installTool(this->getNameInDocument())){
+      MountedRobot.setValue(targetRobot_Ptr->getNameInDocument());
+      return true;
+  }
+  return false;
 }
 
 void ToolObject::updateToolMountPose(const Base::Placement &t_Pose)
@@ -225,11 +219,15 @@ void ToolObject::updateToolMountPose(const Base::Placement &t_Pose)
 }
 
 bool ToolObject::detachToolFromRobot() {
-    auto targetRobot_Ptr = dynamic_cast<Robot::Robot6AxisObject*>(getDocument()->getObject(MountedRobot.getValue()));
+    auto targetRobot_Ptr = dynamic_cast<Robot::MechanicRobot*>(getDocument()->getObject(MountedRobot.getValue()));
     if(targetRobot_Ptr == nullptr)
         return false;
-    targetRobot_Ptr->uninstallTool(this);
+    targetRobot_Ptr->uninstallTool(this->getNameInDocument());
     MountedRobot.setValue("");
+    auto newPose = targetRobot_Ptr->Placement.getValue().getPosition();
+    newPose.x += 200;
+    newPose.y += 200;
+    Pose_Mount.setValue(Base::Placement(newPose, Base::Rotation()));
     return true;
 }
 

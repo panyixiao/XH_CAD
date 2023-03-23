@@ -51,9 +51,9 @@ public:
 
     // Tool Setting
     bool TorchAssembled();
-    void installTool(const char* tool_Name);
-    void uninstallTool(Robot::ToolObject* t_Tool);
-    void udpateTools();
+    bool installTool(const char* tool_Name);
+    void uninstallTool(const char *tool_Name);
+    void updateAssembledToolPose();
     void setCurrentToolType(const ToolType& t_Type);
     void setCurrentToolActive(bool activated = false);
     ToolType getCurrentTool() const;
@@ -69,6 +69,7 @@ public:
     }
 
 public:
+    App::PropertyPlacement   Pose_Flan;
     App::PropertyIntegerList ArmConfiguration;  // Wrist | Forearm | Elbow
     App::PropertyBool        EnableArmConfiguration;
     // Connected ExtAx

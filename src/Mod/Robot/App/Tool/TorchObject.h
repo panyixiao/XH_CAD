@@ -32,7 +32,10 @@ protected:
 
 public:
   App::PropertyBool SparkOn;
-  ToolInfo_WeldTorch m_Info;
+  App::PropertyInteger m_TubeType;
+  App::PropertyString m_TorchName;
+  App::PropertyInteger m_TubeLength;
+//  ToolInfo_WeldTorch m_Info;
 };
 }
 

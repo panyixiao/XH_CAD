@@ -60,9 +60,9 @@ void TaskBoxTorchToolSetupPanel::initUi() {
       m_ui->lineEdit_brand->setEnabled(false);
       m_ui->lineEdit_brand->setText(tr(m_TorchPtr->ToolBrand.getStrValue().c_str()));
       m_ui->comboBox_tubeType->setEnabled(false);
-      m_ui->comboBox_tubeType->setCurrentIndex((int)m_TorchPtr->m_Info.tube_Type);
+      m_ui->comboBox_tubeType->setCurrentIndex((int)m_TorchPtr->m_TubeType.getValue());
       m_ui->doubleSpinBox_tubeLength->setEnabled(false);
-      m_ui->doubleSpinBox_tubeLength->setValue(m_TorchPtr->m_Info.tube_Length);
+      m_ui->doubleSpinBox_tubeLength->setValue(m_TorchPtr->m_TubeLength.getValue());
       m_ui->pushButton_finishSetup->setText(tr("Finish Edit"));
   }
   QObject::connect(m_ui->pushButton_finishSetup, SIGNAL(clicked()),
@@ -258,11 +258,11 @@ void TaskBoxTorchToolSetupPanel::slot_finishSetupButtonClicked()
             return;
         }
         m_TorchPtr->ToolBrand.setValue(m_ui->lineEdit_brand->text().toStdString().c_str());
-        m_TorchPtr->m_Info.tube_Type = (Robot::Type_TorchTube)m_ui->comboBox_tubeType->currentIndex();
-        m_TorchPtr->m_Info.tube_Length = m_ui->doubleSpinBox_tubeLength->value();
-        m_TorchPtr->m_Info.torch_Name = m_TorchPtr->ToolBrand.getStrValue() + "_" +
-                                        std::to_string(m_TorchPtr->m_Info.tube_Length) + "_" +
-                                        Robot::StrList_TorchTubeType[(int)m_TorchPtr->m_Info.tube_Type];
+        m_TorchPtr->m_TubeType.setValue(m_ui->comboBox_tubeType->currentIndex());
+        m_TorchPtr->m_TubeLength.setValue(m_ui->doubleSpinBox_tubeLength->value());
+        m_TorchPtr->m_TorchName.setValue(m_TorchPtr->ToolBrand.getStrValue() + "_" +
+                                        std::to_string(m_TorchPtr->m_TubeLength.getValue()) + "_" +
+                                        Robot::StrList_TorchTubeType[m_TorchPtr->m_TubeType.getValue()]);
         if(m_TorchPtr->saveTool()){
             QString msg = tr("Torch param file is saved as:") + tr(m_TorchPtr->FilePath_Param.getValue());
             QMessageBox::information(NULL, tr("Message"),msg);

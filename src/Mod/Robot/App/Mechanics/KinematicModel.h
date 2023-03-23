@@ -91,7 +91,7 @@ public:
     virtual unsigned int getMemSize (void) const;
 	virtual void Save (Base::Writer &/*writer*/) const;
     virtual void Restore(Base::XMLReader &/*reader*/);
-    const bool initialized() const;
+    bool initialized() const;
     uint getJointNumbers() const{
         return m_KDLchain.getNrOfJoints();
     }

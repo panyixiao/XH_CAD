@@ -36,23 +36,23 @@ bool TorchObject::saveTool()
     }
     Base::FileInfo file(t_FileName.c_str());
     if (file.extension().empty()){
-        t_FileName  += "/Torch/" + m_Info.torch_Name + ".tor";
+        t_FileName  += "/Torch/" + m_TorchName.getStrValue() + ".tor";
         FilePath_Param.setValue(t_FileName);
     }
     m_FileOperator.openFile(t_FileName);
-    m_FileOperator.insertItem(QObject::tr("TorchName"), QString::fromStdString(m_Info.torch_Name));
-    m_FileOperator.insertItem(QObject::tr("TubeType"), QString::number((int)m_Info.tube_Type));
-    m_FileOperator.insertItem(QObject::tr("TubeLength"), QString::number((uint)m_Info.tube_Length));
+    m_FileOperator.insertItem(QObject::tr("TorchName"), QString::fromStdString(m_TorchName.getStrValue()));
+    m_FileOperator.insertItem(QObject::tr("TubeType"), QString::number(m_TubeType.getValue()));
+    m_FileOperator.insertItem(QObject::tr("TubeLength"), QString::number(m_TubeLength.getValue()));
     return ToolObject::saveTool();
 }
 
 bool TorchObject::loadTool(const std::string &filePath)
 {
     m_FileOperator.openFile(filePath, QIODevice::ReadOnly);
-    m_Info.model_FilePath = m_FileOperator.readStringPropFromFile(QObject::tr("FilePath_Solid"));
-    m_Info.torch_Name = m_FileOperator.readStringPropFromFile(QObject::tr("TorchName"));
-    m_Info.tube_Type = (Type_TorchTube)m_FileOperator.readNumberPropFromFile(QObject::tr("TubeType"));
-    m_Info.tube_Length = m_FileOperator.readNumberPropFromFile(QObject::tr("TubeLength"));
+//    m_Info.model_FilePath = m_FileOperator.readStringPropFromFile(QObject::tr("FilePath_Solid"));
+    m_TorchName.setValue(m_FileOperator.readStringPropFromFile(QObject::tr("TorchName")));
+    m_TubeType.setValue(m_FileOperator.readNumberPropFromFile(QObject::tr("TubeType")));
+    m_TubeLength.setValue((int)m_FileOperator.readNumberPropFromFile(QObject::tr("TubeLength")));
     return ToolObject::loadTool(filePath);
 }
 

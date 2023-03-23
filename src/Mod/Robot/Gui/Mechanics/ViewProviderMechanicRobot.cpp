@@ -102,7 +102,7 @@ bool ViewProviderMechanicRobot::updatelinkmeshPoses()
 std::vector<App::DocumentObject *> ViewProviderMechanicRobot::claimChildren() const
 {
     Robot::MechanicRobot* t_RobotPtr = static_cast<Robot::MechanicRobot*>(pcObject);
-    return std::vector<App::DocumentObject *>();
+    return t_RobotPtr->getChildrenList();
 }
 
 void ViewProviderMechanicRobot::DraggerMotionCallback(InteractiveDragger *t_dragger)
