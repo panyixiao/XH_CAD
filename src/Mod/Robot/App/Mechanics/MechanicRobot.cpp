@@ -241,7 +241,7 @@ bool MechanicRobot::installTool(const char *tool_Name)
     if(t_ToolPtr == nullptr)
         return false;
     for(const auto& t_ToolInfo : m_AssembledTools){
-        if(t_ToolInfo.second->CurToolType.getValue() == t_ToolPtr->CurToolType.getValue())
+        if(t_ToolInfo.second->_ToolType.getValue() == t_ToolPtr->_ToolType.getValue())
             return false;
     }
 
@@ -299,7 +299,7 @@ std::vector<DocumentObject *> MechanicRobot::getChildrenList() const
 
 const Base::Placement MechanicRobot::getCurrentBasePose() const
 {
-    return Base::Placement(Pose_Referece.getValue() * Trans_Ref2Base.getValue());
+    return Base::Placement(Pose_Reference.getValue() * Trans_Ref2Base.getValue());
 }
 
 const Base::Placement MechanicRobot::getSelectedFeatureCenter() const
@@ -488,7 +488,7 @@ void MechanicRobot::setTipPoseByDiff(const Base::Placement &movement)
 void MechanicRobot::moveToSelectedFaceCenter()
 {
     auto newCenter = CAD_Utility::calculateLinkedFaceCenter(LinkedFaceFeature);
-    Pose_Referece.setValue(Base::Placement(newCenter.toMatrix()));
+    Pose_Reference.setValue(Base::Placement(newCenter.toMatrix()));
 }
 
 

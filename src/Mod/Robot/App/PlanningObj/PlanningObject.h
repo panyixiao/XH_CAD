@@ -20,32 +20,30 @@ public:
   virtual const char *getViewProviderName() const override {
     return "RobotGui::ViewProviderPlanningObj";
   }
-  void insertIntoCollisionWorld();
-  void updateTranslation_Origin2Mount(const Base::Placement &t_Translation);
-  const Base::Placement getCurrentMountPose();
-  void updateObjectMountPose(const Base::Placement &n_Pose);
-  void setAssembleCenter_toFeatureCenter();
-
   virtual void Save(Base::Writer &writer) const;
   virtual void Restore(Base::XMLReader &reader);
 
-  /// object frame
-  void setupObjectFrame(std::shared_ptr<FrameObject> t_frame = nullptr);
-  bool setupObjectFrameProperty();
-  void restoreObjectFrame();
+  void insertIntoCollisionWorld();
+  const Base::Placement getCurrentMountPose();
+  const Base::Placement getCurrentFramePose();
+  // Assemble
+  void setMountPose_toFeatureCenter();
+  void setFramePose_toFeatureCenter();
+  bool changeMountState(const char* device_Name, bool attachTo);
 
 protected:
   virtual void onChanged (const App::Property* prop);
   void onDocumentRestored() override;
 
 public:
-//  bool restoringObject = false;
-  App::PropertyPlacement Translation_O2M;
+  App::PropertyString FilePath_Solid;
+  App::PropertyBool isEditing;
+  App::PropertyPlacement Trans_O2M;
   App::PropertyPlacement Pose_Mount;
+  App::PropertyBool FrameOn;
+  App::PropertyPlacement Trans_O2F;
 
-  App::PropertyString ObjectName;
-  App::PropertyString FilePath;
-
+  App::PropertyString AttachedTo;
   App::PropertyLinkSub tCurvFeature;
   App::PropertyLinkSub tFaceFeature;
 

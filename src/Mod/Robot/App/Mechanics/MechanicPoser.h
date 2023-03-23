@@ -37,17 +37,17 @@ public:
     const Base::Placement getToolTipTranslation() const;
 
     // Poser can attach Tool/Object at the Tip
-    void assembleTool(const char* toolName);
-    void disassembleTool();
+    void mountToolObject(const char* toolName);
+    void dismountToolObject();
     void mountWorkingObject(const char* obejctName);
     void dismountWorkingObject();
-
-    void udpateLoadPosition();
+    void updateMountedObjectPose();
     std::vector<App::DocumentObject*> getChildrenList() const;
 
 public:
-    App::PropertyString    MountedWorkingObj;
-    App::PropertyString    AssembledTool;
+//    App::PropertyStringList MountedObjectNames;
+    App::PropertyString     MountedWorkingObj;
+    App::PropertyString     AssembledTool;
 
 protected:
     /// get called by the container when a property has changed
@@ -55,7 +55,8 @@ protected:
     void onDocumentRestored() override;
 
 private:
-    Robot::PlanningObject* m_MountedWorkingObjPtr = nullptr;
+//    std::vector<Robot::PlanningObject*> m_MountedObjects;
+    Robot::PlanningObject* m_MountedObjectPtr = nullptr;
     Robot::ToolObject* m_AssembledToolPtr = nullptr;
 };
 

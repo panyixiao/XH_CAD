@@ -20,7 +20,7 @@ using namespace Robot;
 PROPERTY_SOURCE(Robot::TorchObject, Robot::ToolObject)
 
 TorchObject::TorchObject() {
-    m_Type = ToolType::WeldTorch;
+    _ToolType.setValue((uint)ToolType::WeldTorch);
     ADD_PROPERTY_TYPE(SparkOn,(false),"Property", Prop_None,"A Switch to Set Spark On/Off");
 }
 

@@ -53,6 +53,9 @@ PyObject *MechanicPoser::getPyObject()
 
 void MechanicPoser::onChanged(const Property* prop)
 {
+    if(prop == &Pose_Tip){
+        updateMountedObjectPose();
+    }
     Robot::MechanicBase::onChanged(prop);
 }
 
@@ -63,7 +66,7 @@ void MechanicPoser::onDocumentRestored()
         mountWorkingObject(MountedWorkingObj.getValue());
     }
     if(!AssembledTool.getStrValue().empty()){
-        assembleTool(AssembledTool.getValue());
+        mountToolObject(AssembledTool.getValue());
     }
 }
 
@@ -109,11 +112,14 @@ bool MechanicPoser::setTipPose(const Base::Placement &n_TipPose,
 
 const Base::Placement MechanicPoser::getToolTipTranslation() const
 {
+    if(m_AssembledToolPtr!=nullptr){
+        return m_AssembledToolPtr->Trans_M2T.getValue();
+    }
     return Base::Placement();
 }
 
 
-void MechanicPoser::assembleTool(const char *toolName)
+void MechanicPoser::mountToolObject(const char *toolName)
 {
     if(toolName == nullptr)
         return;
@@ -121,11 +127,11 @@ void MechanicPoser::assembleTool(const char *toolName)
     if(t_ToolObjPtr == nullptr)
         return;
     m_AssembledToolPtr = t_ToolObjPtr;
-    udpateLoadPosition();
+    updateMountedObjectPose();
     AssembledTool.setValue(std::string(t_ToolObjPtr->getNameInDocument()));
 }
 
-void MechanicPoser::disassembleTool()
+void MechanicPoser::dismountToolObject()
 {
     m_AssembledToolPtr = nullptr;
     AssembledTool.setValue("");
@@ -139,22 +145,22 @@ void MechanicPoser::mountWorkingObject(const char *obejctName)
     auto t_ObjectPtr = static_cast<Robot::PlanningObject*>(getDocument()->getObject(obejctName));
     if(t_ObjectPtr == nullptr)
         return;
-    m_MountedWorkingObjPtr = t_ObjectPtr;
-    udpateLoadPosition();
+    m_MountedObjectPtr = t_ObjectPtr;
+    updateMountedObjectPose();
     MountedWorkingObj.setValue(std::string(t_ObjectPtr->getNameInDocument()));
 }
 
 void MechanicPoser::dismountWorkingObject()
 {
 //    m_MountedObjectPtr->Pose_Mount.setValue(Base::Placement());
-    m_MountedWorkingObjPtr = nullptr;
+    m_MountedObjectPtr = nullptr;
     MountedWorkingObj.setValue("");
 }
 
-void MechanicPoser::udpateLoadPosition()
+void MechanicPoser::updateMountedObjectPose()
 {
-    if(m_MountedWorkingObjPtr)
-        m_MountedWorkingObjPtr->Pose_Mount.setValue(getCurrentTipPose());
+    if(m_MountedObjectPtr)
+        m_MountedObjectPtr->Pose_Mount.setValue(getCurrentTipPose());
     if(m_AssembledToolPtr)
         m_AssembledToolPtr->Pose_Mount.setValue(getCurrentTipPose());
 }
@@ -162,8 +168,10 @@ void MechanicPoser::udpateLoadPosition()
 std::vector<DocumentObject *> MechanicPoser::getChildrenList() const
 {
     std::vector<DocumentObject *> result;
-    if(m_MountedWorkingObjPtr)
-        result.push_back(m_MountedWorkingObjPtr);
+    if(m_MountedObjectPtr!=nullptr)
+        result.push_back(m_MountedObjectPtr);
+    if(m_AssembledToolPtr!=nullptr)
+        result.push_back(m_AssembledToolPtr);
     return result;
 }
 

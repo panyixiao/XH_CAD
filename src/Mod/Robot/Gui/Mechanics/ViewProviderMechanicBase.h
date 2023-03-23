@@ -60,8 +60,6 @@ public:
     virtual std::vector<App::DocumentObject *> claimChildren(void) const override;
 
 protected:
-//    void DraggerMotionCallback(InteractiveDragger *t_dragger);
-//    void DraggerFinishCallback(InteractiveDragger *t_dragger);
     bool generateLinkMeshNodes_fromURDF(const std::string& filePath_urdf);
     bool updatelinkmeshPoses();
     bool callbackRegistered();

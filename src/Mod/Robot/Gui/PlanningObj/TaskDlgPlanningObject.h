@@ -10,10 +10,13 @@
 #include <QObject>
 #include <QWidget>
 #include "Mod/Robot/App/PlanningObj/PlanningObject.h"
+#include "Mod/Robot/Gui/Utilites/DraggerUtility.h"
+#include <Mod/Robot/App/Utilites/DS_Utility.h>
 
 class Ui_TaskDlgPlanningObject;
 
 namespace RobotGui {
+class ViewProviderPlanningObj;
 class TaskDlgPlanningObject : public Gui::TaskView::TaskDialog {
   Q_OBJECT
 public:
@@ -24,26 +27,44 @@ public:
   virtual bool accept();
   virtual bool reject();
   virtual QDialogButtonBox::StandardButtons getStandardButtons() const {
-    return QDialogButtonBox::Ok | QDialogButtonBox::Cancel;
+      return QDialogButtonBox::NoButton;
   }
 
 protected:
   void initUi();
-  void blockPosePanelSignal(bool blocking);
-  void updatePanelInformation();
-  void updatePositionerList();
-  void enablePanel(bool flag);
+  void blockMountPosePanelSignal(bool blocking);
+  void blockFramePosePanelSignal(bool blocking);
+  void updateMountPanelInformation();
+  void updateMountTargetDeviceList();
+  void updateFramePoseInformation();
+  bool createDragger(const Base::Placement& init_Pose);
+  void destroyDragger();
+  void updateDraggerPose(const Base::Placement new_Pose);
+  void updateFramePanelStatus();
 
 private Q_SLOTS:
-  void slot_resetObjectOrigin();
-  void slot_MountToPositioner();
-  void slot_changeAssemblePose();
+  void slot_setMountPoseToFeatureCenter();
+  void slot_setFramePoseToFeatureCenter();
+  void slot_changeMountState();
+  void slot_changeMountPose();
+  void slot_changeFramePose();
+  void slot_changeFrameStatus();
+  void slot_finishEditObject();
+  void slot_editTargetChanged(int c_index);
+  void slot_flipAngle_Mount_rX();
+  void slot_flipAngle_Mount_rY();
+  void slot_flipAngle_Mount_rZ();
+  void slot_flipAngle_Frame_rX();
+  void slot_flipAngle_Frame_rY();
+  void slot_flipAngle_Frame_rZ();
 
 private:
   App::Document* m_Doc = nullptr;
   Robot::PlanningObject *m_PlanningObj = nullptr;
   QWidget *m_proxy;
   std::shared_ptr<Ui_TaskDlgPlanningObject> m_ui;
+  ViewProviderPlanningObj* m_PlanningObj_VP = nullptr;
+  std::shared_ptr<InteractiveDragger> m_displayDragger;
   Gui::TaskView::TaskSelectLinkProperty *m_EdgeSelection = nullptr;
   Gui::TaskView::TaskSelectLinkProperty *m_FaceSelection = nullptr;
 };

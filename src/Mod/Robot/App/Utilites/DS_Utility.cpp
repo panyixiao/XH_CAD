@@ -173,6 +173,24 @@ bool DS_Utility::setValueIfDifferent(App::PropertyPlacement &placement,
   return false;
 }
 
+double DS_Utility::flipRotationValue(const double t_val)
+{
+    double result = t_val;
+    if(t_val == 0){
+        result = 180.0;
+    }
+    else if(0<t_val&&t_val<180){
+        result = -1.0*(180.0 - t_val);
+    }
+    else if(-180<t_val&&t_val<0){
+        result = 180.0 + t_val;
+    }
+    else if(t_val == 180 || t_val == -180){
+        result = 0;
+    }
+    return result;
+}
+
 //bool DS_Utility::setValueIfDifferent(App::PropertyPlacement &placement,
 //                                     geometry_msgs::Pose const &newPose) {
 //  return setValueIfDifferent(placement, PoseToPlacement(newPose));

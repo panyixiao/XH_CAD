@@ -32,7 +32,7 @@ MechanicBase::MechanicBase()
     ADD_PROPERTY_TYPE(isEditing,(0),"Property",Prop_None, "Identify is Target is Editing");
     ADD_PROPERTY_TYPE(DeviceType,(0),"Property",Prop_None, "Current Teach Coord Index");
 
-    ADD_PROPERTY_TYPE(Pose_Referece,(Base::Placement()),"Kinematics",Prop_None,"The Placement of Reference");
+    ADD_PROPERTY_TYPE(Pose_Reference,(Base::Placement()),"Kinematics",Prop_None,"The Placement of Reference");
     ADD_PROPERTY_TYPE(Trans_Ref2Base,(Base::Placement()),"Kinematics",Prop_None,"Transformation from Reference Origin to Base");
     ADD_PROPERTY_TYPE(Pose_Tip,(Base::Placement()),"Kinematics",Prop_None,"The pose of current active Tcp in WorldFrame");
 
@@ -256,7 +256,7 @@ const Base::Placement MechanicBase::getAxisOriginPose(const uint t_AxisID)
 
 const Base::Placement MechanicBase::getOriginPose() const
 {
-    return Pose_Referece.getValue()*Trans_Ref2Base.getValue();
+    return Pose_Reference.getValue()*Trans_Ref2Base.getValue();
 }
 
 bool MechanicBase::flipAxisDirection(uint jntID, bool invert)

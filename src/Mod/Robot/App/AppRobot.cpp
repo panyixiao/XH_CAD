@@ -160,12 +160,12 @@ private:
             Base::Console().Error(msg.c_str());
             throw Py::Exception();
         }
-        auto t_RobotPtr = static_cast<Robot::MechanicDevice*>(pcDoc->addObject("Robot::MechanicDevice",ModelName.c_str()));
-        if(t_RobotPtr == nullptr){
+        auto t_PoserPtr = static_cast<Robot::MechanicPoser*>(pcDoc->addObject("Robot::MechanicPoser",ModelName.c_str()));
+        if(t_PoserPtr == nullptr){
             Base::Console().Error("Failed to insert Robot Object into Document\n");
             throw Py::Exception();
         }
-        t_RobotPtr->File_URDF.setValue(t_ItemInfo.model_FilePath.c_str());
+        t_PoserPtr->FilePath_URDF.setValue(t_ItemInfo.model_FilePath.c_str());
         return Py::None();
     }
     Py::Object insertMech_ExtAx(const Py::Tuple & args){
@@ -204,25 +204,26 @@ private:
     }
 
     Py::Object insert_Solid(const Py::Tuple &args) {
-      char *Name;
+      char *filePath;
       const char *DocName;
-      if (!PyArg_ParseTuple(args.ptr(), "ets", "utf-8", &Name, &DocName))
+      if (!PyArg_ParseTuple(args.ptr(), "ets", "utf-8", &filePath, &DocName))
         throw Py::Exception();
-      std::string EncodedName = std::string(Name);
-      PyMem_Free(Name);
-      Base::FileInfo file(EncodedName.c_str());
+      std::string FilePath_SolidModel = std::string(filePath);
+      PyMem_Free(filePath);
+      Base::FileInfo file(FilePath_SolidModel.c_str());
       if (file.extension().empty())
         throw Py::RuntimeError("No file extension");
       App::Document *pcDoc = App::GetApplication().getDocument(DocName);
       if (!pcDoc) {
         pcDoc = App::GetApplication().newDocument(DocName);
       }
-      auto result = PartUtility::importCADFile(pcDoc, EncodedName.c_str());
+      auto result = PartUtility::importCADFile(pcDoc, FilePath_SolidModel.c_str());
       if (result) {
         auto objPtr = pcDoc->getObject(result->getNameInDocument());
         if (objPtr != nullptr &&
             objPtr->isDerivedFrom(Robot::PlanningObject::getClassTypeId())) {
-//          auto planningObj = dynamic_cast<Robot::PlanningObject *>(objPtr);
+          auto planningObj = static_cast<Robot::PlanningObject *>(objPtr);
+          planningObj->isEditing.setValue(true);
 //          planningObj->insertIntoCollisionWorld();
         } else {
           Base::Console().Error("Can't Find Object in Document\n");
@@ -299,7 +300,7 @@ private:
         torchPtr->setEdit.setValue(true);
         torchPtr->FilePath_Solid.setValue(modelPath);
         torchPtr->FilePath_Param.setValue(m_ToolDatabase.getResFilePath());
-        torchPtr->CurToolType.setValue((int)ToolType::WeldTorch);
+        torchPtr->_ToolType.setValue((int)ToolType::WeldTorch);
         return Py::None();
     }
     Py::Object createTool_2DScanner(const Py::Tuple & args){

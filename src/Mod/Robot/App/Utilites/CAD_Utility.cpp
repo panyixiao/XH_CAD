@@ -97,7 +97,7 @@ CAD_Utility::getEdgesFromDataSource(const App::PropertyLinkSub &t_selection) {
   std::vector<TopoDS_Edge> result;
   auto feature = t_selection.getValue();
   if (feature == nullptr) {
-    Base::Console().Error("CAD_Utility: Feature pointer is nullptr!\n");
+//    Base::Console().Error("CAD_Utility: Feature pointer is nullptr!\n");
     return result;
   }
   if (!feature->getTypeId().isDerivedFrom(Part::Feature::getClassTypeId())) {

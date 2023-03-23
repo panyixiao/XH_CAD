@@ -331,8 +331,8 @@ App::DocumentObject *PartUtility::insertPlanningObjToDoc(App::Document *pcDoc,
   if (n_planningObj == nullptr)
     return nullptr;
   n_planningObj->Shape.setValue(shape);
-  n_planningObj->FilePath.setValue(filePath);
-  n_planningObj->ObjectName.setValue(n_planningObj->getNameInDocument());
+  n_planningObj->FilePath_Solid.setValue(filePath);
+//  n_planningObj->ObjectName.setValue(n_planningObj->getNameInDocument());
   double mat[4][4];
   for (int i = 1; i < 4; ++i) {
     for (int j = 1; j <= 4; ++j) {

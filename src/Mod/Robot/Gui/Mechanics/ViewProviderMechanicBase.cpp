@@ -227,7 +227,7 @@ void ViewProviderMechanicBase::updateData(const App::Property* prop)
     }
 
     // Move Base
-    else if(prop == &t_Mechanics->Trans_Ref2Base || prop == &t_Mechanics->Pose_Referece){
+    else if(prop == &t_Mechanics->Trans_Ref2Base || prop == &t_Mechanics->Pose_Reference){
         updatelinkmeshPoses();
         if(callbackRegistered()){
             callBack_UpdatePanelWidgets();
@@ -279,6 +279,10 @@ void ViewProviderMechanicBase::unsetEdit(int ModeNum)
 std::vector<App::DocumentObject *> ViewProviderMechanicBase::claimChildren() const
 {
     Robot::MechanicBase* t_Mechanics = static_cast<Robot::MechanicBase*>(pcObject);
+    if(t_Mechanics->isDerivedFrom(Robot::MechanicPoser::getClassTypeId())){
+        auto t_PoserPtr = static_cast<Robot::MechanicPoser*>(t_Mechanics);
+        return t_PoserPtr->getChildrenList();
+    }
     return std::vector<App::DocumentObject *>();
 }
 

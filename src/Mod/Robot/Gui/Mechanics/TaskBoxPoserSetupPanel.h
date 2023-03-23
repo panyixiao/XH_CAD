@@ -6,20 +6,20 @@
 #include <App/Document.h>
 #include <Gui/TaskView/TaskView.h>
 #include <Gui/TaskView/TaskSelectLinkProperty.h>
-#include "Mod/Robot/Gui/Utilites/WidgetUtility.h"
-#include "Mod/Robot/App/Mechanics/MechanicDevice.h"
-#include "Mod/Robot/Gui/Mechanics/QDialogCalibrationPanel.h"
+#include <Mod/Robot/Gui/Utilites/WidgetUtility.h>
+#include <Mod/Robot/App/Mechanics/MechanicPoser.h>
+#include <Mod/Robot/Gui/Mechanics/QDialogCalibrationPanel.h>
 
-class Ui_TaskBoxMechanicDevice;
+class Ui_TaskBoxPoserSetupPanel;
 
 namespace RobotGui
 {
 
-class TaskBoxPositionerSetupPanel : public Gui::TaskView::TaskBox {
+class TaskBoxPoserSetupPanel : public Gui::TaskView::TaskBox {
   Q_OBJECT
 
 public:
-  TaskBoxPositionerSetupPanel(Robot::MechanicDevice *t_Positioner);
+  TaskBoxPoserSetupPanel(Robot::MechanicPoser *t_Positioner);
 
 Q_SIGNALS:
   void Signal_setupRobotTool();
@@ -52,16 +52,16 @@ private Q_SLOTS:
     void slot_referenceTargetChanged();
 
 private:
+    App::Document *m_DocPtr = nullptr;
+    Robot::MechanicPoser* m_PoserPtr = nullptr;
     // UI
     QWidget *m_proxy = nullptr;
-    Ui_TaskBoxMechanicDevice *m_ui = nullptr;
+    Ui_TaskBoxPoserSetupPanel *m_ui = nullptr;
     // Joint Map
     std::map<string, double> m_JointStatusMap;
     QGridLayout *m_JointPanel_layout = nullptr;
     QSignalMapper *m_signalmapper = nullptr;
-    vector<JointSliderWidget *> m_jointSliderVec;
-    App::Document *m_DocPtr = nullptr;
-    Robot::MechanicDevice* m_Positioner = nullptr;
+    std::vector<JointSliderWidget *> m_jointSliderVec;
 };
 
 

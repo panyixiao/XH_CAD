@@ -89,6 +89,7 @@ public:
   /// return true if (different and set value)
   /// return false if (same, and not set value)
 
+  static double flipRotationValue(const double t_val);
   static void convert_Placement2Transform(const Base::Placement &from,
                                           SoTransform *to);
 

@@ -10,7 +10,7 @@
 #include "Mod/Robot/App/Mechanics/MechanicRobot.h"
 #include "Mod/Robot/App/Mechanics/MechanicPoser.h"
 #include "TaskBoxRobotTeachPanel.h"
-#include "TaskBoxMechanicDevice.h"
+#include "TaskBoxPoserSetupPanel.h"
 #include "TaskBoxMechanicGroupPanel.h"
 
 namespace RobotGui {
@@ -18,14 +18,14 @@ namespace RobotGui {
 class TaskDlgMechanicControl : public Gui::TaskView::TaskDialog {
   Q_OBJECT
 public:
-  TaskDlgMechanicControl(Robot::Robot6AxisObject *targetRobot,
-                         QWidget *parent = 0);
-  TaskDlgMechanicControl(Robot::MechanicDevice* t_Positioner,
-                         QWidget *parent = 0);
+//  TaskDlgMechanicControl(Robot::Robot6AxisObject *targetRobot,
+//                         QWidget *parent = 0);
+//  TaskDlgMechanicControl(Robot::MechanicDevice* t_Positioner,
+//                         QWidget *parent = 0);
+    TaskDlgMechanicControl(Robot::MechanicBase* t_Mechanics,
+                           QWidget* parent = 0);
   TaskDlgMechanicControl(Robot::MechanicGroup* t_Group,
                          QWidget *parent = 0);
-  TaskDlgMechanicControl(Robot::MechanicBase* t_Mechanics,
-                         QWidget* parent = 0);
   ~TaskDlgMechanicControl();
 
   virtual bool accept();

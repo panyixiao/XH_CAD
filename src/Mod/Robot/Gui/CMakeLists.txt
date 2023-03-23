@@ -134,24 +134,24 @@ SOURCE_GROUP("PlanningObj" FILES ${RobotGui_SRC_PlanningObjectViewProvider}
 
 # Mechanics
 set(RobotGui_SRC_MechanicViewProvider
-    Mechanics/ViewProviderRobot6AxisObject.cpp
-    Mechanics/ViewProviderRobot6AxisObject.h
-    Mechanics/ViewProviderMechanicDevice.cpp
-    Mechanics/ViewProviderMechanicDevice.h
+#    Mechanics/ViewProviderRobot6AxisObject.cpp
+#    Mechanics/ViewProviderRobot6AxisObject.h
+#    Mechanics/ViewProviderMechanicDevice.cpp
+#    Mechanics/ViewProviderMechanicDevice.h
     Mechanics/ViewProviderMechanicBase.cpp
     Mechanics/ViewProviderMechanicBase.h
-    Mechanics/ViewProviderMechanicGroup.cpp
-    Mechanics/ViewProviderMechanicGroup.h
     Mechanics/ViewProviderMechanicRobot.cpp
-    Mechanics/ViewProviderMechanicRobot.h)
+    Mechanics/ViewProviderMechanicRobot.h
+    Mechanics/ViewProviderMechanicGroup.cpp
+    Mechanics/ViewProviderMechanicGroup.h)
 
 set(RobotGui_SRC_MechanicsTaskBox
     Mechanics/TaskBoxMechanicGroupPanel.cpp
     Mechanics/TaskBoxMechanicGroupPanel.h
     Mechanics/TaskBoxRobotTeachPanel.cpp
     Mechanics/TaskBoxRobotTeachPanel.h
-    Mechanics/TaskBoxMechanicDevice.cpp
-    Mechanics/TaskBoxMechanicDevice.h
+    Mechanics/TaskBoxPoserSetupPanel.cpp
+    Mechanics/TaskBoxPoserSetupPanel.h
     )
 
 set(RobotGui_SRC_MechanicsTaskDlg
@@ -166,9 +166,9 @@ set(RobotGui_SRC_MechanicsTaskDlg
 set(RobotGui_UIC_Mechanics
     Mechanics/TaskBoxMechanicGroupPanel.ui
     Mechanics/TaskBoxRobotTeachPanel.ui
-    Mechanics/TaskBoxMechanicDevice.ui
-    Mechanics/QDialogCalibrationPanel.ui
+    Mechanics/TaskBoxPoserSetupPanel.ui
     Mechanics/MechanicSelectionPanel.ui
+    Mechanics/QDialogCalibrationPanel.ui
     )
 
 SOURCE_GROUP("Mechanics" FILES ${RobotGui_SRC_MechanicViewProvider}

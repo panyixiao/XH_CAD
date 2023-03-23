@@ -48,7 +48,7 @@ ToolObject::ToolObject() {
   ADD_PROPERTY_TYPE(FilePath_Solid, (""), "File", Prop_None, "Path to Model File");
   ADD_PROPERTY_TYPE(FilePath_Param, (""), "File", Prop_None, "Path to Tool File");
   ADD_PROPERTY_TYPE(MountedRobot, (""), "Assemble", Prop_None, "Assembled Robot Name");
-  ADD_PROPERTY_TYPE(CurToolType, (0), "Property", Prop_None, "Tool Type");
+  ADD_PROPERTY_TYPE(_ToolType, (0), "Property", Prop_None, "Tool Type");
 
   ADD_PROPERTY(Pose_Mount, (Base::Placement()));
   ADD_PROPERTY(Trans_O2M, (Base::Placement()));
@@ -81,7 +81,7 @@ bool ToolObject::loadTool(const string &param_FilePath) {
   FilePath_Param.setValue(m_FileOperator.readStringPropFromFile(QObject::tr("FilePath_Param")));
   FilePath_Solid.setValue(m_FileOperator.readStringPropFromFile(QObject::tr("FilePath_Solid")));
   ToolBrand.setValue(m_FileOperator.readStringPropFromFile(QObject::tr("ToolBrand")));
-  CurToolType.setValue(m_FileOperator.readNumberPropFromFile(QObject::tr("CurrentType")));
+  _ToolType.setValue(m_FileOperator.readNumberPropFromFile(QObject::tr("CurrentType")));
   m_FileOperator.closeFile();
 
   bool result = false;
@@ -111,7 +111,7 @@ bool ToolObject::saveTool()
     m_FileOperator.insertItem(QObject::tr("FilePath_Solid"),QString::fromLocal8Bit(FilePath_Solid.getValue()));
     m_FileOperator.insertItem(QObject::tr("FilePath_Param"),QString::fromLocal8Bit(FilePath_Param.getValue()));
     m_FileOperator.insertItem(QObject::tr("ToolBrand"),QString::fromLocal8Bit(ToolBrand.getValue()));
-    m_FileOperator.insertItem(QObject::tr("CurrentType"),QString::number(CurToolType.getValue()));
+    m_FileOperator.insertItem(QObject::tr("CurrentType"),QString::number(_ToolType.getValue()));
     return m_FileOperator.saveFile();
 }
 
@@ -225,8 +225,8 @@ bool ToolObject::detachToolFromRobot() {
     targetRobot_Ptr->uninstallTool(this->getNameInDocument());
     MountedRobot.setValue("");
     auto newPose = targetRobot_Ptr->Placement.getValue().getPosition();
-    newPose.x += 200;
-    newPose.y += 200;
+    newPose.x += 500;
+    newPose.y += 500;
     Pose_Mount.setValue(Base::Placement(newPose, Base::Rotation()));
     return true;
 }
@@ -244,9 +244,9 @@ void ToolObject::onChanged(const Property *prop)
     if(prop == &Trans_O2M || prop == &Pose_Mount){
        updateToolPose();
     }
-    else if(prop == &CurToolType){
-        m_Type = (ToolType)CurToolType.getValue();
-    }
+//    else if(prop == &_ToolType){
+//        m_Type = (ToolType)_ToolType.getValue();
+//    }
     Part::Feature::onChanged(prop);
 }
 

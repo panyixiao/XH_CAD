@@ -72,7 +72,7 @@ public:
     App::PropertyString FilePath_Calibration;
 
     // IK Trigger
-    App::PropertyPlacement Pose_Referece;  // TODO: Use link property
+    App::PropertyPlacement Pose_Reference;  // TODO: Use link property
     App::PropertyPlacement Trans_Ref2Base;
     App::PropertyPlacement Pose_Tip;
 

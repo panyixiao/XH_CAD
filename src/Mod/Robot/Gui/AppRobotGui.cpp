@@ -16,8 +16,8 @@
 
 #include "Mechanics/ViewProviderMechanicBase.h"
 #include "Mechanics/ViewProviderMechanicRobot.h"
-#include "Mechanics/ViewProviderMechanicDevice.h"
-#include "Mechanics/ViewProviderRobot6AxisObject.h"
+//#include "Mechanics/ViewProviderMechanicDevice.h"
+//#include "Mechanics/ViewProviderRobot6AxisObject.h"
 #include "Mechanics/ViewProviderMechanicGroup.h"
 
 #include "TaskManage/ViewProviderTaskObject.h"
@@ -94,8 +94,6 @@ PyMOD_INIT_FUNC(RobotGui)
     // Mechanics
     RobotGui::ViewProviderMechanicBase       ::init();
     RobotGui::ViewProviderMechanicRobot      ::init();
-    RobotGui::ViewProviderMechanicDevice     ::init();
-    RobotGui::ViewProviderRobot6AxisObject   ::init();
     RobotGui::ViewProviderMechanicGroup      ::init();
 
     // Tool

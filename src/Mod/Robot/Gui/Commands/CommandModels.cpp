@@ -76,8 +76,7 @@ void CmdImportCADModel::activated(int iMsg) {
       return; // no document
     Gui::Command::openCommand("Import CAD");
     Gui::Command::doCommand(Gui::Command::DoCmd_Type::Doc, "import Robot");
-    Gui::Command::doCommand(Gui::Command::DoCmd_Type::Doc, "Robot.insert_CAD(\"%s\",\"%s\")",
-              (const char *)fn.toUtf8(), pDoc->getName());
+    Gui::Command::doCommand(Gui::Command::DoCmd_Type::Doc, "Robot.insert_Solid(\"%s\",\"%s\")",(const char *)fn.toUtf8(), pDoc->getName());
     if (pDoc->getObjects().size() == 1) {
       Gui::Command::doCommand(Gui::Command::DoCmd_Type::Gui, "Gui.activeDocument().activeView().viewAxonometric()");
       Gui::Command::doCommand(Gui::Command::DoCmd_Type::Gui, "Gui.SendMsgToActiveView(\"ViewFit\")");
@@ -87,7 +86,7 @@ void CmdImportCADModel::activated(int iMsg) {
         Gui::View3DInventor::getClassTypeId());
     for (std::list<Gui::MDIView *>::iterator it = views.begin();
          it != views.end(); ++it) {
-      (*it)->viewAll();
+        (*it)->viewAll();
     }
   }
 }

@@ -35,11 +35,10 @@ public:
 
 protected:
   void updateRenderStatus(bool colliding);
-  void setupDragger(bool enable);
 
 private:
   InteractiveDragger *m_dragger = nullptr;
   App::Document* m_DocPtr = nullptr;
-  Robot::PlanningObject* m_PlanningObj = nullptr;
+//  Robot::PlanningObject* m_PlanningObj = nullptr;
 };
 }

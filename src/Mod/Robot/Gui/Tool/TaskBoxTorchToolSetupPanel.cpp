@@ -56,7 +56,9 @@ void TaskBoxTorchToolSetupPanel::initUi() {
   initUi_VisualizeBox();
   if(creatingMode){
       m_ui->pushButton_finishSetup->setText(tr("Save Tool"));
-  }else{
+  }
+  else{
+      m_ui->tabWidget_EditPanel->setCurrentIndex(1);
       m_ui->lineEdit_brand->setEnabled(false);
       m_ui->lineEdit_brand->setText(tr(m_TorchPtr->ToolBrand.getStrValue().c_str()));
       m_ui->comboBox_tubeType->setEnabled(false);

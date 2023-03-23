@@ -38,12 +38,6 @@ public:
   // TOOL Setup
   bool loadTool(const std::string& param_FilePath);
   bool saveTool();
-//  static Tool_BasicParam parsingToolDescriptionFile(const std::string& t_filepath);
-
-//  bool setupToolObject(const std::string &filePath,
-//                       const std::string &cad_Path,
-//                       const Base::Placement &tf_f2c,
-//                       const Base::Placement &tf_f2t);
 
   bool loadStepShape(const std::string& filePath);
   bool loadIgesShape(const std::string& filePath);
@@ -75,7 +69,7 @@ public:
   virtual void Restore(Base::XMLReader &reader);
 
   const ToolType& getToolType() const{
-      return m_Type;
+      return (ToolType)_ToolType.getValue();
   }
 
 protected:
@@ -86,6 +80,7 @@ protected:
 public:
 //  App::PropertyLink
   App::PropertyString    ToolBrand;
+  App::PropertyInteger   _ToolType;
   // Translation
   App::PropertyPlacement Pose_Mount;
   App::PropertyPlacement Trans_O2M; // Translation, Origin to Mount
@@ -96,14 +91,12 @@ public:
   App::PropertyString    FilePath_Param;
   // Assemble
   App::PropertyString    MountedRobot;
-  App::PropertyInteger   CurToolType;
   // Linked Feature
   App::PropertyLinkSub   LinkedFaceFeature;
   App::PropertyLinkSub   LinkedEdgeFeature;
   App::PropertyBool      setEdit;
 
 protected:
-  ToolType m_Type = ToolType::Undefined;
   FileOperator m_FileOperator;
 };
 }
