@@ -24,13 +24,18 @@ PROPERTY_SOURCE(Robot::MechanicRobot, Robot::MechanicBase)
 
 MechanicRobot::MechanicRobot()
 {
-    ADD_PROPERTY_TYPE(EnableArmConfiguration ,(false), "Kinematics",Prop_None,"Identify is using configuration constraint while calc IK results");
-    ADD_PROPERTY_TYPE(ConnectedExtAxis,(""),"Property",Prop_None,"The Name of Attached External Axis");
-    ADD_PROPERTY_TYPE(TeachCoordIndex,(0),"Interactive",Prop_None, "Current Teach Coord Index");
-    ADD_PROPERTY_TYPE(InteractiveDraggerOn,(false),"Interactive",Prop_None, "Trigger On Interactive Dragger");
-    ADD_PROPERTY_TYPE(CurrentToolIndex,(0),"Tool Setup", Prop_None,"Current ID of Selected Tool");
+    ADD_PROPERTY_TYPE(LinkedExtAxName,(""),"属性",Prop_None,"已连接的外部轴设备名称");
+    ADD_PROPERTY_TYPE(LinkedPoserNames,(std::vector<std::string>()),"属性",Prop_None,"已连接的变位机设备名称");
+    ADD_PROPERTY_TYPE(CurrentToolIndex,(0),"属性", Prop_None,"当前启用的工具ID");
+    ADD_PROPERTY_TYPE(TeachCoordIndex,(0),"属性",Prop_None, "");
+    ADD_PROPERTY_TYPE(EnableArmConfiguration ,(false), "Kinematics",Prop_None,"");
+    ADD_PROPERTY_TYPE(InteractiveDraggerOn,(false),"Interactive",Prop_None, "");
     m_kinematicModel.setMechanicType(MechanicType::M_Robot);
     m_kinematicModel.setIKsolverType(IK_SolverType::TRAC_IK);
+
+    EnableArmConfiguration.setStatus(App::Property::Status::Hidden, true);
+    TeachCoordIndex.setStatus(App::Property::Status::Hidden, true);
+    InteractiveDraggerOn.setStatus(App::Property::Status::Hidden, true);
 }
 
 MechanicRobot::~MechanicRobot()
@@ -75,6 +80,16 @@ void MechanicRobot::onChanged(const Property* prop)
             m_kinematicModel.setIKsolverType(IK_SolverType::TRAC_IK);
         else
             m_kinematicModel.setIKsolverType(IK_SolverType::KDL_IK);
+   }
+   else if(prop == &LinkedPoserNames){
+       m_LinkedPosers.clear();
+       for(auto t_Name : LinkedPoserNames.getValues()){
+           auto objPtr = getDocument()->getObject(t_Name.c_str());
+           if(objPtr!=nullptr && objPtr->isDerivedFrom(Robot::MechanicPoser::getClassTypeId())){
+               auto poserPtr = static_cast<Robot::MechanicPoser*>(objPtr);
+               m_LinkedPosers.insert(std::make_pair(t_Name,poserPtr));
+           }
+       }
    }
 }
 
@@ -223,10 +238,10 @@ const Base::Placement MechanicRobot::getCurrentFlanPose(const CoordOrigin &ref_O
     return c_flanPose;
 }
 
-bool MechanicRobot::TorchAssembled()
+bool MechanicRobot::targetToolAssemebled(const ToolType &t_Type)
 {
     for(const auto& iter : m_AssembledTools){
-        if(iter.second->getToolType() == ToolType::WeldTorch)
+        if(iter.second->getToolType() == t_Type)
             return true;
     }
     return false;
@@ -312,6 +327,50 @@ void MechanicRobot::setTeachCoordType(const TeachCoord &t_coord)
 {
     m_TeachCoord = t_coord;
     TeachCoordIndex.setValue(t_coord);
+}
+
+uint MechanicRobot::getAvailablePoserAxisNumber() const
+{
+    uint axisNumber = 8;
+    for(const auto& t_PoserPtr : m_LinkedPosers){
+        axisNumber -= t_PoserPtr.second->getJointNumbers();
+    }
+    return axisNumber;
+}
+
+MechanicPoser *MechanicRobot::getTargetLinkedPoser(const string poserName)
+{
+    auto result = m_LinkedPosers.find(poserName);
+    if(result!=m_LinkedPosers.end())
+        return result->second;
+    return nullptr;
+}
+
+QStringList MechanicRobot::getLinkedPoserInfo(const std::string& t_PoserName) const
+{
+    QStringList result_infoList;
+    auto result = m_LinkedPosers.find(t_PoserName);
+    if(result != m_LinkedPosers.end()){
+        auto poserPtr = result->second;
+        result_infoList = QStringList({QString::fromStdString(t_PoserName),
+                                       QString::number(poserPtr->getJointNumbers()),
+                                       QString::number(poserPtr->RatedLoad.getValue())});
+    }
+    return result_infoList;
+}
+
+QStringList MechanicRobot::getLinkedExtAxInfo(const string &t_ExtAxName) const
+{
+    QStringList result_infoList;
+//    auto t_Name = LinkedExtAxName.getValue();
+//    auto objPtr = this->getDocument()->getObject(t_Name);
+//    if(objPtr!=nullptr && objPtr->isDerivedFrom(MechanicPoser::getClassTypeId())){
+//        auto poserPtr = static_cast<MechanicPoser*>(objPtr);
+//        result_infoList = QStringList({QObject::tr(t_Name),
+//                                       QString::number(poserPtr->getJointNumbers()),
+//                                       QString::number(poserPtr->RatedLoad.getValue())});
+//    }
+    return result_infoList;
 }
 
 void MechanicRobot::Save(Base::Writer &writer) const
@@ -413,6 +472,27 @@ const RobotPose MechanicRobot::getRobotPose(const CordType &t_Type) const
 //    }
 
     return c_Pose;
+}
+
+bool MechanicRobot::setJointAngle(const size_t jntID, float jntAngle)
+{
+    if(jntID <= getJointNumbers()-1)
+        return MechanicBase::setJointAngle(jntID,jntAngle);
+    else{
+        uint jntNum_base = getJointNumbers();
+        // 按照 外部轴->变位机vec<0,1,2...>的顺序
+        // m_LinkedExtAxPtr->
+        for(auto& t_Item : m_LinkedPosers){
+            auto t_PoserPtr = t_Item.second;
+            if(jntID-jntNum_base>t_PoserPtr->getJointNumbers()){
+                jntNum_base+=t_PoserPtr->getJointNumbers();
+            }
+            else{
+                return t_PoserPtr->setJointAngle(jntID-jntNum_base, jntAngle);
+            }
+        }
+    }
+    return false;
 }
 
 void MechanicRobot::setTipPoseByDraggerPose(const Base::Placement &n_DraggerPose)

@@ -50,7 +50,7 @@ public:
     bool setAxisHomePose();
     bool resAxisHomePose();
     // Joint Value setter
-    bool setJointAngle(const size_t jntID, float jntAngle);
+    virtual bool setJointAngle(const size_t jntID, float jntAngle);
     bool setJointAngles(const std::vector<double>& t_angles);
     void updateAxisValues();
     const std::vector<double> getAxisRuningSpeed() const;

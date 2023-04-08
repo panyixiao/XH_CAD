@@ -46,7 +46,7 @@ public:
     virtual short mustExecute(void) const;
     virtual PyObject *getPyObject(void);
     // Operator
-    void setOperator(const std::string& t_Name);
+    bool setOperator(const std::string& t_Name);
     const std::string& getOperatorName() const{
         return ExecutorName.getStrValue();
     }

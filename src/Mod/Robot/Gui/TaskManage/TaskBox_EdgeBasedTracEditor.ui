@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>398</width>
-    <height>647</height>
+    <height>700</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -33,9 +33,25 @@
      </property>
      <widget class="QWidget" name="tab_TracParam">
       <attribute name="title">
-       <string>Trac Define</string>
+       <string>轨迹生成</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QLabel" name="label_FigurePath">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>80</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>示意图</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="maximumSize">
@@ -45,60 +61,29 @@
           </size>
          </property>
          <property name="title">
-          <string>Reference</string>
+          <string>参考设置</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_10">
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,1,1">
-            <item>
-             <widget class="QLabel" name="label_28">
-              <property name="text">
-               <string>Operator:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="radioButton_Gp1Robot">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>#1 Robot</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="radioButton_Gp2Robot">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>#2 Robot</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="Line" name="line_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
              <widget class="QCheckBox" name="checkBox_flipTracDir">
               <property name="text">
-               <string>Inverse</string>
+               <string>反转头尾</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="Line" name="line">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="checkBox_RevFace1">
               <property name="text">
-               <string>Flip Ref-1</string>
+               <string>反转法向1</string>
               </property>
              </widget>
             </item>
@@ -111,7 +96,7 @@
                </size>
               </property>
               <property name="text">
-               <string>Flip Ref-2</string>
+               <string>反转法向2</string>
               </property>
              </widget>
             </item>
@@ -122,7 +107,7 @@
             <item>
              <widget class="QLabel" name="label_6">
               <property name="text">
-               <string>Interpolate Distance</string>
+               <string>插值间距</string>
               </property>
              </widget>
             </item>
@@ -136,6 +121,9 @@
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::NoButtons</enum>
               </property>
               <property name="decimals">
                <number>1</number>
@@ -156,75 +144,54 @@
             </item>
             <item>
              <widget class="QLabel" name="label_9">
+              <property name="maximumSize">
+               <size>
+                <width>30</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="text">
                <string>mm</string>
               </property>
              </widget>
             </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_generateConstraint">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Generate Constraint</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_PoseEditor">
-         <property name="title">
-          <string>Pose Editor</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="3,3,3">
             <item>
-             <widget class="QLabel" name="label_24">
-              <property name="text">
-               <string>Visualizer:</string>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
               </property>
-             </widget>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
             <item>
-             <widget class="QRadioButton" name="radioButton_RobotViz">
-              <property name="text">
-               <string>Robot</string>
-              </property>
-              <property name="checked">
+             <widget class="QPushButton" name="pushButton_generateConstraint">
+              <property name="enabled">
                <bool>true</bool>
               </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="radioButton_MarkerViz">
-              <property name="text">
-               <string>Marker</string>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>30</height>
+               </size>
               </property>
-              <property name="checked">
-               <bool>false</bool>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>更新</string>
               </property>
              </widget>
             </item>
@@ -233,21 +200,18 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
-             <widget class="QLabel" name="label_CurrentPointID">
-              <property name="minimumSize">
+             <widget class="QPushButton" name="pushButton_SaveRest">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="maximumSize">
                <size>
                 <width>30</width>
-                <height>0</height>
+                <height>16777215</height>
                </size>
               </property>
-              <property name="frameShadow">
-               <enum>QFrame::Sunken</enum>
-              </property>
               <property name="text">
-               <string>0</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <string>&lt;&lt;</string>
               </property>
              </widget>
             </item>
@@ -271,18 +235,21 @@
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_SaveRest">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="maximumSize">
+             <widget class="QLabel" name="label_CurrentPointID">
+              <property name="minimumSize">
                <size>
                 <width>30</width>
-                <height>16777215</height>
+                <height>0</height>
                </size>
               </property>
+              <property name="frameShadow">
+               <enum>QFrame::Sunken</enum>
+              </property>
               <property name="text">
-               <string>—|</string>
+               <string>0</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -298,838 +265,1228 @@
                </size>
               </property>
               <property name="text">
-               <string>|—</string>
+               <string>&gt;&gt;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_PoseEditor">
+         <property name="title">
+          <string>轨迹设置</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_14">
+            <item>
+             <widget class="QLabel" name="label_21">
+              <property name="maximumSize">
+               <size>
+                <width>105</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>执行机构</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBox_List_executor"/>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_bindToTargetExecutor">
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>绑定</string>
               </property>
              </widget>
             </item>
            </layout>
           </item>
           <item>
-           <widget class="QTabWidget" name="tabWidget_PoseSetup">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="currentIndex">
-             <number>0</number>
-            </property>
-            <widget class="QWidget" name="tab_1_2">
-             <attribute name="title">
-              <string>Angles</string>
-             </attribute>
-             <layout class="QVBoxLayout" name="verticalLayout_9">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QLabel" name="label_12">
+              <property name="maximumSize">
+               <size>
+                <width>105</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>进入/退出点</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBox_ConfigList_LeadPoints">
               <item>
-               <layout class="QGridLayout" name="gridLayout_10">
-                <item row="1" column="0">
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_10">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                  <property name="decimals">
-                   <number>2</number>
-                  </property>
-                  <property name="minimum">
-                   <double>-180.000000000000000</double>
-                  </property>
-                  <property name="maximum">
-                   <double>180.000000000000000</double>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QLabel" name="label_18">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Yaw</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_19">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Rot-S</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="2">
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_PosePitch">
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                  <property name="decimals">
-                   <number>2</number>
-                  </property>
-                  <property name="minimum">
-                   <double>-360.000000000000000</double>
-                  </property>
-                  <property name="maximum">
-                   <double>360.000000000000000</double>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QLabel" name="label_20">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Rot-E</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="0">
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_PoseRoll">
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                  <property name="decimals">
-                   <number>2</number>
-                  </property>
-                  <property name="minimum">
-                   <double>-360.000000000000000</double>
-                  </property>
-                  <property name="maximum">
-                   <double>360.000000000000000</double>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_11">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                  <property name="decimals">
-                   <number>2</number>
-                  </property>
-                  <property name="minimum">
-                   <double>-180.000000000000000</double>
-                  </property>
-                  <property name="maximum">
-                   <double>180.000000000000000</double>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_PoseYaw">
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                  <property name="decimals">
-                   <number>2</number>
-                  </property>
-                  <property name="minimum">
-                   <double>-360.000000000000000</double>
-                  </property>
-                  <property name="maximum">
-                   <double>360.000000000000000</double>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="label_21">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Roll</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="2">
-                 <widget class="QLabel" name="label_22">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Pitch</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="1">
-                 <widget class="QPushButton" name="pushButton_3">
-                  <property name="text">
-                   <string>Diff By Tip</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+               <property name="text">
+                <string>默认设置</string>
+               </property>
               </item>
-             </layout>
-            </widget>
-            <widget class="QWidget" name="tab_1_1">
-             <attribute name="title">
-              <string>Offset</string>
-             </attribute>
-             <layout class="QGridLayout" name="gridLayout_2">
-              <item row="0" column="0">
-               <layout class="QGridLayout" name="gridLayout_4">
-                <item row="2" column="2">
-                 <widget class="QLabel" name="label_17">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Off-B-90</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_12">
-                  <property name="text">
-                   <string>Verti-P</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_OffsetB">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>80</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                  <property name="decimals">
-                   <number>2</number>
-                  </property>
-                  <property name="minimum">
-                   <double>-1000.000000000000000</double>
-                  </property>
-                  <property name="maximum">
-                   <double>1000.000000000000000</double>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_OffsetZ">
-                  <property name="maximumSize">
-                   <size>
-                    <width>80</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                  <property name="decimals">
-                   <number>2</number>
-                  </property>
-                  <property name="minimum">
-                   <double>-1000.000000000000000</double>
-                  </property>
-                  <property name="maximum">
-                   <double>1000.000000000000000</double>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QLabel" name="label_13">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Off-W</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QLabel" name="label_14">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Off-B</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_OffsetW">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>80</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                  <property name="decimals">
-                   <number>2</number>
-                  </property>
-                  <property name="minimum">
-                   <double>-1000.000000000000000</double>
-                  </property>
-                  <property name="maximum">
-                   <double>1000.000000000000000</double>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QLabel" name="label_16">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Off-W-90</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="label_15">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Verti-A</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_4">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>80</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                  <property name="decimals">
-                   <number>2</number>
-                  </property>
-                  <property name="minimum">
-                   <double>-1000.000000000000000</double>
-                  </property>
-                  <property name="maximum">
-                   <double>1000.000000000000000</double>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_5">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>80</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                  <property name="decimals">
-                   <number>2</number>
-                  </property>
-                  <property name="minimum">
-                   <double>-1000.000000000000000</double>
-                  </property>
-                  <property name="maximum">
-                   <double>1000.000000000000000</double>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="2">
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_6">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>80</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                  <property name="decimals">
-                   <number>2</number>
-                  </property>
-                  <property name="minimum">
-                   <double>-1000.000000000000000</double>
-                  </property>
-                  <property name="maximum">
-                   <double>1000.000000000000000</double>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </widget>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_setupLeads">
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>设置</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_applyAdjustment">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Apply Adjustment</string>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
+             <widget class="QLabel" name="label_13">
+              <property name="maximumSize">
+               <size>
+                <width>105</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>多层多道</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBox_ConfigList_MultiLayer">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <item>
+               <property name="text">
+                <string>关闭</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_setupMultiLayer">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>设置</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <item>
+             <widget class="QLabel" name="label_14">
+              <property name="maximumSize">
+               <size>
+                <width>105</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>变位机配合</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBox_ConfigList_poserRules">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <item>
+               <property name="text">
+                <string>保持原位</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>工具轴向</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>船形焊位</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_setupPoserRules">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>设置</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>
        </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_ScanCraft">
-      <attribute name="title">
-       <string>Scan Craft</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <widget class="QTabWidget" name="tabWidget_6">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>工具角设置</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_11">
+            <item>
+             <widget class="QLabel" name="label_15">
+              <property name="maximumSize">
+               <size>
+                <width>105</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>左右倾角</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="doubleSpinBox_tiltAngle">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::PlusMinus</enum>
+              </property>
+              <property name="decimals">
+               <number>1</number>
+              </property>
+              <property name="minimum">
+               <double>-180.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>180.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_resetTilt">
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>复位</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_12">
+            <item>
+             <widget class="QLabel" name="label_16">
+              <property name="maximumSize">
+               <size>
+                <width>105</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>前后倾角</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="doubleSpinBox_flareAngle">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::PlusMinus</enum>
+              </property>
+              <property name="decimals">
+               <number>1</number>
+              </property>
+              <property name="minimum">
+               <double>-180.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>180.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_resetFlare">
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>复位</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_13">
+            <item>
+             <widget class="QLabel" name="label_17">
+              <property name="maximumSize">
+               <size>
+                <width>105</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>扭转角</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="doubleSpinBox_twistAngle">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::PlusMinus</enum>
+              </property>
+              <property name="decimals">
+               <number>1</number>
+              </property>
+              <property name="minimum">
+               <double>-180.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>180.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_resetTwist">
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>复位</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_FinishEdit">
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>310</height>
+           <height>40</height>
           </size>
          </property>
-         <property name="currentIndex">
-          <number>0</number>
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
          </property>
-         <widget class="QWidget" name="tab_2_7">
-          <attribute name="title">
-           <string>Key points</string>
-          </attribute>
-          <layout class="QVBoxLayout" name="verticalLayout_15">
+         <property name="text">
+          <string>完成</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_LeadPoints">
+      <attribute name="title">
+       <string>进入/退出点</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_18">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_36">
+         <item>
+          <widget class="QLabel" name="label_76">
+           <property name="maximumSize">
+            <size>
+             <width>30</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>配置</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboBox_availableLeadConfigs">
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="2,2,2,2,2">
-             <item>
-              <widget class="QLabel" name="label_45">
-               <property name="minimumSize">
-                <size>
-                 <width>30</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>32</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>P-in</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
-               <property name="minimumSize">
-                <size>
-                 <width>70</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="decimals">
-                <number>1</number>
-               </property>
-               <property name="maximum">
-                <double>1000.000000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_47">
-               <property name="minimumSize">
-                <size>
-                 <width>70</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>mm |     |</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_18">
-               <property name="minimumSize">
-                <size>
-                 <width>70</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="decimals">
-                <number>1</number>
-               </property>
-               <property name="maximum">
-                <double>1000.000000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_46">
-               <property name="minimumSize">
-                <size>
-                 <width>70</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>mm P-out</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <property name="text">
+             <string>默认设置</string>
+            </property>
            </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_createLeadsConfig">
+           <property name="maximumSize">
+            <size>
+             <width>50</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>创建</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QScrollArea" name="scrollArea">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>342</width>
+            <height>860</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_17">
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="2,2,2,2,2">
-             <item>
-              <widget class="QLabel" name="label_11">
-               <property name="minimumSize">
-                <size>
-                 <width>30</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>32</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Near</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_20">
-               <property name="minimumSize">
-                <size>
-                 <width>70</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="decimals">
-                <number>1</number>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_23">
-               <property name="minimumSize">
-                <size>
-                 <width>70</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>mm |     |</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_19">
-               <property name="minimumSize">
-                <size>
-                 <width>70</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="decimals">
-                <number>1</number>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_10">
-               <property name="minimumSize">
-                <size>
-                 <width>70</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>mm Away</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="2,2,2,2,2">
-             <item>
-              <widget class="QLabel" name="label_43">
-               <property name="minimumSize">
-                <size>
-                 <width>30</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>32</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>On</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_21">
-               <property name="minimumSize">
-                <size>
-                 <width>70</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="decimals">
-                <number>1</number>
-               </property>
-               <property name="maximum">
-                <double>1000.000000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_44">
-               <property name="minimumSize">
-                <size>
-                 <width>70</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>mm |--&gt;|</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_12">
-               <property name="minimumSize">
-                <size>
-                 <width>70</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="decimals">
-                <number>1</number>
-               </property>
-               <property name="maximum">
-                <double>1000.000000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_48">
-               <property name="minimumSize">
-                <size>
-                 <width>70</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>mm Off</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_4">
-             <property name="text">
-              <string>Update Keypoints</string>
+            <widget class="QGroupBox" name="groupBox_3">
+             <property name="title">
+              <string>进入点</string>
              </property>
+             <layout class="QVBoxLayout" name="verticalLayout_12">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_15">
+                <item>
+                 <widget class="QLabel" name="label_22">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>方向</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_approachPnt_dir">
+                  <item>
+                   <property name="text">
+                    <string>工具方向</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_16">
+                <item>
+                 <widget class="QLabel" name="label_24">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>运动方式</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_approachPnt_mov">
+                  <item>
+                   <property name="text">
+                    <string>线性运动</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_17">
+                <item>
+                 <widget class="QLabel" name="label_25">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>距离</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="spinBox_approachPnt_dist">
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="maximum">
+                   <number>300</number>
+                  </property>
+                  <property name="value">
+                   <number>100</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_73">
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>mm</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_18">
+                <item>
+                 <widget class="QLabel" name="label_28">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>速度</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="spinBox_approachPnt_speed">
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="maximum">
+                   <number>200</number>
+                  </property>
+                  <property name="value">
+                   <number>100</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_74">
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>mm/s</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_19">
+                <item>
+                 <widget class="QLabel" name="label_29">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>过渡半径</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="spinBox_approachPnt_bl">
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="maximum">
+                   <number>10</number>
+                  </property>
+                  <property name="value">
+                   <number>5</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_75">
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>mm</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
             </widget>
            </item>
            <item>
-            <spacer name="verticalSpacer_4">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
+            <widget class="QGroupBox" name="groupBox_4">
+             <property name="title">
+              <string>接近点</string>
              </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="tab_2_8">
-          <attribute name="title">
-           <string>Speed</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout_7">
-           <item row="0" column="4" rowspan="2" alignment="Qt::AlignTop">
-            <widget class="QLabel" name="label_27">
-             <property name="text">
-              <string>mm/s</string>
-             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_13">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_20">
+                <item>
+                 <widget class="QLabel" name="label_49">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>方向</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_nearPnt_dir">
+                  <item>
+                   <property name="text">
+                    <string>工具方向</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_21">
+                <item>
+                 <widget class="QLabel" name="label_50">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>运动方式</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_nearPnt_mov">
+                  <item>
+                   <property name="text">
+                    <string>线性运动</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_22">
+                <item>
+                 <widget class="QLabel" name="label_51">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>距离</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="spinBox_nearPnt_dist">
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="maximum">
+                   <number>300</number>
+                  </property>
+                  <property name="value">
+                   <number>20</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_70">
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>mm</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_23">
+                <item>
+                 <widget class="QLabel" name="label_52">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>速度</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="spinBox_nearPnt_speed">
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="maximum">
+                   <number>200</number>
+                  </property>
+                  <property name="value">
+                   <number>20</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_71">
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>mm/s</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_24">
+                <item>
+                 <widget class="QLabel" name="label_53">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>过渡半径</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="spinBox_nearPnt_bl">
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="maximum">
+                   <number>10</number>
+                  </property>
+                  <property name="value">
+                   <number>5</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_72">
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>mm</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
             </widget>
            </item>
-           <item row="0" column="3">
-            <widget class="QDoubleSpinBox" name="doubleSpinBox_ScanSpeed">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
+           <item>
+            <widget class="QGroupBox" name="groupBox_5">
+             <property name="title">
+              <string>撤离点</string>
              </property>
-             <property name="decimals">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <double>5000.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>100.000000000000000</double>
-             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_14">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_25">
+                <item>
+                 <widget class="QLabel" name="label_54">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>方向</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_extractPnt_dir">
+                  <item>
+                   <property name="text">
+                    <string>工具方向</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_26">
+                <item>
+                 <widget class="QLabel" name="label_55">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>运动方式</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_extractPnt_mov">
+                  <item>
+                   <property name="text">
+                    <string>线性运动</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_27">
+                <item>
+                 <widget class="QLabel" name="label_56">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>距离</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="spinBox_extractPnt_dist">
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="maximum">
+                   <number>300</number>
+                  </property>
+                  <property name="value">
+                   <number>20</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_67">
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>mm</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_28">
+                <item>
+                 <widget class="QLabel" name="label_57">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>速度</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="spinBox_extractPnt_speed">
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="maximum">
+                   <number>200</number>
+                  </property>
+                  <property name="value">
+                   <number>20</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_68">
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>mm/s</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_29">
+                <item>
+                 <widget class="QLabel" name="label_58">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>过渡半径</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="spinBox_extractPnt_bl">
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="maximum">
+                   <number>10</number>
+                  </property>
+                  <property name="value">
+                   <number>5</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_69">
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>mm</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
             </widget>
            </item>
-           <item row="0" column="0" rowspan="2" alignment="Qt::AlignTop">
-            <widget class="QLabel" name="label_26">
-             <property name="text">
-              <string>Scan Speed:</string>
+           <item>
+            <widget class="QGroupBox" name="groupBox_6">
+             <property name="title">
+              <string>退出点</string>
              </property>
+             <layout class="QVBoxLayout" name="verticalLayout_16">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_30">
+                <item>
+                 <widget class="QLabel" name="label_59">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>方向</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_exitPnt_dir">
+                  <item>
+                   <property name="text">
+                    <string>工具方向</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_31">
+                <item>
+                 <widget class="QLabel" name="label_60">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>运动方式</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_exitPnt_mov">
+                  <item>
+                   <property name="text">
+                    <string>线性运动</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_32">
+                <item>
+                 <widget class="QLabel" name="label_61">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>距离</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="spinBox_exitPnt_dist">
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="maximum">
+                   <number>300</number>
+                  </property>
+                  <property name="value">
+                   <number>100</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_64">
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>mm</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_33">
+                <item>
+                 <widget class="QLabel" name="label_62">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>速度</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="spinBox_exitPnt_speed">
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="maximum">
+                   <number>200</number>
+                  </property>
+                  <property name="value">
+                   <number>100</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_65">
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>mm/s</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_34">
+                <item>
+                 <widget class="QLabel" name="label_63">
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>过渡半径</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="spinBox_exitPnt_bl">
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="maximum">
+                   <number>10</number>
+                  </property>
+                  <property name="value">
+                   <number>5</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_66">
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>mm</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>
@@ -1140,7 +1497,7 @@
      </widget>
      <widget class="QWidget" name="tab_WeldCraft">
       <attribute name="title">
-       <string>Weld Craft</string>
+       <string>焊接参数</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
@@ -1653,24 +2010,360 @@
        </item>
       </layout>
      </widget>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="pushButton_FinishEdit">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>40</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>15</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Done Edit</string>
-     </property>
+     <widget class="QWidget" name="tab_ScanCraft">
+      <attribute name="title">
+       <string>扫描参数</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QTabWidget" name="tabWidget_6">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>310</height>
+          </size>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="tab_2_7">
+          <attribute name="title">
+           <string>Key points</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_15">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="2,2,2,2,2">
+             <item>
+              <widget class="QLabel" name="label_45">
+               <property name="minimumSize">
+                <size>
+                 <width>30</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>32</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>P-in</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>1000.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_47">
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>mm |     |</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_18">
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>1000.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_46">
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>mm P-out</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="2,2,2,2,2">
+             <item>
+              <widget class="QLabel" name="label_11">
+               <property name="minimumSize">
+                <size>
+                 <width>30</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>32</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Near</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_20">
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="decimals">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_23">
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>mm |     |</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_19">
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="decimals">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_10">
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>mm Away</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="2,2,2,2,2">
+             <item>
+              <widget class="QLabel" name="label_43">
+               <property name="minimumSize">
+                <size>
+                 <width>30</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>32</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>On</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_21">
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>1000.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_44">
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>mm |--&gt;|</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_12">
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>1000.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_48">
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>mm Off</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_4">
+             <property name="text">
+              <string>Update Keypoints</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_2_8">
+          <attribute name="title">
+           <string>Speed</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_7">
+           <item row="0" column="4" rowspan="2" alignment="Qt::AlignTop">
+            <widget class="QLabel" name="label_27">
+             <property name="text">
+              <string>mm/s</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_ScanSpeed">
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="decimals">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <double>5000.000000000000000</double>
+             </property>
+             <property name="value">
+              <double>100.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" rowspan="2" alignment="Qt::AlignTop">
+            <widget class="QLabel" name="label_26">
+             <property name="text">
+              <string>Scan Speed:</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>

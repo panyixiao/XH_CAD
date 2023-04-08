@@ -133,7 +133,7 @@ void TaskBoxTorchToolSetupPanel::initUi_AssembleWidgets()
         auto objList = m_DocPtr->getObjects();
         for(auto objPtr : objList){
             if(objPtr->isDerivedFrom(Robot::MechanicRobot::getClassTypeId())){
-                if(!static_cast<Robot::MechanicRobot*>(objPtr)->TorchAssembled()){
+                if(!static_cast<Robot::MechanicRobot*>(objPtr)->targetToolAssemebled(Robot::ToolType::WeldTorch)){
                     m_ui->comboBox_RobotList->addItem(tr(objPtr->getNameInDocument()));
                 }
             }

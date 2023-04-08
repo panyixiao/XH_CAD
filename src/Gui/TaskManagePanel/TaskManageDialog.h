@@ -18,7 +18,7 @@ class TaskManageDialog :  public QDialog
 {
     Q_OBJECT
 public:
-  TaskManageDialog(QWidget *parent = 0,QString dlg_name = QObject::tr("Task Manager"),App::Document* pDoc = 0);
+  TaskManageDialog(QWidget *parent = 0,QString dlg_name = QString::fromLocal8Bit("管理面板"),App::Document* pDoc = 0);
   ~TaskManageDialog();
 
   void showButtonBox(bool flag);

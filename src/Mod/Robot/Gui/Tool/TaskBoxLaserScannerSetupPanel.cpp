@@ -11,7 +11,8 @@
 #include <Gui/Document.h>
 #include <QPushButton>
 
-#include <Mod/Robot/App/Mechanics/Robot6AxisObject.h>
+//#include <Mod/Robot/App/Mechanics/Robot6AxisObject.h>
+#include <Mod/Robot/App/Mechanics/MechanicRobot.h>
 #include <Mod/Robot/App/Utilites/CAD_Utility.h>
 #include <Mod/Robot/Gui/Tool/ViewProviderScannerObject.h>
 #include "Mod/Robot/App/Utilites/DS_Utility.h"
@@ -151,8 +152,8 @@ void TaskBoxLaserScannerSetupPanel::initUi_AssembleWidgets()
         m_ui->comboBox_RobotList->clear();
         auto objList = m_DocPtr->getObjects();
         for(auto objPtr : objList){
-            if(objPtr->isDerivedFrom(Robot::Robot6AxisObject::getClassTypeId())){
-                if(!static_cast<Robot::Robot6AxisObject*>(objPtr)->ScannerAssembled()){
+            if(objPtr->isDerivedFrom(Robot::MechanicRobot::getClassTypeId())){
+                if(!static_cast<Robot::MechanicRobot*>(objPtr)->targetToolAssemebled(Robot::ToolType::_2DScanner)){
                     m_ui->comboBox_RobotList->addItem(tr(objPtr->getNameInDocument()));
                 }
             }

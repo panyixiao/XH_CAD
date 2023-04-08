@@ -212,9 +212,9 @@ void TaskBoxMechanicGroupPanel::updateLinkedPoserAxisTable(){
 
 
 void TaskBoxMechanicGroupPanel::slot_updatePanelWidgets() {
-  for (int jntID = 0; jntID < m_MechGroup->getJointNumbers(); jntID++) {
+  for (size_t jntID = 0; jntID < m_MechGroup->getJointNumbers(); jntID++) {
     auto sliderPtr = m_jointSliderVec[jntID];
-    sliderPtr->setSliderPosition(m_MechGroup->getJointAngle(jntID));
+    sliderPtr->updateAxisWidgetData(m_MechGroup->getJointAngle(jntID));
   }
   slot_updateTipPosePanel();
 }
@@ -396,7 +396,7 @@ void TaskBoxMechanicGroupPanel::sliderPositionChanged(int t_Index) {
   if (t_Index < m_jointSliderVec.size()) {
     auto sliderPtr = m_jointSliderVec[t_Index];
     m_MechGroup->setJointAngle(t_Index, sliderPtr->getSliderPosition());
-    sliderPtr->set_labelvalue();
+//    sliderPtr->set_labelvalue();
   }
 }
 

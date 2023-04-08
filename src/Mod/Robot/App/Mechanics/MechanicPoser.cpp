@@ -20,6 +20,11 @@ PROPERTY_SOURCE(Robot::MechanicPoser, Robot::MechanicBase)
 
 MechanicPoser::MechanicPoser()
 {
+    ADD_PROPERTY_TYPE(RatedLoad,(0),"属性",Prop_None,"变位机额定负载");
+    ADD_PROPERTY(MountedObjectName,(""));
+    ADD_PROPERTY(AssembledToolName,(""));
+    MountedObjectName.setStatus(App::Property::Status::Hidden, true);
+    AssembledToolName.setStatus(App::Property::Status::Hidden, true);
 }
 
 MechanicPoser::~MechanicPoser()
@@ -62,11 +67,11 @@ void MechanicPoser::onChanged(const Property* prop)
 void MechanicPoser::onDocumentRestored()
 {
     Robot::MechanicBase::onDocumentRestored();
-    if(!MountedWorkingObj.getStrValue().empty()){
-        mountWorkingObject(MountedWorkingObj.getValue());
+    if(!MountedObjectName.getStrValue().empty()){
+        mountWorkingObject(MountedObjectName.getValue());
     }
-    if(!AssembledTool.getStrValue().empty()){
-        mountToolObject(AssembledTool.getValue());
+    if(!AssembledToolName.getStrValue().empty()){
+        mountToolObject(AssembledToolName.getValue());
     }
 }
 
@@ -128,13 +133,13 @@ void MechanicPoser::mountToolObject(const char *toolName)
         return;
     m_AssembledToolPtr = t_ToolObjPtr;
     updateMountedObjectPose();
-    AssembledTool.setValue(std::string(t_ToolObjPtr->getNameInDocument()));
+    AssembledToolName.setValue(std::string(t_ToolObjPtr->getNameInDocument()));
 }
 
 void MechanicPoser::dismountToolObject()
 {
     m_AssembledToolPtr = nullptr;
-    AssembledTool.setValue("");
+    AssembledToolName.setValue("");
 }
 
 
@@ -147,14 +152,14 @@ void MechanicPoser::mountWorkingObject(const char *obejctName)
         return;
     m_MountedObjectPtr = t_ObjectPtr;
     updateMountedObjectPose();
-    MountedWorkingObj.setValue(std::string(t_ObjectPtr->getNameInDocument()));
+    MountedObjectName.setValue(std::string(t_ObjectPtr->getNameInDocument()));
 }
 
 void MechanicPoser::dismountWorkingObject()
 {
 //    m_MountedObjectPtr->Pose_Mount.setValue(Base::Placement());
     m_MountedObjectPtr = nullptr;
-    MountedWorkingObj.setValue("");
+    MountedObjectName.setValue("");
 }
 
 void MechanicPoser::updateMountedObjectPose()

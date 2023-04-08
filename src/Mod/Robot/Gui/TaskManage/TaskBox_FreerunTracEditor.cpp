@@ -17,7 +17,7 @@ using namespace RobotGui;
 
 TaskBox_FreerunTracEditor::TaskBox_FreerunTracEditor(Robot::RobotTracObject *t_TracObj,
                                                      QWidget *parent):
-    TaskBox(Gui::BitmapFactory().pixmap("document-new"), tr("FREE-TRAC Editor"), true, parent){
+    TaskBox(Gui::BitmapFactory().pixmap("document-new"), tr("动作轨迹编辑"), true, parent){
   if (t_TracObj == nullptr)
     return;
   setTargetTracObject(t_TracObj);

@@ -148,7 +148,6 @@ void TaskBoxPoserSetupPanel::slot_updatePositionerPosePanel()
 void TaskBoxPoserSetupPanel::slot_targetConfigJointChanged()
 {
     auto jntID = m_ui->comboBox_JointList->currentIndex();
-  //  updateJointLimitationPanel(jntID);
     m_ui->doubleSpinBox_lowerLimit->blockSignals(true);
     m_ui->doubleSpinBox_upperLimit->blockSignals(true);
     m_ui->doubleSpinBox_lowerLimit->setMinimum(m_PoserPtr->getJointMinAngle(jntID));
@@ -191,7 +190,7 @@ void TaskBoxPoserSetupPanel::slot_flipTargetAxisDirection()
 void TaskBoxPoserSetupPanel::slot_updateSliderPosition() {
   for (int jntID = 0; jntID < m_PoserPtr->getJointNumbers(); jntID++) {
     auto sliderPtr = m_jointSliderVec[jntID];
-    sliderPtr->setSliderPosition(m_PoserPtr->getJointAngle(jntID));
+    sliderPtr->updateAxisWidgetData(m_PoserPtr->getJointAngle(jntID));
   }
 }
 
@@ -245,17 +244,16 @@ void TaskBoxPoserSetupPanel::slot_referenceTargetChanged()
 //    m_ui->pushButton_BindReference->setEnabled(c_selected != m_Positioner->OriginReference.getStrValue());
 }
 
-void TaskBoxPoserSetupPanel::sliderPositionChanged(int t_Index) {
+void TaskBoxPoserSetupPanel::slot_sliderPositionChanged(int t_Index) {
   if (m_jointSliderVec.empty())
     return;
   if (t_Index < m_jointSliderVec.size()) {
     auto sliderPtr = m_jointSliderVec[t_Index];
     m_PoserPtr->setJointAngle(t_Index, sliderPtr->getSliderPosition());
-    sliderPtr->set_labelvalue();
   }
 }
 
-JointSliderWidget *TaskBoxPoserSetupPanel::getTargetJointSlider(const int jntID) {
+JointSliderWidget *TaskBoxPoserSetupPanel::getTargetJointSlider(const size_t jntID) {
     if(jntID<0 || jntID>m_jointSliderVec.size())
         return nullptr;
     return m_jointSliderVec.at(jntID);

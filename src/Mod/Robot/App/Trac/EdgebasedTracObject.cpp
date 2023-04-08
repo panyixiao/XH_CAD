@@ -131,7 +131,7 @@ void EdgebasedTracObject::setTracSafePoint(const GroupPose &t_Pose)
 
 bool EdgebasedTracObject::generateConstraint(const uint t_ID, bool newRef)
 {
-    bool success;
+    bool success = false;
     if(t_ID == 1){
         if(edge1_Poses.empty()||newRef){
             edge1_FaceRef = CAD_Utility::getFacesFromDataSource(FaceSource);
@@ -193,6 +193,8 @@ bool EdgebasedTracObject::generateProgram(const uint t_ID)
         insertCMD_SwitchTool(executorName,t_ToolType);
         trac_speed = WeldSpeed.getValue();
         break;
+    default:
+        break;
     }
     // To Safe Point
     RobotWaypoint safePoint(m_TracSafePoint);
@@ -202,7 +204,7 @@ bool EdgebasedTracObject::generateProgram(const uint t_ID)
                    Robot::MovePrec::FINE,
                    trac_speed);
 
-    for(int i = 0; i<t_Poses.size(); i++){
+    for(size_t i = 0; i<t_Poses.size(); i++){
         RobotWaypoint newWaypoint(t_Poses[i],
                                   CurrentExternalAxis.getValues(),
                                   t_ID);
@@ -346,12 +348,12 @@ void EdgebasedTracObject::cutEdgeAtPoint(const uint position, bool abandonRest)
     if(position>waypointVec.size())
         return;
     if(abandonRest){
-        for(int i = position; i<waypointVec.size(); i++){
+        for(size_t i = position; i<waypointVec.size(); i++){
             waypointVec.erase(waypointVec.begin()+i);
         }
     }
     else{
-        for(int i = 0; i<position; i++){
+        for(size_t i = 0; i<position; i++){
             waypointVec.erase(waypointVec.begin()+i);
         }
     }

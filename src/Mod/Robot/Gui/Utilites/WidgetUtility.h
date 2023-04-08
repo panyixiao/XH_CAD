@@ -10,6 +10,7 @@
 #include <QSignalMapper>
 #include <QLabel>
 #include <QSlider>
+#include <QDoubleSpinBox>
 
 namespace RobotGui {
 
@@ -56,17 +57,20 @@ public:
                     QObject *recevier,
                     QSignalMapper *signalmapper,
                     float upper, float lower);
-  const float getSliderPosition() const;
-  const QString getJointName() const;
+  float getSliderPosition() const;
+  QString getJointName() const;
   void updateSliderRange(float lowerBound, float upperBound);
-  void set_labelvalue();
-  void setSliderPosition(const float);
+  void updateAxisWidgetData(const float);
+
+protected Q_SLOTS:
+  void slot_updateSliderPosByJntValSpinBox();
+  void slot_updateJntValSpinBoxBySliderPos();
 
 private:
   int value;
   QString m_joint_name;
-  CustomizedSlider *m_slider;
-  QLabel *m_valueofjoint;
+  CustomizedSlider *m_slider_JntVal;
+  QDoubleSpinBox *m_spinBox_JntVal;
   QLabel *m_nameofjoint;
 };
 

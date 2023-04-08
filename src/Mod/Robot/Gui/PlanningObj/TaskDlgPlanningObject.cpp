@@ -292,6 +292,7 @@ void TaskDlgPlanningObject::slot_changeFrameStatus()
 
 void TaskDlgPlanningObject::slot_finishEditObject()
 {
+    m_PlanningObj->isEditing.setValue(false);
     destroyDragger();
     Gui::Control().closeDialog();
 }

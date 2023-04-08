@@ -12,7 +12,8 @@
 #include <Gui/DockWindowManager.h>
 #include <Mod/Robot/App/TaskManage/TaskObject.h>
 
-#include <Mod/Robot/App/Mechanics/Robot6AxisObject.h>
+//#include <Mod/Robot/App/Mechanics/Robot6AxisObject.h>
+#include <Mod/Robot/App/Mechanics/MechanicBase.h>
 #include <Mod/Robot/App/Mechanics/MechanicGroup.h>
 
 class Ui_TaskBox_TaskManager;
@@ -39,10 +40,10 @@ public Q_SLOTS:
   bool reject();
 
 private Q_SLOTS:
-  bool slot_insertAction_FreerunTrac();
-  bool slot_insertAction_ScanTrac();
-  bool slot_insertAction_SeamTrac();
-  bool slot_insertAction_ReadinTrac();
+  void slot_insertAction_FreerunTrac();
+  void slot_insertAction_ScanTrac();
+  void slot_insertAction_SeamTrac();
+  void slot_insertAction_ReadinTrac();
   void slot_editSelectedAction();
   void slot_deleteSeletectedAction();
   void slot_moveUpSelectedAction();
@@ -63,8 +64,7 @@ private:
 
   App::Document *m_currentDoc = nullptr;
   Robot::TaskObject* m_targetTaskPtr = nullptr;
-  Robot::Robot6AxisObject* m_Robot = nullptr;
-  Robot::MechanicGroup* m_Group = nullptr;
+  Robot::MechanicBase* m_Executor = nullptr;
 
   App::DocumentObject *m_CurrentSelection = nullptr;
 

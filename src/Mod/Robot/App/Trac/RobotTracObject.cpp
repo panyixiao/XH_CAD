@@ -195,13 +195,16 @@ const TracType &RobotTracObject::getTracType() const
     return m_TYPE;
 }
 
-void RobotTracObject::setOperator(const std::string &t_Name)
+bool RobotTracObject::setOperator(const std::string &t_Name)
 {
     auto executorPtr = this->getDocument()->getObject(t_Name.c_str());
-    if(executorPtr->isDerivedFrom(Robot::Robot6AxisObject::getClassTypeId()) ||
-       executorPtr->isDerivedFrom(Robot::MechanicGroup::getClassTypeId())){
-        ExecutorName.setValue(t_Name);
-    }
+    if(executorPtr == nullptr)
+        return false;
+//    if(executorPtr->isDerivedFrom(Robot::Robot6AxisObject::getClassTypeId()) ||
+//       executorPtr->isDerivedFrom(Robot::MechanicGroup::getClassTypeId())){
+//        ExecutorName.setValue(t_Name);
+//    }
+    return true;
 }
 
 bool RobotTracObject::isEmpty()

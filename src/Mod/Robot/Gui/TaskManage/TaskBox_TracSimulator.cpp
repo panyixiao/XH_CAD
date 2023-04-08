@@ -22,7 +22,7 @@ using namespace Gui;
 
 TaskBox_TracSimulator::TaskBox_TracSimulator(Robot::RobotTracObject *t_TracObj,
                                              QWidget *parent)
-    : TaskBox(Gui::BitmapFactory().pixmap("document-new"),tr("Trac Simulator"),true, parent)
+    : TaskBox(Gui::BitmapFactory().pixmap("document-new"),tr("仿真管理"),true, parent)
 {
     initUi(false);
     if(!updateSimulationTarget(t_TracObj))
@@ -32,7 +32,7 @@ TaskBox_TracSimulator::TaskBox_TracSimulator(Robot::RobotTracObject *t_TracObj,
 }
 
 TaskBox_TracSimulator::TaskBox_TracSimulator(Robot::TaskObject *t_TaskObj, QWidget *parent)
-    : TaskBox(Gui::BitmapFactory().pixmap("document-new"),tr("Task Simulator"),true, parent)
+    : TaskBox(Gui::BitmapFactory().pixmap("document-new"),tr("仿真管理"),true, parent)
 {
     initUi(true);
     if(!updateSimulationTarget(t_TaskObj))

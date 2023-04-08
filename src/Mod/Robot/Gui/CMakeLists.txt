@@ -192,8 +192,8 @@ set(RobotGui_SRC_TaskManageViewProvider
 set(RobotGui_SRC_TaskManageTaskBox
     TaskManage/TaskBox_TaskManager.cpp
     TaskManage/TaskBox_TaskManager.h
-    TaskManage/TaskBox_ActionManager.cpp
-    TaskManage/TaskBox_ActionManager.h
+#    TaskManage/TaskBox_ActionManager.cpp
+#    TaskManage/TaskBox_ActionManager.h
     TaskManage/TaskBox_EdgeBasedTracEditor.cpp
     TaskManage/TaskBox_EdgeBasedTracEditor.h
     TaskManage/TaskBox_FreerunTracEditor.cpp
@@ -206,10 +206,10 @@ set(RobotGui_SRC_TaskManageTaskDlg
     TaskManage/TaskDlg_TaskManage.cpp)
 
 set(RobotGui_UIC_TaskManage
-    TaskManage/TaskBox_ActionManager.ui
+#    TaskManage/TaskBox_ActionManager.ui
     TaskManage/TaskBox_TaskManager.ui
     TaskManage/TaskBox_FreerunTracEditor.ui
-    TaskManage/TaskBox_EdgeTracGenerator.ui
+#    TaskManage/TaskBox_EdgeTracGenerator.ui
     TaskManage/TaskBox_EdgeBasedTracEditor.ui
     TaskManage/TaskBox_TracSimulator.ui
     )

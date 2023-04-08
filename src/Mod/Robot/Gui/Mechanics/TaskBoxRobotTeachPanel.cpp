@@ -34,7 +34,6 @@ void TaskBoxRobotTeachPanel::initUi() {
   m_ui->setupUi(m_proxy);
   this->addWidget(m_proxy);
 
-  m_JointPanel_layout = new QGridLayout;
 
   QObject::connect(m_ui->comboBox_TeachCoord, SIGNAL(currentIndexChanged(int)),
                    this,SLOT(slot_changeTeachCoord()));
@@ -44,33 +43,71 @@ void TaskBoxRobotTeachPanel::initUi() {
   QObject::connect(m_ui->pushButton_toHomePose, SIGNAL(clicked()),
                    this, SLOT(slot_setRobotToHomePose()));
 
+  // Up Panel
   initUi_AxisControllerBox();
-  initUi_TcpControlBox();
   initUi_ConfigurationBox();
+  initUi_PoserSetupBox();
+
+  // Bot Panel
+  initUi_TcpControlBox();
   initUi_BaseSetupBox();
 }
 
 void TaskBoxRobotTeachPanel::initUi_AxisControllerBox() {
-  if (m_JointPanel_layout == nullptr)
-    return;
-
   if(m_signalmapper == nullptr)
      m_signalmapper = new QSignalMapper(this);
 
   m_jointSliderVec.clear();
-
-  for (int jntID = 0; jntID<m_RobotPtr->getJointNumbers(); jntID++)
+  uint slider_id = 0;
+  // 初始化关节轴操作面板
+  if(m_Layout_RobotJointPanel == nullptr)
+     m_Layout_RobotJointPanel = new QGridLayout;
+  for (size_t jntID = 0; jntID<m_RobotPtr->getJointNumbers(); jntID++)
   {
     auto jointName = std::string("J-")+std::to_string(jntID+1);
-    auto slider_widget = new JointSliderWidget(m_ui->groupBox_AxisControl,
-                                               m_JointPanel_layout,
-                                               jntID+1,jntID,
+    auto slider_widget = new JointSliderWidget(m_ui->groupBox_RobotAxisControl,
+                                               m_Layout_RobotJointPanel,
+                                               jntID+1,slider_id,
                                                QString::fromStdString(jointName),
                                                this,
                                                m_signalmapper,
                                                m_RobotPtr->getJointMaxAngle(jntID),
                                                m_RobotPtr->getJointMinAngle(jntID));
     m_jointSliderVec.push_back(slider_widget);
+    slider_id++;
+  }
+  if(m_RobotPtr->LinkedExtAxName.isEmpty())
+    m_ui->groupBox_ExtAxisControl->setVisible(false);
+  else{
+      // 初始化外部轴操作面板
+  }
+  if(m_RobotPtr->LinkedPoserNames.getValues().empty())
+    m_ui->groupBox_PoserAxisControl->setVisible(false);
+  else{
+      // 初始化变位机操作面板
+      if(m_Layout_PoserJointPanel == nullptr)
+         m_Layout_PoserJointPanel = new QGridLayout;
+      uint poserNum = 1;
+      for(const auto& linkName : m_RobotPtr->LinkedPoserNames.getValues()){
+         auto poserPtr = m_RobotPtr->getTargetLinkedPoser(linkName);
+         if(poserPtr!=nullptr){
+             for (auto jntID = 0; jntID<poserPtr->getJointNumbers(); jntID++)
+             {
+               auto jointName = std::string("P")+std::to_string(poserNum) + std::string("-") + std::to_string(jntID+1);
+               auto slider_widget = new JointSliderWidget(m_ui->groupBox_PoserAxisControl,
+                                                          m_Layout_PoserJointPanel,
+                                                          jntID+1,slider_id,
+                                                          QString::fromStdString(jointName),
+                                                          this,
+                                                          m_signalmapper,
+                                                          poserPtr->getJointMaxAngle(jntID),
+                                                          poserPtr->getJointMinAngle(jntID));
+               m_jointSliderVec.push_back(slider_widget);
+               slider_id++;
+             }
+             poserNum++;
+         }
+      }
   }
 
   slot_updatePanelWidgets();
@@ -78,7 +115,7 @@ void TaskBoxRobotTeachPanel::initUi_AxisControllerBox() {
 
 void TaskBoxRobotTeachPanel::initUi_ConfigurationBox()
 {
-    for(int i = 1; i<=m_RobotPtr->getJointNumbers(); i++){
+    for(size_t i = 1; i<=m_RobotPtr->getJointNumbers(); i++){
         QString jnt_Name = QObject::tr("Jnt-")+QString::number(i);
         m_ui->comboBox_JointList->addItem(jnt_Name);
     }
@@ -109,14 +146,24 @@ void TaskBoxRobotTeachPanel::initUi_ConfigurationBox()
     slot_targetConfigJointChanged();
 }
 
+void TaskBoxRobotTeachPanel::initUi_PoserSetupBox()
+{
+    updateLinkedPoserWidgets();
+
+    QObject::connect(m_ui->comboBox_poserList, SIGNAL(currentIndexChanged(int)),
+                     this, SLOT(slot_targetPoserChanged()));
+    QObject::connect(m_ui->pushButton_LinkPoser, SIGNAL(clicked(bool)),
+                     this, SLOT(slot_poserButtonClicked()));
+}
+
 void TaskBoxRobotTeachPanel::initUi_TcpControlBox()
 {
     if(m_RobotPtr->isDriven.getValue()){
-        m_ui->groupBox_ToolSetup->hide();
+//        m_ui->groupBox_ToolSetup->hide();
     }
     else{
-        m_ui->radioButton_Flan->setChecked(m_RobotPtr->CurrentToolIndex.getValue() == 0);
-        QObject::connect(m_ui->radioButton_Flan, SIGNAL(clicked()),this, SLOT(slot_changeActivatedTool()));
+//        m_ui->radioButton_Flan->setChecked(m_RobotPtr->CurrentToolIndex.getValue() == 0);
+//        QObject::connect(m_ui->radioButton_Flan, SIGNAL(clicked()),this, SLOT(slot_changeActivatedTool()));
 
 //        m_ui->radioButton_Torch->setEnabled(m_RobotPtr->hasTorch());
 //        m_ui->radioButton_Torch->setChecked(m_RobotPtr->CurrentToolIndex.getValue() == m_RobotPtr->TorchIndex.getValue());
@@ -169,6 +216,40 @@ void TaskBoxRobotTeachPanel::initUi_BaseSetupBox()
                      SLOT(slot_changeRef2BasePose()));
 }
 
+void TaskBoxRobotTeachPanel::updateLinkedPoserWidgets()
+{
+    auto poserInDoc = m_DocPtr->getObjectsOfType(Robot::MechanicPoser::getClassTypeId());
+    auto linkedPoserNames = m_RobotPtr->LinkedPoserNames.getValues();
+    // 初始化变位机列表
+    m_ui->tableWidget_LinkedPoser->clear();
+    m_ui->tableWidget_LinkedPoser->setColumnCount(3);
+    m_ui->tableWidget_LinkedPoser->setHorizontalHeaderLabels({tr("名称"),tr("轴数"),tr("负载")});
+    size_t row_count = 0;
+    for(const auto& t_Name : linkedPoserNames){
+        auto deviceInfo = m_RobotPtr->getLinkedPoserInfo(t_Name);
+        if(!deviceInfo.empty()){
+            // 构建变位机参数
+            QTableWidgetItem *name = new QTableWidgetItem(deviceInfo.at(0));
+            QTableWidgetItem *axis = new QTableWidgetItem(deviceInfo.at(1));
+            QTableWidgetItem *load = new QTableWidgetItem(deviceInfo.at(2));
+            m_ui->tableWidget_LinkedPoser->insertRow(row_count);
+            m_ui->tableWidget_LinkedPoser->setItem(row_count,0,name);
+            m_ui->tableWidget_LinkedPoser->setItem(row_count,1,axis);
+            m_ui->tableWidget_LinkedPoser->setItem(row_count,2,load);
+            row_count++;
+        }
+    }
+    m_ui->tableWidget_LinkedPoser->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    // 初始化可用的变位机列表
+    m_ui->comboBox_poserList->clear();
+    for(const auto& poserPtr : poserInDoc){
+        m_ui->comboBox_poserList->addItem(tr(poserPtr->getNameInDocument()));
+    }
+    // 更新可用轴数
+    QString content = QString::number(m_RobotPtr->getAvailablePoserAxisNumber()) + tr("/8");
+    m_ui->label_availablePoserAxisNum->setText(content);
+}
+
 void TaskBoxRobotTeachPanel::updateRef2BasePosePanel()
 {
     blockSignals_Basebox(true);
@@ -208,8 +289,8 @@ void TaskBoxRobotTeachPanel::slot_changeReferenceBase()
 //            m_RobotPtr->setBaseToSelectedFaceCenter();    // This will be called once
         }
         else{
-            if(!m_RobotPtr->ConnectedExtAxis.getStrValue().empty()){
-                auto t_DevicePtr = static_cast<Robot::MechanicDevice*>(m_DocPtr->getObject(m_RobotPtr->ConnectedExtAxis.getValue()));
+            if(!m_RobotPtr->LinkedExtAxName.getStrValue().empty()){
+                auto t_DevicePtr = static_cast<Robot::MechanicDevice*>(m_DocPtr->getObject(m_RobotPtr->LinkedExtAxName.getValue()));
                 t_DevicePtr->unloadRobot(m_RobotPtr->getNameInDocument());
             }
 
@@ -217,7 +298,7 @@ void TaskBoxRobotTeachPanel::slot_changeReferenceBase()
             auto t_DevicePtr = static_cast<Robot::MechanicDevice*>(m_DocPtr->getObject(extAxisDeviceName.c_str()));
             if(t_DevicePtr!=nullptr && t_DevicePtr->DeviceType.getValue() == (int)Robot::MechanicType::M_ExtAxis){
                 t_DevicePtr->loadRobot(m_RobotPtr->getNameInDocument());
-                m_RobotPtr->ConnectedExtAxis.setValue(t_DevicePtr->getNameInDocument());
+                m_RobotPtr->LinkedExtAxName.setValue(t_DevicePtr->getNameInDocument());
             }
 
         }
@@ -276,9 +357,9 @@ void TaskBoxRobotTeachPanel::slot_enableConfigConstraint()
 }
 
 void TaskBoxRobotTeachPanel::slot_updatePanelWidgets() {
-  for (int jntID = 0; jntID < m_RobotPtr->getJointNumbers(); jntID++) {
+  for (size_t jntID = 0; jntID < m_RobotPtr->getJointNumbers(); jntID++) {
     auto sliderPtr = m_jointSliderVec[jntID];
-    sliderPtr->setSliderPosition(m_RobotPtr->getJointAngle(jntID));
+    sliderPtr->updateAxisWidgetData(m_RobotPtr->getJointAngle(jntID));
   }
   slot_updateTipPosePanel();
 }
@@ -322,22 +403,22 @@ void TaskBoxRobotTeachPanel::slot_changeTargetRobotTipPose()
 
 void TaskBoxRobotTeachPanel::slot_changeActivatedTool()
 {
-    if(m_ui->radioButton_Flan->isChecked()){
-        m_RobotPtr->setCurrentToolType(Robot::ToolType::Undefined);
-        m_ui->spinBox_ToolID->setValue(0);
-    }
-    if(m_ui->radioButton_Torch->isChecked()){
-        m_RobotPtr->setCurrentToolType(Robot::ToolType::WeldTorch);
-//        m_ui->spinBox_ToolID->setValue(m_RobotPtr->TorchIndex.getValue());
-    }
-    if(m_ui->radioButton_Scan->isChecked()){
-        m_RobotPtr->setCurrentToolType(Robot::ToolType::_2DScanner);
-//        m_ui->spinBox_ToolID->setValue(m_RobotPtr->ScannerIndex.getValue());
-    }
-    if(m_ui->radioButton_Camera->isChecked()){
-        m_RobotPtr->setCurrentToolType(Robot::ToolType::_3DCamera);
-//        m_ui->spinBox_ToolID->setValue(m_RobotPtr->CameraIndex.getValue());
-    }
+//    if(m_ui->radioButton_Flan->isChecked()){
+//        m_RobotPtr->setCurrentToolType(Robot::ToolType::Undefined);
+//        m_ui->spinBox_ToolID->setValue(0);
+//    }
+//    if(m_ui->radioButton_Torch->isChecked()){
+//        m_RobotPtr->setCurrentToolType(Robot::ToolType::WeldTorch);
+////        m_ui->spinBox_ToolID->setValue(m_RobotPtr->TorchIndex.getValue());
+//    }
+//    if(m_ui->radioButton_Scan->isChecked()){
+//        m_RobotPtr->setCurrentToolType(Robot::ToolType::_2DScanner);
+////        m_ui->spinBox_ToolID->setValue(m_RobotPtr->ScannerIndex.getValue());
+//    }
+//    if(m_ui->radioButton_Camera->isChecked()){
+//        m_RobotPtr->setCurrentToolType(Robot::ToolType::_3DCamera);
+////        m_ui->spinBox_ToolID->setValue(m_RobotPtr->CameraIndex.getValue());
+//    }
 
     slot_updateTipPosePanel();
 }
@@ -347,20 +428,49 @@ void TaskBoxRobotTeachPanel::slot_setRobotToHomePose()
     m_RobotPtr->resAxisHomePose();
 }
 
+void TaskBoxRobotTeachPanel::slot_targetPoserChanged()
+{
+    auto t_PoserName = m_ui->comboBox_poserList->currentText();
+    auto linkedPoserNames = m_RobotPtr->LinkedPoserNames.getValues();
+    auto result = std::find(linkedPoserNames.begin(),linkedPoserNames.end(),t_PoserName.toStdString());
+    if(result == linkedPoserNames.end()){
+        m_ui->pushButton_LinkPoser->setText(tr("绑定"));
+        operationFlag_bind = true;
+    }
+    else{
+        m_ui->pushButton_LinkPoser->setText(tr("解绑"));
+        operationFlag_bind = false;
+    }
+}
+
+void TaskBoxRobotTeachPanel::slot_poserButtonClicked()
+{
+    auto t_PoserName = m_ui->comboBox_poserList->currentText();
+    auto linkedPoserNames = m_RobotPtr->LinkedPoserNames.getValues();
+    auto result = std::find(linkedPoserNames.begin(),linkedPoserNames.end(),t_PoserName.toStdString());
+    if(result == linkedPoserNames.end()){
+        linkedPoserNames.push_back(t_PoserName.toStdString());
+    }else{
+        linkedPoserNames.erase(result);
+    }
+    m_RobotPtr->LinkedPoserNames.setValues(linkedPoserNames);
+    updateLinkedPoserWidgets();
+}
+
 void TaskBoxRobotTeachPanel::slot_changeToolIndex()
 {
-    int val = m_ui->spinBox_ToolID->value();
-    switch(m_RobotPtr->getCurrentTool()){
-    case Robot::ToolType::WeldTorch:
-//        m_RobotPtr->TorchIndex.setValue(val);
-        break;
-    case Robot::ToolType::_2DScanner:
-//        m_RobotPtr->ScannerIndex.setValue(val);
-        break;
-    case Robot::ToolType::_3DCamera:
-//        m_RobotPtr->CameraIndex.setValue(val);
-        break;
-    }
+//    int val = m_ui->spinBox_ToolID->value();
+//    switch(m_RobotPtr->getCurrentTool()){
+//    case Robot::ToolType::WeldTorch:
+////        m_RobotPtr->TorchIndex.setValue(val);
+//        break;
+//    case Robot::ToolType::_2DScanner:
+////        m_RobotPtr->ScannerIndex.setValue(val);
+//        break;
+//    case Robot::ToolType::_3DCamera:
+////        m_RobotPtr->CameraIndex.setValue(val);
+//        break;
+//    }
 }
 
 void TaskBoxRobotTeachPanel::slot_openToolSetupBox()
@@ -373,17 +483,16 @@ void TaskBoxRobotTeachPanel::slot_setCurrentPoseAsHomePosition() {
   m_RobotPtr->setAxisHomePose();
 }
 
-void TaskBoxRobotTeachPanel::sliderPositionChanged(int t_Index) {
+void TaskBoxRobotTeachPanel::slot_sliderPositionChanged(int t_Index) {
   if (m_jointSliderVec.empty())
     return;
   if (t_Index < m_jointSliderVec.size()) {
     auto sliderPtr = m_jointSliderVec[t_Index];
     m_RobotPtr->setJointAngle(t_Index, sliderPtr->getSliderPosition());
-    sliderPtr->set_labelvalue();
   }
 }
 
-JointSliderWidget *TaskBoxRobotTeachPanel::findTargetJointSlider(const int jntID) {
+JointSliderWidget *TaskBoxRobotTeachPanel::findTargetJointSlider(const size_t jntID) {
     if(jntID<0 || jntID>m_jointSliderVec.size())
         return nullptr;
     return m_jointSliderVec.at(jntID);

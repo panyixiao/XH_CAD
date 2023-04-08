@@ -106,7 +106,6 @@ bool PlanningObject::changeMountState(const char *targetName, bool attachTo)
     else if(t_TargetDevicePtr->isDerivedFrom(Robot::ToolObject::getClassTypeId())){
         auto t_ToolPtr = static_cast<Robot::ToolObject*>(t_TargetDevicePtr);
         if(attachTo){
-
             Pose_Mount.setValue(t_ToolPtr->getPose_ABSToolTip());
             AttachedTo.setValue(t_ToolPtr->getNameInDocument());
         }else{

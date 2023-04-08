@@ -16,6 +16,7 @@
 #include <Mod/Robot/Gui/Utilites/DraggerUtility.h>
 
 #include <Mod/Robot/App/Mechanics/MechanicGroup.h>
+#include <Mod/Robot/App/Mechanics/MechanicBase.h>
 #include <Mod/Robot/Gui/Mechanics/ViewProviderMechanicGroup.h>
 #include <Mod/Robot/App/Trac/RobotTracObject.h>
 #include <Mod/Robot/App/Trac/EdgebasedTracObject.h>
@@ -91,19 +92,19 @@ private:
   QWidget *m_proxy;
   App::Document *m_DocPtr;
   Robot::EdgebasedTracObject* m_EdgeTracPtr = nullptr;
+  RobotGui::InteractiveDragger *m_MarkerViz = nullptr;
 
   uint m_RobotID = 1;
   uint c_PntID = 0;
   // Visualizer
   bool flag_VizByMarker = true;
-  RobotGui::InteractiveDragger *m_MarkerViz = nullptr;
 
   Robot::MechanicGroup* m_GroupPtr = nullptr;
   Robot::GroupPose m_InitPoses;
   bool flag_VizByRobot = false;
 
   Base::Placement m_PntOriginPose;
-  std::vector<Base::Placement> m_PntAdjustments;
+  std::vector<Base::Placement> m_PntOffsets;
 //  Base::Placement c_PntAdjustment;
 
   Gui::TaskView::TaskSelectLinkProperty *m_EdgeSelection = nullptr;

@@ -416,11 +416,11 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags f)
     }
 
     // TaskManagePanel
-    if (hiddenDockWindows.find("TaskManagePanel") == std::string::npos) {
+    if (hiddenDockWindows.find("TaskProcess") == std::string::npos) {
         TaskManageDockPanel* tskManage_DockPanel = new TaskManageDockPanel(0,this);
-        tskManage_DockPanel->setObjectName(QString::fromLatin1(QT_TRANSLATE_NOOP("QDockWidget", "TaskManagePanel")));
+        tskManage_DockPanel->setObjectName(QString::fromLatin1(QT_TRANSLATE_NOOP("QDockWidget", "TaskProcess")));
         tskManage_DockPanel->setMinimumWidth(150);
-        pDockMgr->registerDockWindow("TaskManagePanel", tskManage_DockPanel);
+        pDockMgr->registerDockWindow("TaskProcess", tskManage_DockPanel);
     }
 
     // Report view (must be created before PythonConsole!)

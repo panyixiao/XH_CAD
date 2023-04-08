@@ -90,47 +90,64 @@ JointSliderWidget::JointSliderWidget(QWidget *parent,
   m_nameofjoint->setMaximumSize(80, 15);
   m_nameofjoint->setAlignment(Qt::AlignHCenter);
   lay->addWidget(m_nameofjoint, line_number, 0);
-  m_slider = new RobotGui::CustomizedSlider(Qt::Orientation::Horizontal);
-  m_slider->setMaximumWidth(120);
-  m_slider->setMinimum(lower);
-  m_slider->setMaximum(upper);
-  lay->addWidget(m_slider, line_number, 1);
+  m_slider_JntVal = new RobotGui::CustomizedSlider(Qt::Orientation::Horizontal);
+  m_slider_JntVal->setMaximumWidth(120);
+  lay->addWidget(m_slider_JntVal, line_number, 1);
 
-  m_valueofjoint = new QLabel;
-  m_valueofjoint->setText(QString::number(0));
-  m_valueofjoint->setFixedWidth(80);
-  lay->addWidget(m_valueofjoint, line_number, 2);
+  m_spinBox_JntVal = new QDoubleSpinBox;
+  m_spinBox_JntVal->setValue(0.0);
+  m_spinBox_JntVal->setDecimals(2);
+  m_spinBox_JntVal->setFixedWidth(80);
+  lay->addWidget(m_spinBox_JntVal, line_number, 2);
 
-  QObject::connect(m_slider, SIGNAL(valueChanged(int)),
+  QObject::connect(m_slider_JntVal, SIGNAL(valueChanged(int)),
                    signalmapper, SLOT(map()));
-  signalmapper->setMapping(m_slider, slider_id);
+  QObject::connect(m_slider_JntVal, SIGNAL(valueChanged(int)),
+                   this, SLOT(slot_updateJntValSpinBoxBySliderPos()));
+  signalmapper->setMapping(m_slider_JntVal, slider_id);
   QObject::connect(signalmapper, SIGNAL(mapped(int)),
-                   recevier, SLOT(sliderPositionChanged(int)));
+                   recevier, SLOT(slot_sliderPositionChanged(int)));
+
+  QObject::connect(m_spinBox_JntVal, SIGNAL(valueChanged(double)),
+                   this, SLOT(slot_updateSliderPosByJntValSpinBox()));
+
+  updateSliderRange(lower,upper);
 }
 
-const float JointSliderWidget::getSliderPosition() const {
-    return m_slider->value();
+float JointSliderWidget::getSliderPosition() const {
+    return m_slider_JntVal->value();
 }
 
-const QString JointSliderWidget::getJointName() const {
+QString JointSliderWidget::getJointName() const {
     return m_joint_name;
 }
 
 void JointSliderWidget::updateSliderRange(float lowerBound, float upperBound) {
-  m_slider->setMinimum(lowerBound);
-  m_slider->setMaximum(upperBound);
+  m_slider_JntVal->setMinimum(lowerBound);
+  m_slider_JntVal->setMaximum(upperBound);
+  m_spinBox_JntVal->setMaximum(upperBound);
+  m_spinBox_JntVal->setMinimum(lowerBound);
 }
 
-void JointSliderWidget::set_labelvalue() {
-  float settingValue = getSliderPosition();
-  m_valueofjoint->setText(QString::number(settingValue, 'f', 1) + tr(" deg"));
+void JointSliderWidget::updateAxisWidgetData(const float value) {
+//  double setvalue = value;
+//  m_slider_JntVal->setValue(setvalue,true);
+//  m_slider_JntVal->blockSignals(false);
+  m_spinBox_JntVal->setValue(value);
 }
 
-void JointSliderWidget::setSliderPosition(const float value) {
-  double setvalue = value;
-  m_slider->setValue(setvalue,true);
-  set_labelvalue();
-  m_slider->blockSignals(false);
+void JointSliderWidget::slot_updateSliderPosByJntValSpinBox()
+{
+    m_slider_JntVal->blockSignals(true);
+    m_slider_JntVal->setValue(m_spinBox_JntVal->value());
+    m_slider_JntVal->blockSignals(false);
+}
+
+void JointSliderWidget::slot_updateJntValSpinBoxBySliderPos()
+{
+    m_spinBox_JntVal->blockSignals(true);
+    m_spinBox_JntVal->setValue(getSliderPosition());
+    m_spinBox_JntVal->blockSignals(false);
 }
 
 #include "moc_WidgetUtility.cpp"

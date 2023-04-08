@@ -38,7 +38,7 @@
      <item>
       <widget class="QLabel" name="label_OperatorName">
        <property name="text">
-        <string>Opt:</string>
+        <string>RBT:</string>
        </property>
       </widget>
      </item>

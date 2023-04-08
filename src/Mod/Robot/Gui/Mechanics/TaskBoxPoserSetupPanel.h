@@ -38,14 +38,14 @@ public Q_SLOTS:
     bool reject();
 
 private:
-    JointSliderWidget *getTargetJointSlider(const int jntID);
+    JointSliderWidget *getTargetJointSlider(const size_t jntID);
     void initUi_PanelWidgets();
     void initUi_AxisControllerBox();
     void initUi_ConfigurationBox();
     void initUi_PoseSetupBox();
 
 private Q_SLOTS:
-    void sliderPositionChanged(int t_Index);
+    void slot_sliderPositionChanged(int t_Index);
     void slot_setCurrentPoseAsHomePosition();
     void slot_updatePositionerPose();
     void slot_updatePositionerReference();

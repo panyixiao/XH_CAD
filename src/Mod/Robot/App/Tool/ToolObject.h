@@ -68,7 +68,7 @@ public:
   virtual void Save(Base::Writer &writer) const;
   virtual void Restore(Base::XMLReader &reader);
 
-  const ToolType& getToolType() const{
+  ToolType getToolType() const{
       return (ToolType)_ToolType.getValue();
   }
 

@@ -337,17 +337,17 @@ bool TaskDlg_TaskManage::insertTracObject(const string opt_Name, const TracType 
     std::string tracName, cmmd_str;
     switch(t_type){
     case Robot::TracType::FREETRAC:
-        Gui::Command::openCommand("Insert New Freerun Trac");
+        Gui::Command::openCommand("Insert New RobotTrac");
         tracName = m_DocPtr->getUniqueObjectName("FreeTrac");
         cmmd_str = "App.activeDocument().addObject(\"Robot::RobotTracObject\",\"%s\")";
         break;
     case Robot::TracType::SCANTRAC:
-        Gui::Command::openCommand("Insert New Scan Trac");
+        Gui::Command::openCommand("Insert New ScanTrac");
         tracName = m_DocPtr->getUniqueObjectName("ScanTrac");
         cmmd_str = "App.activeDocument().addObject(\"Robot::EdgebasedTracObject\",\"%s\")";
         break;
     case Robot::TracType::SEAMTRAC:
-        Gui::Command::openCommand("Insert New Seam Trac");
+        Gui::Command::openCommand("Insert New SeamTrac");
         tracName = m_DocPtr->getUniqueObjectName("SeamTrac");
         cmmd_str = "App.activeDocument().addObject(\"Robot::EdgebasedTracObject\",\"%s\")";
         break;
@@ -356,19 +356,12 @@ bool TaskDlg_TaskManage::insertTracObject(const string opt_Name, const TracType 
                             tracName.c_str());
     Gui::Command::commitCommand();
 
-    // Get inserted Object
-    int tryTime = 0;
     auto objPtr = m_DocPtr->getObject(tracName.c_str());
-    while(objPtr == nullptr && tryTime<5){
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
-        objPtr = m_DocPtr->getObject(tracName.c_str());
-        tryTime++;
-    }
     if(objPtr != nullptr){
         // Set Trac operator
         auto tracObj = static_cast<Robot::RobotTracObject*>(objPtr);
         tracObj->setTracManager(std::string(m_taskObjPtr->getNameInDocument()));
-        tracObj->setOperator(opt_Name);
+//        tracObj->setOperator(opt_Name);
         tracObj->setTracType(t_type);
         m_taskObjPtr->insertAction(tracObj);
         showTskBox_TracObject(tracObj);

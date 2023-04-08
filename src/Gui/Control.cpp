@@ -177,11 +177,11 @@ void ControlSingleton::show_TaskManageDialog(std::shared_ptr<TaskManage::TaskMan
 {
     if(onDockPanel){
         Gui::DockWnd::TaskManageDockPanel* tskManagePanel = qobject_cast<Gui::DockWnd::TaskManageDockPanel*>
-                (Gui::DockWindowManager::instance()->getDockWindow("TaskManagePanel"));
+                (Gui::DockWindowManager::instance()->getDockWindow("TaskProcess"));
         if(tskManagePanel!=nullptr)
             tskManagePanel->showDialog(t_DlgPtr);
         else
-            Base::Console().Error("Can't find TaskManagePanel to attach Dialog, Please set Panels in Edit->View!\n");
+            Base::Console().Error("Can't find TaskProcess Panel to attach Dialog, Please set Panels in Edit->View!\n");
     }
     else{
         if(t_DlgPtr!=nullptr)
@@ -190,7 +190,7 @@ void ControlSingleton::show_TaskManageDialog(std::shared_ptr<TaskManage::TaskMan
 }
 DockWnd::TaskManageDockPanel *ControlSingleton::getTaskManagePanel()
 {
-    return qobject_cast<Gui::DockWnd::TaskManageDockPanel*>(Gui::DockWindowManager::instance()->getDockWindow("TaskManagePanel"));
+    return qobject_cast<Gui::DockWnd::TaskManageDockPanel*>(Gui::DockWindowManager::instance()->getDockWindow("TaskProcess"));
 }
 
 Gui::TaskView::TaskView* ControlSingleton::getTaskPanel()

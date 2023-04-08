@@ -64,7 +64,9 @@ void ViewProviderPlanningObj::onChanged(const App::Property *prop) {
 }
 
 bool ViewProviderPlanningObj::doubleClicked() {
-    return setEdit(0);
+    Robot::PlanningObject* t_PlanningObjPtr = static_cast<Robot::PlanningObject*>(pcObject);
+    t_PlanningObjPtr->isEditing.setValue(true);
+    return true;
 }
 
 void ViewProviderPlanningObj::updateCenterPlacement(const Base::Placement &newPlacement) {

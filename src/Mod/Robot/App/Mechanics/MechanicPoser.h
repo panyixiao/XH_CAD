@@ -46,8 +46,9 @@ public:
 
 public:
 //    App::PropertyStringList MountedObjectNames;
-    App::PropertyString     MountedWorkingObj;
-    App::PropertyString     AssembledTool;
+    App::PropertyString     MountedObjectName;
+    App::PropertyString     AssembledToolName;
+    App::PropertyInteger    RatedLoad;
 
 protected:
     /// get called by the container when a property has changed

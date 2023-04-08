@@ -310,32 +310,6 @@ private:
 
     }
 
-//    Py::Object insert_Tool(const Py::Tuple &args) {
-//      auto result = argParser(args);
-//      auto FileName = result[0];
-//      auto DocName = result[1];
-//      App::Document *pcDoc = App::GetApplication().getDocument(DocName.c_str());
-//      Base::FileInfo file(result[0].c_str());
-//      if (file.extension().empty())
-//        throw Py::RuntimeError("No file extension");
-//      // LOAD A TOOLOBJECT from File
-//      if (file.hasExtension("tor")||
-//          file.hasExtension("lsr")||
-//          file.hasExtension("cam")) {
-//          Robot::ToolObject::loadTool(pcDoc, FileName);
-//      }
-//      // GENERATE A NEW Tool
-//      else {
-//          Base::FileInfo fi(FileName);
-//          if (!fi.exists()) {
-//            std::stringstream str;
-//            str << "File '" << FileName << "' does not exist!";
-//            throw Base::RuntimeError(str.str().c_str());
-//          }
-//          auto toolObjPtr = static_cast<Robot::ToolObject*>(pcDoc->addObject("Robot::ToolObject", fi.fileNamePure().c_str()));
-//      }
-//      return Py::None();
-//    }
 
     std::vector<string> argParser(const Py::Tuple &args){
         std::vector<string> result;

@@ -1466,12 +1466,11 @@ ToolBarItem *RBT_Workbench::setupCommandBars() const
 DockWindowItems *RBT_Workbench::setupDockWindows() const
 {
     DockWindowItems* root = new DockWindowItems();
-    root->addDockWidget("TaskManagePanel", Qt::RightDockWidgetArea, true, false);
+    root->addDockWidget("TaskProcess", Qt::RightDockWidgetArea, true, false);
     root->addDockWidget("Std_ComboView", Qt::LeftDockWidgetArea, true, false);
     root->setVisibility("Std_ComboView",true);
     //Dagview through parameter.
-    ParameterGrp::handle group = App::GetApplication().GetUserParameter().
-          GetGroup("BaseApp")->GetGroup("Preferences")->GetGroup("DockWindows")->GetGroup("DAGView");
+    ParameterGrp::handle group = App::GetApplication().GetUserParameter().GetGroup("BaseApp")->GetGroup("Preferences")->GetGroup("DockWindows")->GetGroup("DAGView");
     bool enabled = group->GetBool("Enabled", false);
     if (enabled)
         root->addDockWidget("Std_DAGView", Qt::RightDockWidgetArea, false, false);
