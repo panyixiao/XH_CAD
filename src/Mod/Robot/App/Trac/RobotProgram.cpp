@@ -54,7 +54,7 @@ RobotProgram::RobotProgram()
 }
 
 RobotProgram::RobotProgram(const RobotProgram& Trac)
-: m_WaypointData(Trac.m_WaypointData.size()),
+: m_waypoints(Trac.m_waypoints.size()),
   m_ProgramID(boost::uuids::random_generator()())
 {
     operator=(Trac);
@@ -67,10 +67,10 @@ RobotProgram::~RobotProgram()
 
 RobotProgram &RobotProgram::operator=(const RobotProgram& Trac)
 {
-    this->m_WaypointData.clear();
-    this->m_WaypointData = Trac.m_WaypointData;
+    this->m_waypoints.clear();
+    this->m_waypoints = Trac.m_waypoints;
 
-    this->m_cmdData = Trac.m_cmdData;
+    this->m_commands = Trac.m_commands;
 
 //    this->m_TracOriginPose = Trac.m_TracOriginPose;
 //    this->m_ExecutorOriginPose = Trac.m_ExecutorOriginPose;
@@ -102,6 +102,7 @@ void RobotProgram::setExecutorBase(const Placement &t_Pose)
 void RobotProgram::setTracDataOrigin(const Placement &t_Pose)
 {
 //    m_TracOriginPose = t_Pose;
+    // 更新所有点位置
 }
 
 void RobotProgram::insertCMD_NewMOVE(const std::string executorName,
@@ -112,7 +113,7 @@ void RobotProgram::insertCMD_NewMOVE(const std::string executorName,
                                      const float t_BL,
                                      const float t_VBL)
 {
-    m_cmdData.push_back(std::make_shared<Robot::MoveCommand>(Robot::MoveCommand(_taskName,
+    m_commands.push_back(std::make_shared<Robot::MoveCommand>(Robot::MoveCommand(_taskName,
                                                                                 executorName,
                                                                                 t_Type,
                                                                                 t_Prec,
@@ -124,7 +125,7 @@ void RobotProgram::insertCMD_SwitchTool(const string executorName,
                                         const ToolType &t_Type,
                                         const uint coordID)
 {
-    m_cmdData.push_back(std::make_shared<Robot::ToolCommand>(Robot::ToolCommand(_taskName,
+    m_commands.push_back(std::make_shared<Robot::ToolCommand>(Robot::ToolCommand(_taskName,
                                                                                 executorName,
                                                                                 t_Type,
                                                                                 coordID)));
@@ -133,7 +134,7 @@ void RobotProgram::insertCMD_SwitchTool(const string executorName,
 void RobotProgram::insertCMD_SetToolOn(const std::string executorName,
                                        const Robot::ToolType& t_Type)
 {
-    m_cmdData.push_back(std::make_shared<Robot::ToolCommand>(Robot::ToolCommand(_taskName,
+    m_commands.push_back(std::make_shared<Robot::ToolCommand>(Robot::ToolCommand(_taskName,
                                                                                 executorName,
                                                                                 t_Type,
                                                                                 true)));
@@ -141,7 +142,7 @@ void RobotProgram::insertCMD_SetToolOn(const std::string executorName,
 
 void RobotProgram::insertCMD_SetToolOff(const string executorName, const ToolType &t_Type)
 {
-    m_cmdData.push_back(std::make_shared<Robot::ToolCommand>(Robot::ToolCommand(_taskName,
+    m_commands.push_back(std::make_shared<Robot::ToolCommand>(Robot::ToolCommand(_taskName,
                                                                                 executorName,
                                                                                 t_Type,
                                                                                 false)));
@@ -149,7 +150,7 @@ void RobotProgram::insertCMD_SetToolOff(const string executorName, const ToolTyp
 
 void RobotProgram::insertCMD_ChgCord(const std::string executorName, const CordType &t_Type, const uint cordID)
 {
-    m_cmdData.push_back(std::make_shared<Robot::CoordCommand>(Robot::CoordCommand(_taskName,
+    m_commands.push_back(std::make_shared<Robot::CoordCommand>(Robot::CoordCommand(_taskName,
                                                                                   executorName,
                                                                                   t_Type,
                                                                                   cordID)));
@@ -161,7 +162,7 @@ const std::size_t RobotProgram::addNewPose(const RobotWaypoint &t_Pnt)
     if(pntID>0)
         return pntID;
     auto tmp = std::make_shared<RobotWaypoint>(t_Pnt);
-    m_WaypointData.push_back(tmp);
+    m_waypoints.push_back(tmp);
     return tmp->getPointHashID();
 }
 
@@ -169,10 +170,10 @@ const std::size_t RobotProgram::addNewPose(const RobotWaypoint &t_Pnt)
 const std::size_t RobotProgram::findWaypoint(const size_t pointID)
 {
     std::size_t result = 0;
-    auto iter = std::find_if(m_WaypointData.cbegin(),m_WaypointData.cend(),[&](const RobotWaypoint_sptr& c_iter){
+    auto iter = std::find_if(m_waypoints.cbegin(),m_waypoints.cend(),[&](const RobotWaypoint_sptr& c_iter){
         return c_iter->getPointHashID() == pointID;
     });
-    if(iter != m_WaypointData.cend()){
+    if(iter != m_waypoints.cend()){
         return pointID;
     }
     return result;
@@ -180,13 +181,13 @@ const std::size_t RobotProgram::findWaypoint(const size_t pointID)
 
 bool RobotProgram::deleteCMD_byPosition(const uint position)
 {
-    if(position > m_cmdData.size())
+    if(position > m_commands.size())
         return false;
     auto t_cmdPtr = getCMD_byPosition(position);
     if(t_cmdPtr->getType() == Robot::CommandType::SetMove){
         auto t_MovPtr = static_cast<Robot::MoveCommand*>(t_cmdPtr.get());
         int count = 0;
-        for(auto& cmdPtr : m_cmdData){
+        for(auto& cmdPtr : m_commands){
             if(cmdPtr->getType() == Robot::CommandType::SetMove){
                 auto movCmdPtr = static_cast<Robot::MoveCommand*>(cmdPtr.get());;
                 if(movCmdPtr->getMovPoseID() == t_MovPtr->getMovPoseID())
@@ -199,25 +200,25 @@ bool RobotProgram::deleteCMD_byPosition(const uint position)
             deleteWP_byHashID(t_MovPtr->getMovPoseID());
         }
     }
-    auto iter = m_cmdData.begin() + position;
-    m_cmdData.erase(iter);
+    auto iter = m_commands.begin() + position;
+    m_commands.erase(iter);
 
     return true;
 }
 
 const RobotCommand_sptr RobotProgram::getCMD_byPosition(const uint position)
 {
-    if(position>m_cmdData.size())
+    if(position>m_commands.size())
         return nullptr;
-    return m_cmdData.at(position);
+    return m_commands.at(position);
 }
 
 const std::vector<RobotCommand_sptr> RobotProgram::getCmmdData(const uint s_ID) const
 {
     std::vector<RobotCommand_sptr> result;
-    if(s_ID>m_cmdData.size())
+    if(s_ID>m_commands.size())
         return result;
-    result.assign(m_cmdData.begin()+s_ID, m_cmdData.end());
+    result.assign(m_commands.begin()+s_ID, m_commands.end());
     return result;
 }
 
@@ -373,22 +374,22 @@ void RobotProgram::joinData(const std::shared_ptr<RobotProgram> t_ProgramPtr)
 
 unsigned int RobotProgram::getMemSize (void) const
 {
-    return m_WaypointData.size();
+    return m_waypoints.size();
 }
 
 void RobotProgram::Save (Writer &writer) const
 {
-    writer.Stream() << writer.ind() << "<Poses Count=\"" <<  m_WaypointData.size() <<"\">" << std::endl;
+    writer.Stream() << writer.ind() << "<Poses Count=\"" <<  m_waypoints.size() <<"\">" << std::endl;
     writer.incInd();
-    for(unsigned int i = 0;i<m_WaypointData.size(); i++)
-        m_WaypointData[i]->Save(writer);
+    for(unsigned int i = 0;i<m_waypoints.size(); i++)
+        m_waypoints[i]->Save(writer);
     writer.decInd();
     writer.Stream() << writer.ind() << "</Poses>" << std::endl ;
 
-    writer.Stream() << writer.ind() << "<Commands Count=\"" <<  m_cmdData.size() <<"\">" << std::endl;
+    writer.Stream() << writer.ind() << "<Commands Count=\"" <<  m_commands.size() <<"\">" << std::endl;
     writer.incInd();
-    for(unsigned int i = 0;i<m_cmdData.size(); i++)
-        m_cmdData[i]->Save(writer);
+    for(unsigned int i = 0;i<m_commands.size(); i++)
+        m_commands[i]->Save(writer);
     writer.decInd();
     writer.Stream() << writer.ind() << "</Commands>" << std::endl ;
 
@@ -396,20 +397,20 @@ void RobotProgram::Save (Writer &writer) const
 
 void RobotProgram::Restore(XMLReader &reader)
 {
-    m_WaypointData.clear();
+    m_waypoints.clear();
     // read my element
     reader.readElement("Poses");
     // get the value of my Attribute
     int poseNum = reader.getAttributeAsInteger("Count");
-    m_WaypointData.resize(poseNum);
+    m_waypoints.resize(poseNum);
     for (int i = 0; i < poseNum; i++) {
         auto t_waypoint = std::make_shared<RobotWaypoint>();
         t_waypoint->Restore(reader);
-        m_WaypointData[i] = t_waypoint;
+        m_waypoints[i] = t_waypoint;
     }
     reader.readEndElement("Poses");
 
-    m_cmdData.clear();
+    m_commands.clear();
     // read my element
     reader.readElement("Commands");
     int cmdNum = reader.getAttributeAsInteger("Count");
@@ -422,7 +423,7 @@ void RobotProgram::Restore(XMLReader &reader)
                 auto t_command = std::make_shared<CoordCommand>();
                 t_command->setCommandType(cmdType);
                 t_command->Restore(reader);
-                m_cmdData.push_back(t_command);
+                m_commands.push_back(t_command);
                 break;
             }
         case CommandType::SetMove:
@@ -430,7 +431,7 @@ void RobotProgram::Restore(XMLReader &reader)
                 auto t_command = std::make_shared<MoveCommand>();
                 t_command->setCommandType(cmdType);
                 t_command->Restore(reader);
-                m_cmdData.push_back(t_command);
+                m_commands.push_back(t_command);
                 break;
             }
         case CommandType::ChgTool:
@@ -439,7 +440,7 @@ void RobotProgram::Restore(XMLReader &reader)
                 auto t_command = std::make_shared<ToolCommand>();
                 t_command->setCommandType(cmdType);
                 t_command->Restore(reader);
-                m_cmdData.push_back(t_command);
+                m_commands.push_back(t_command);
                 break;
             }
         }
@@ -449,10 +450,10 @@ void RobotProgram::Restore(XMLReader &reader)
 
 bool RobotProgram::isProgramValid()
 {
-    if(m_cmdData.empty())
+    if(m_commands.empty())
         return false;
     bool validFlag = true;
-    for(const auto& t_cmdPtr : m_cmdData){
+    for(const auto& t_cmdPtr : m_commands){
         if(t_cmdPtr->getType() == CommandType::SetMove){
             validFlag &= getWaypoint_byCommand(t_cmdPtr)->isValid();
         }
@@ -462,29 +463,29 @@ bool RobotProgram::isProgramValid()
 
 void RobotProgram::joinPoseData(const std::vector<RobotWaypoint_sptr> &t_PoseData)
 {
-    auto originSize = m_WaypointData.size();
-    m_WaypointData.resize(originSize + t_PoseData.size());
-    std::copy(t_PoseData.begin(), t_PoseData.end(),m_WaypointData.begin()+originSize);
+    auto originSize = m_waypoints.size();
+    m_waypoints.resize(originSize + t_PoseData.size());
+    std::copy(t_PoseData.begin(), t_PoseData.end(),m_waypoints.begin()+originSize);
 }
 
 void RobotProgram::joinCmmdData(const std::vector<RobotCommand_sptr> &t_CmmdData)
 {
-    auto originSize = m_cmdData.size();
-    m_cmdData.resize(originSize + t_CmmdData.size());
-    std::copy(t_CmmdData.begin(), t_CmmdData.end(),m_cmdData.begin()+originSize);
+    auto originSize = m_commands.size();
+    m_commands.resize(originSize + t_CmmdData.size());
+    std::copy(t_CmmdData.begin(), t_CmmdData.end(),m_commands.begin()+originSize);
 }
 
 void RobotProgram::clearData()
 {
-    m_cmdData.clear();
-    m_WaypointData.clear();
+    m_commands.clear();
+    m_waypoints.clear();
 }
 
 void RobotProgram::setWPntCartPose(const int pntID,
                                       const uint rbtID,
                                       const Placement &new_Pose)
 {
-    auto& t_PntIter = m_WaypointData.at(pntID);
+    auto& t_PntIter = m_waypoints.at(pntID);
     if(rbtID == 1)
         t_PntIter->setGp1_CartPose(new_Pose);
     if(rbtID == 2)
@@ -495,7 +496,7 @@ void RobotProgram::setWPntPoseAdjust(const int pntID,
                                         const uint rbtID,
                                         const Placement &new_Adjust)
 {
-    auto& t_PntIter = m_WaypointData.at(pntID);
+    auto& t_PntIter = m_waypoints.at(pntID);
     if(rbtID == 1)
         t_PntIter->setGp1_CartPoseAdjust(new_Adjust);
     else if(rbtID == 2)
@@ -510,12 +511,12 @@ const RobotWaypoint_sptr RobotProgram::getWaypoint_byID(const size_t wp_id) cons
 
 const std::size_t RobotProgram::getPosePosition(const size_t poseID) const
 {
-    auto iter = std::find_if(m_WaypointData.cbegin(),m_WaypointData.cend(),[&](const RobotWaypoint_sptr& t_Pose){
+    auto iter = std::find_if(m_waypoints.cbegin(),m_waypoints.cend(),[&](const RobotWaypoint_sptr& t_Pose){
         return t_Pose->getPointHashID() == poseID;
     });
 
-    if(iter != m_WaypointData.cend())
-        return std::distance(m_WaypointData.cbegin(),iter);
+    if(iter != m_waypoints.cend())
+        return std::distance(m_waypoints.cbegin(),iter);
     return -1;
 }
 
@@ -534,24 +535,24 @@ const std::vector<RobotCommand_sptr> RobotProgram::snipProgramSegment(const uint
 //    for(uint i = s_ID; i < e_ID; i++){
 //        result.push_back(m_cmdData[i]);
 //    }
-    result.assign(m_cmdData.begin()+s_ID, m_cmdData.begin()+e_ID);
+    result.assign(m_commands.begin()+s_ID, m_commands.begin()+e_ID);
 //    std::copy(m_cmdData.begin()+s_CMDpos, m_cmdData.begin()+e_CMDpos,result);
     return result;
 }
 
 void RobotProgram::deleteWP_byHashID(const std::size_t &t_HashID)
 {
-    auto iter = std::find_if(m_WaypointData.begin(), m_WaypointData.end(),[&](auto t_posePtr){
+    auto iter = std::find_if(m_waypoints.begin(), m_waypoints.end(),[&](auto t_posePtr){
         return t_HashID == t_posePtr->getPointHashID();
     });
-    if(iter!=m_WaypointData.end())
-        m_WaypointData.erase(iter);
+    if(iter!=m_waypoints.end())
+        m_waypoints.erase(iter);
 }
 
 void RobotProgram::replacePoseData(const std::vector<RobotWaypoint_sptr> &t_PoseData)
 {
-    m_WaypointData.clear();
-    m_WaypointData = t_PoseData;
+    m_waypoints.clear();
+    m_waypoints = t_PoseData;
 }
 
 bool RobotProgram::exportProgram(const string file_Path)

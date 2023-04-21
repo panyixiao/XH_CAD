@@ -2,7 +2,7 @@
 
 #ifndef ROBOT_RBTWAYPOINT_H
 #define ROBOT_RBTWAYPOINT_H
-
+#include "Mod/Robot/App/PreCompiled.h"
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include "Mod/Robot/App/Utilites/FrameObject.h"
@@ -28,17 +28,13 @@ class RobotExport RobotWaypoint : public Base::Persistence
     TYPESYSTEM_HEADER();
 
 public:
-
     RobotWaypoint();
-
     RobotWaypoint(const RobotWaypoint&);
 
     RobotWaypoint& operator=(const RobotWaypoint&);
-
     bool operator==(const RobotWaypoint&);
 
     /// Single Robot(Default Robot 1)
-//    RobotWaypoint(const CompPose &t_RbtPose);
 
     RobotWaypoint(const CompPose &t_RbtPose,
                   const std::vector<double>& extVals,

@@ -94,12 +94,12 @@ public:
     void setWPntCartPose(const int pntID, const uint rbtID, const Base::Placement& new_Pose);
     void setWPntPoseAdjust(const int pntID, const uint rbtID,const Base::Placement& new_Adjust);
 
-    const size_t getTotalWayPointCount(void) const{return m_WaypointData.size();}
+    const size_t getTotalWayPointCount(void) const{return m_waypoints.size();}
     const RobotWaypoint_sptr getWaypoint_byID(const size_t wp_id)const;
-    const RobotWaypoint_sptr getWaypoint_byPosition(unsigned int pos)const {return m_WaypointData[pos];}
+    const RobotWaypoint_sptr getWaypoint_byPosition(unsigned int pos)const {return m_waypoints[pos];}
     const RobotWaypoint_sptr getWaypoint_byCommand(RobotCommand_sptr t_CommandPtr) const;
     const std::vector<RobotWaypoint_sptr> &getWaypointData(void)const{
-        return m_WaypointData;
+        return m_waypoints;
     }
     const std::vector<RobotCommand_sptr> snipProgramSegment(const uint s_ID,
                                                             const uint e_ID);
@@ -110,7 +110,6 @@ public:
         return boost::uuids::hash_value(m_ProgramID);
     }
     void setRoundupDist(const double r_d){
-        roundup_d = r_d;
     }
 
     bool exportProgram(const std::string file_Path);
@@ -127,10 +126,9 @@ protected:
 protected:
     boost::uuids::uuid m_ProgramID;
     // Data Buffer to store all kinds of commands, can be exported as real robot program
-    std::vector<RobotCommand_sptr> m_cmdData;
+    std::vector<RobotCommand_sptr> m_commands;
     // Data Buffer to store waypoint data
-    std::vector<RobotWaypoint_sptr> m_WaypointData;
-    double roundup_d = 1.0;
+    std::vector<RobotWaypoint_sptr> m_waypoints;
 };
 
 } //namespace Part

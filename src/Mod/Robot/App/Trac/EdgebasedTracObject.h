@@ -52,14 +52,15 @@ public:
 
     bool updateReferences();
     void setTracSafePoint(const GroupPose& t_Pose);
-    bool generateConstraint(const uint t_ID, bool newRef = false);
-    bool generateProgram(const uint t_ID);
+    bool generateConstraint();
+    bool generateProgram();
     bool regenerateProgram();
 
     void setEdgeTracType(const TracType &t_Type);
     void cutEdgeAtPoint(const uint position, bool abandonRest);
 
 
+    App::PropertyString          LinkedObject;
     App::PropertyFloat           InterpoDist;
     App::PropertyLinkSub         EdgeSource;
     App::PropertyLinkSub         FaceSource;    // TODO: This limits selected reference faces must belong to 1 object;
@@ -105,14 +106,13 @@ protected:
 private:
     TracType m_TracType;
     GroupPose m_TracSafePoint;
-    std::vector<Base::Placement> edge1_Poses;
-    std::vector<TopoDS_Face> edge1_FaceRef;
-    std::vector<TopoDS_Edge> edge1_EdgeRef;
+    std::vector<Base::Placement> edge_Poses;
+    std::vector<TopoDS_Face> edge_FaceRef;
+    std::vector<TopoDS_Edge> edge_EdgeRef;
 
     std::vector<Base::Placement> edge2_Poses;
     std::vector<TopoDS_Face> edge2_FaceRef;
     std::vector<TopoDS_Edge> edge2_EdgeRef;
-
     std::vector<double> c_ExtJointVal;
 
 };

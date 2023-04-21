@@ -26,7 +26,6 @@ public:
     virtual ~TaskObject();
     virtual void onDocumentRestored();
     void insertAction(App::DocumentObject* n_Action);
-//    void editAction(const int action_ID);
     void removeAction(const size_t action_ID);
     const std::vector<DocumentObject*> getActionList();
     virtual App::DocumentObjectExecReturn * recompute();
@@ -45,7 +44,7 @@ public:
     const RobotProg_sptr getTaskProgramPtr() const{
         return m_ProgramPtr;
     }
-    const size_t getTaskTracPointNumber() const;
+    size_t getTaskTracPointNumber() const;
 
     bool exportTaskProgram(const std::string filePath, bool splitProgram = true);
     void onDelete();
@@ -54,8 +53,6 @@ public:
     App::PropertyStringList ActionList;
     App::PropertyPlacement TaskOrigin;
     App::PropertyBool refreshTracData;
-
-
 protected:
     /// get called by the container when a property has changed
     virtual void onChanged (const App::Property* prop);

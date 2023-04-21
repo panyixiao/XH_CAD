@@ -41,11 +41,6 @@ private:
   float m_SimulationTimeStep = 1 / SimulationFrequence;
 
   SimulationType m_simType;
-  // 4 Types of simulation
-//  RD_TaskManager::RD_Action *m_Action = nullptr;
-//  RD_TaskManager::RD_TrajectoryObject *m_RoboTrac = nullptr;
-//  RD_TaskManager::RD_Moment *m_Moment = nullptr;
-//  RD_TaskManager::RD_WorkFlow *m_WorkFlow = nullptr;
 };
 }
 

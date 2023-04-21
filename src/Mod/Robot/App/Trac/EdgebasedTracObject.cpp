@@ -53,12 +53,11 @@ PROPERTY_SOURCE(Robot::EdgebasedTracObject, Robot::RobotTracObject)
 
 EdgebasedTracObject::EdgebasedTracObject()
 {
-
+    ADD_PROPERTY_TYPE(LinkedObject,(""),"Property",Prop_None,"标识本轨迹被绑定的工件名称");
     ADD_PROPERTY_TYPE(FaceSource,      (0)  , "DataSource",Prop_None,"Face References to calculate Trac");
     ADD_PROPERTY_TYPE(EdgeSource,      (0)  , "DataSource",Prop_None,"Edge References to calculate Trac");
     ADD_PROPERTY_TYPE(UseRotation, (0)  , "Property",Prop_None,"use orientation of the edge");
     ADD_PROPERTY_TYPE(InterpoDist, (5.0), "Property", Prop_None, "Distance value for interpolation");
-//    ADD_PROPERTY_TYPE( PoseAdjust, (Base::Placement()), "Property", Prop_None, "Pose adjustment for edge");
     ADD_PROPERTY_TYPE(Accelerate,(0.0), "Trac Parameters", Prop_None, "Accelerate setting for Trac");
     ADD_PROPERTY_TYPE(Angle_Roll, (0.0), "Trac Parameters", Prop_None, "Edge Trac Rolling Angle");
     ADD_PROPERTY_TYPE(Angle_Pitch, (0.0), "Trac Parameters", Prop_None, "Edge Trac Pitching Angle");
@@ -74,8 +73,6 @@ EdgebasedTracObject::EdgebasedTracObject()
     // Scan Param
     ADD_PROPERTY_TYPE(ScanToolID,(2),"Scan Trac Parameters", Prop_None, "Scan Tool ID");
     ADD_PROPERTY_TYPE(ScanSpeed, (0.0), "Scan Trac Parameters", Prop_None, "Scaning Speed setting for Trac");
-
-    // Scan Param
 
     ADD_PROPERTY(Reverse_EdgeDir, (false));
     Reverse_EdgeDir.setStatus(App::Property::Status::Hidden, true);
@@ -129,54 +126,24 @@ void EdgebasedTracObject::setTracSafePoint(const GroupPose &t_Pose)
     m_TracSafePoint = t_Pose;
 }
 
-bool EdgebasedTracObject::generateConstraint(const uint t_ID, bool newRef)
+bool EdgebasedTracObject::generateConstraint()
 {
     bool success = false;
-    if(t_ID == 1){
-        if(edge1_Poses.empty()||newRef){
-            edge1_FaceRef = CAD_Utility::getFacesFromDataSource(FaceSource);
-            edge1_EdgeRef = CAD_Utility::getEdgesFromDataSource(EdgeSource);
-        }
-        float interpoLen = InterpoDist.getValue();
-//        if(!edge2_Poses.empty()&&!edge1_Poses.empty()){
-//            auto len_1 = (float)edge1_Poses.size();
-//            auto len_2 = (float)edge2_Poses.size();
-//            float ratio = len_1>len_2?(len_2/len_1):(len_1/len_2);
-//            interpoLen*=ratio;
-//        }
-        edge1_Poses = generateEdgePoses(edge1_FaceRef,edge1_EdgeRef,interpoLen);
-        success = !edge1_Poses.empty();
+    if(edge_Poses.empty()){
+        edge_FaceRef = CAD_Utility::getFacesFromDataSource(FaceSource);
+        edge_EdgeRef = CAD_Utility::getEdgesFromDataSource(EdgeSource);
     }
-    else if(t_ID == 2){
-        if(edge2_Poses.empty()||newRef){
-            edge2_FaceRef = CAD_Utility::getFacesFromDataSource(FaceSource);
-            edge2_EdgeRef = CAD_Utility::getEdgesFromDataSource(EdgeSource);
-        }
-        float interpoLen = InterpoDist.getValue();
-//        if(!edge2_Poses.empty()&&!edge1_Poses.empty()){
-//            auto len_1 = (float)edge1_Poses.size();
-//            auto len_2 = (float)edge2_Poses.size();
-//            float ratio = len_1>len_2?(len_2/len_1):(len_1/len_2);
-//            interpoLen*=ratio;
-//        }
-        edge2_Poses = generateEdgePoses(edge2_FaceRef,edge2_EdgeRef,interpoLen);
-        success = !edge2_Poses.empty();
-    }
+    float interpoLen = InterpoDist.getValue();
+    edge_Poses = generateEdgePoses(edge_FaceRef,edge_EdgeRef,interpoLen);
+    success = !edge_Poses.empty();
     return success;
 }
 
-bool EdgebasedTracObject::generateProgram(const uint t_ID)
+bool EdgebasedTracObject::generateProgram()
 {
     std::vector<Base::Placement> t_Poses;
     std::string executorName = ExecutorName.getStrValue();
-    switch(t_ID){
-    case 1:
-        t_Poses = edge1_Poses;
-        break;
-    case 2:
-        t_Poses = edge2_Poses;
-        break;
-    }
+    t_Poses = edge_Poses;
     if(t_Poses.empty())
         return false;
     resetData();
@@ -207,7 +174,7 @@ bool EdgebasedTracObject::generateProgram(const uint t_ID)
     for(size_t i = 0; i<t_Poses.size(); i++){
         RobotWaypoint newWaypoint(t_Poses[i],
                                   CurrentExternalAxis.getValues(),
-                                  t_ID);
+                                  1);
         if(i == 0){
             // To first Point
             insertCMD_MOVE(ExecutorName.getStrValue(),
@@ -306,23 +273,6 @@ bool EdgebasedTracObject::regenerateProgram()
                                                                 Reverse_RefFace_1.getValue(),
                                                                 Reverse_RefFace_2.getValue(),
                                                                 Reverse_EdgeDir.getValue());
-//           if(!edgePntPoses.empty()){
-//               for(std::size_t i = 0; i<edgePntPoses.size(); i++){
-//                   RobotWaypoint newWaypoint(edgePntPoses[i]);
-//                   if(i == 0 || i == edgePntPoses.size()-1)
-//                       insertCMD_MOVE(ExecutorName.getStrValue(),
-//                                      newWaypoint,
-//                                      Robot::MoveType::MOVL,
-//                                      Robot::MovePrec::FINE,
-//                                      trac_speed);
-//                   else
-//                       insertCMD_MOVE(ExecutorName.getStrValue(),
-//                                      newWaypoint,
-//                                      Robot::MoveType::MOVL,
-//                                      Robot::MovePrec::CNT,
-//                                      trac_speed,3.0);
-//               }
-//           }
         }
     }
 
@@ -335,7 +285,8 @@ void EdgebasedTracObject::setEdgeTracType(const TracType &t_Type)
     if(t_Type ==  TracType::SEAMTRAC){
         WeldSpeed.setStatus(App::Property::Status::Hidden, true);
         ScanSpeed.setStatus(App::Property::Status::Hidden, false);
-    }else{
+    }
+    else{
         ScanSpeed.setStatus(App::Property::Status::Hidden, true);
         WeldSpeed.setStatus(App::Property::Status::Hidden, false);
     }
@@ -402,7 +353,7 @@ std::vector<Base::Placement> EdgebasedTracObject::generateEdgePoses(const std::v
     Part::Edgecluster acluster(edges);
     Part::tEdgeClusterVector aclusteroutput = acluster.GetClusters();
     if(aclusteroutput.size() == 0){
-        Base::Console().Warning("EdgebasedTracObject: Edgecluster Found No Edges specified\n");
+        Base::Console().Warning("警告: 在指定的边集合中没有找到可用的特征边对象\n");
         return calculatedPoses;
     }
 

@@ -17,14 +17,13 @@
 #include <Mod/Robot/Gui/ui_TaskBox_EdgeTracGenerator.h>
 
 #include "TaskBox_EdgeBasedTracEditor.h"
-//#include "Mod/Robot/App/Mechanics/Robot6AxisObject.h"
-#include "Mod/Robot/App/Mechanics/MechanicGroup.h"
+#include "Mod/Robot/App/Mechanics/MechanicRobot.h"
 
 //using namespace RD_CAD_Utility;
 using namespace RobotGui;
 // EdgeTaskBox
 TaskBox_EdgeBasedTracEditor::TaskBox_EdgeBasedTracEditor(Robot::RobotTracObject *t_TracObject, QWidget *parent)
-    : TaskBox(Gui::BitmapFactory().pixmap("document-new"), tr("特征轨迹编辑"), true, parent) {
+    : TaskBox(Gui::BitmapFactory().pixmap("document-new"), tr("特征轨迹任务编辑"), true, parent) {
   if (t_TracObject == nullptr || !t_TracObject->isDerivedFrom(Robot::EdgebasedTracObject::getClassTypeId()))
     return;
   initEdgeTracEditor(t_TracObject);
@@ -34,52 +33,48 @@ TaskBox_EdgeBasedTracEditor::TaskBox_EdgeBasedTracEditor(Robot::RobotTracObject 
 
 bool TaskBox_EdgeBasedTracEditor::initEdgeTracEditor(Robot::RobotTracObject *t_TracObjPtr)
 {
-    if(t_TracObjPtr == nullptr)
+    if(t_TracObjPtr == nullptr || !t_TracObjPtr->isDerivedFrom(Robot::EdgebasedTracObject::getClassTypeId()))
         return false;
-
     m_EdgeTracPtr = static_cast<Robot::EdgebasedTracObject*>(t_TracObjPtr);
-    if(m_EdgeTracPtr == nullptr)
-        return false;
     m_DocPtr = m_EdgeTracPtr->getDocument();
     m_PntOffsets = std::vector<Base::Placement>(m_EdgeTracPtr->getWaypointData().size(),
                                                 Base::Placement());
 
-//    auto t_OperatorPtr = m_DocPtr->getObject(t_TracObjPtr->getOperatorName().c_str());
-//    if(t_OperatorPtr->isDerivedFrom(Robot::MechanicGroup::getClassTypeId())){
-//        m_GroupPtr = static_cast<Robot::MechanicGroup*>(t_OperatorPtr);
-//        if(m_GroupPtr == nullptr){
-//            Base::Console().Warning("TaskBox_EdgeTracEditor: Unable to Find valid GroupPtr to init Editor");
-//            return false;
-//        }
-//        m_EdgeTracPtr->CurrentExternalAxis.setValues(m_GroupPtr->getCurrentExtAxisValue());
+    auto objPtr = m_DocPtr->getObject(t_TracObjPtr->getOperatorName().c_str());
+    if(objPtr != nullptr &&
+       objPtr->isDerivedFrom(Robot::MechanicRobot::getClassTypeId())){
+        m_TracExecutor = static_cast<Robot::MechanicRobot*>(objPtr);
+        if(m_TracExecutor == nullptr){
+            Base::Console().Warning("TaskBox_EdgeTracEditor: 没有找到绑定到该特征轨迹的执行设备");
+            return false;
+        }
+//        m_EdgeTracPtr->CurrentExternalAxis.setValues(m_TracExecutor->getCurrentExtAxisValue());
 //        switch(m_EdgeTracPtr->getTracType()){
 //        case Robot::TracType::SCANTRAC:
-//            m_GroupPtr->setCurrentToolType(Robot::ToolType::_2DScanner);
-//            m_GroupPtr->setCurrentToolActive(true);
+//            m_TracExecutor->setCurrentToolType(Robot::ToolType::_2DScanner);
+//            m_TracExecutor->setCurrentToolActive(true);
 //            break;
 //        case Robot::TracType::SEAMTRAC:
-//            m_GroupPtr->setCurrentToolType(Robot::ToolType::WeldTorch);
+//            m_TracExecutor->setCurrentToolType(Robot::ToolType::WeldTorch);
 //            break;
 //        }
-//        m_GroupPtr->Activated.setValue(true);
-//        return true;
-//    }
-//    else{
-//        std::string message = std::string("TaskBox_EdgeTracEditor: ") + std::string(t_OperatorPtr->getNameInDocument()) + std::string(" is Not Derived From MechanicGroup");
-//        Base::Console().Message(message.c_str());
-//    }
+        m_TracExecutor->Activated.setValue(true);
+        return true;
+    }
     return false;
 }
 
 
 void TaskBox_EdgeBasedTracEditor::initUI_EditEdgePanel()
 {
+    // 选面
     if(m_FaceSelection == nullptr){
         m_FaceSelection = new Gui::TaskView::TaskSelectLinkProperty("SELECT Part::Feature SUBELEMENT Face COUNT 2",
                                                                     &(m_EdgeTracPtr->FaceSource));
         this->groupLayout()->addWidget(m_FaceSelection);
         m_FaceSelection->hide();
     }
+    // 选边
     if(m_EdgeSelection == nullptr){
         m_EdgeSelection = new Gui::TaskView::TaskSelectLinkProperty("SELECT Part::Feature SUBELEMENT Edge COUNT 1",
                                                                     &(m_EdgeTracPtr->EdgeSource));
@@ -92,33 +87,28 @@ void TaskBox_EdgeBasedTracEditor::initUI_EditEdgePanel()
         m_ui->setupUi(m_proxy);
         this->groupLayout()->addWidget(m_proxy);
     }
-
-    initUI_TracDefineTab();
-
-}
-
-void TaskBox_EdgeBasedTracEditor::initUI_TracDefineTab()
-{
+    // Tab面板初始化
+    switch(m_EdgeTracPtr->getTracType()){
+    case Robot::TracType::SEAMTRAC:
+        m_ui->tab_WeldCraft->setVisible(true);
+        m_ui->tab_ScanCraft->setVisible(false);
+        break;
+    case Robot::TracType::SCANTRAC:
+        m_ui->tab_WeldCraft->setVisible(false);
+        m_ui->tab_ScanCraft->setVisible(true);
+        break;
+    default:
+        break;
+    }
+    m_ui->tab_LeadPoints->setVisible(false);
+    // 轨迹生成Tab
     initUI_Generationbox();
     initUI_PoseEditbox();
+
 }
 
 void TaskBox_EdgeBasedTracEditor::initUI_Generationbox()
 {
-    // Generation Panel
-//    QObject::connect(m_ui->radioButton_Gp1Robot, SIGNAL(clicked(bool)),
-//                     this, SLOT(slot_changeTargetRobotID()));
-//    QObject::connect(m_ui->radioButton_Gp2Robot, SIGNAL(clicked(bool)),
-//                     this, SLOT(slot_changeTargetRobotID()));
-//    if(m_GroupPtr!=nullptr){
-//        if(!m_GroupPtr->LinkedRobotName_1.getStrValue().empty())
-//            m_ui->radioButton_Gp1Robot->setEnabled(true);
-//        if(!m_GroupPtr->LinkedRobotName_2.getStrValue().empty())
-//            m_ui->radioButton_Gp2Robot->setEnabled(true);
-//        m_ui->radioButton_Gp1Robot->setChecked(true);
-//        m_RobotID = 1;
-//    }
-
     /// References
     m_ui->checkBox_flipTracDir->setChecked(m_EdgeTracPtr->Reverse_EdgeDir.getValue());
     m_ui->checkBox_RevFace1->setChecked(m_EdgeTracPtr->Reverse_RefFace_1.getValue());
@@ -129,19 +119,6 @@ void TaskBox_EdgeBasedTracEditor::initUI_Generationbox()
                      this, SLOT(slot_flipReference_1(bool)));
     QObject::connect(m_ui->checkBox_RevFace2, SIGNAL(clicked(bool)),
                      this, SLOT(slot_flipReference_2(bool)));
-
-    /// Trac Type
-    switch(m_EdgeTracPtr->getTracType()){
-    case Robot::TracType::SEAMTRAC:
-        m_ui->tabWidget->setTabEnabled(1,false);
-        break;
-    case Robot::TracType::SCANTRAC:
-        m_ui->tabWidget->setTabEnabled(2,false);
-        break;
-    default:
-        break;
-    }
-
     /// Stp Length
     m_ui->doubleSpinBox_InterpoDis->setValue(m_EdgeTracPtr->InterpoDist.getValue());
     QObject::connect(m_ui->doubleSpinBox_InterpoDis, SIGNAL(valueChanged(double)),
@@ -223,13 +200,15 @@ void TaskBox_EdgeBasedTracEditor::slot_generateConstraint()
     bool success = true;
     m_FaceSelection->sendSelection2Property();
     m_EdgeSelection->sendSelection2Property();
-    success &= m_EdgeTracPtr->generateConstraint(m_RobotID);
+    success &= m_EdgeTracPtr->generateConstraint();
     if(!success){
         Base::Console().Warning("TaskBox_EdgeBasedTracEditor: Failed To Generate Constraint from Selected Feature!\n");
         return;
     }
-    m_EdgeTracPtr->setTracSafePoint(m_GroupPtr->getCurrentGroupPose(Robot::CordType::WCS));
-    success &= m_EdgeTracPtr->generateProgram(m_RobotID);
+
+//    m_EdgeTracPtr->setTracSafePoint(m_TracExecutor->getCurrentGroupPose(Robot::CordType::WCS));
+
+    success &= m_EdgeTracPtr->generateProgram();
     if(success){
         m_PntOffsets = std::vector<Base::Placement>(m_EdgeTracPtr->getWaypointData().size(), Base::Placement());
         Q_EMIT Signal_updateTracObject(m_EdgeTracPtr->getRobotProgramSptr());
@@ -391,14 +370,14 @@ void TaskBox_EdgeBasedTracEditor::enableMarkerVisualizer(bool enable)
 
 void TaskBox_EdgeBasedTracEditor::updateCurrentPntPose()
 {
-    switch(m_RobotID){
-    case 1:
-        m_PntOriginPose = m_EdgeTracPtr->getRobotProgramSptr()->getWaypoint_byPosition(c_PntID)->getWPCartPose_GP1();
-        break;
-    case 2:
-        m_PntOriginPose = m_EdgeTracPtr->getRobotProgramSptr()->getWaypoint_byPosition(c_PntID)->getWPCartPose_GP2();
-        break;
-    }
+//    switch(m_RobotID){
+//    case 1:
+//        m_PntOriginPose = m_EdgeTracPtr->getRobotProgramSptr()->getWaypoint_byPosition(c_PntID)->getWPCartPose_GP1();
+//        break;
+//    case 2:
+//        m_PntOriginPose = m_EdgeTracPtr->getRobotProgramSptr()->getWaypoint_byPosition(c_PntID)->getWPCartPose_GP2();
+//        break;
+//    }
 }
 
 void TaskBox_EdgeBasedTracEditor::slot_setTracScanSpeed(double n_speed)
@@ -408,16 +387,15 @@ void TaskBox_EdgeBasedTracEditor::slot_setTracScanSpeed(double n_speed)
 
 void TaskBox_EdgeBasedTracEditor::slot_applyPoseAdjustmentToRest()
 {
-    m_EdgeTracPtr->setAdjustPoseToRest(c_PntID, m_RobotID, m_PntOffsets[c_PntID]);
-
-    m_PntOffsets = std::vector<Base::Placement>(m_EdgeTracPtr->getWaypointData().size(), Base::Placement());
-    updatePoseAdjustmentPanel(Base::Placement());
-    Q_EMIT Signal_updateTracObject(m_EdgeTracPtr->getRobotProgramSptr());
+//    m_EdgeTracPtr->setAdjustPoseToRest(c_PntID, m_RobotID, m_PntOffsets[c_PntID]);
+//    m_PntOffsets = std::vector<Base::Placement>(m_EdgeTracPtr->getWaypointData().size(), Base::Placement());
+//    updatePoseAdjustmentPanel(Base::Placement());
+//    Q_EMIT Signal_updateTracObject(m_EdgeTracPtr->getRobotProgramSptr());
 }
 
 void TaskBox_EdgeBasedTracEditor::slot_updateDiffByCurrentTipPose(bool checked)
 {
-    auto c_TipPose = m_GroupPtr->getGroupTipPose();
+    auto c_TipPose = m_TracExecutor->getCurrentTipPose(Robot::CoordOrigin::World);
     auto diff_Rot = m_PntOriginPose.getRotation().inverse() * c_TipPose.getRotation();
     auto diff_Trans = c_TipPose.getPosition() - m_PntOriginPose.getPosition();
     updatePoseAdjustmentPanel(Base::Placement(diff_Trans,diff_Rot));
@@ -441,9 +419,9 @@ void TaskBox_EdgeBasedTracEditor::slot_visualizerChanged()
 
 
 void TaskBox_EdgeBasedTracEditor::updateRobotPose(const Base::Placement& new_Pose) {
-  if(!flag_VizByRobot || m_GroupPtr == nullptr)
+  if(!flag_VizByRobot || m_TracExecutor == nullptr)
       return;
-  m_GroupPtr->setTipPose(new_Pose);
+  m_TracExecutor->setRobotTipPose(new_Pose);
 }
 
 void TaskBox_EdgeBasedTracEditor::blockPoseEditboxSignal(bool block)

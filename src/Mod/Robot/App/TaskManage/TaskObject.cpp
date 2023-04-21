@@ -120,7 +120,7 @@ PyObject *TaskObject::getPyObject()
 void TaskObject::moveActionUp(const std::string &act_Name)
 {
     auto nameList = ActionList.getValues();
-    for(int i = 0; i<nameList.size(); i++){
+    for(size_t i = 0; i<nameList.size(); i++){
         if(nameList[i] == act_Name){
             if(i-1>=0){
                auto buff = nameList[i-1];
@@ -136,7 +136,7 @@ void TaskObject::moveActionUp(const std::string &act_Name)
 void TaskObject::moveActionDown(const std::string &act_Name)
 {
     auto nameList = ActionList.getValues();
-    for(int i = 0; i<nameList.size(); i++){
+    for(size_t i = 0; i<nameList.size(); i++){
         if(nameList[i] == act_Name){
             if(i+1<=nameList.size()){
                auto buff = nameList[i+1];
@@ -149,7 +149,7 @@ void TaskObject::moveActionDown(const std::string &act_Name)
     refreshTracData.setValue(true);
 }
 
-const size_t TaskObject::getTaskTracPointNumber() const
+size_t TaskObject::getTaskTracPointNumber() const
 {
     if(m_ProgramPtr!=nullptr)
         return m_ProgramPtr->getTotalWayPointCount();

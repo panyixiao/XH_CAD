@@ -80,9 +80,6 @@ public:
     void setWaypointPose(const int pntID,  const uint rbtID, const Base::Placement& t_pose);
     void setWaypointAdjust(const int pntID, const uint rbtID, const Base::Placement& t_adjust);
     void setAdjustPoseToRest(const int s_PntID,  const uint rbtID, const Base::Placement &t_adjust);
-//    const Base::Placement getWaypointAbsPose_byID(const size_t poseID);
-//    const Base::Placement getWaypointOriPose_byID(const size_t poseID);
-
     bool removeTargetCommand(const int cmdID);
 
     virtual void Save (Base::Writer &writer) const;
@@ -101,10 +98,10 @@ public:
     }
 
     App::PropertyPlacement TracOrigin;
-    App::PropertyInteger WaypointNumber;
-    App::PropertyString  ExecutorName;
-    App::PropertyString  TracManagerName;
-    App::PropertyInteger TracTypeID;
+    App::PropertyInteger   WaypointNumber;
+    App::PropertyString    ExecutorName;
+    App::PropertyString    TracManagerName;
+    App::PropertyInteger   TracTypeID;
 
 protected:
     /// get called by the container when a property has changed

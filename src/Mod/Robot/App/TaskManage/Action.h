@@ -24,6 +24,7 @@
 #ifndef ROBOT_Action_H
 #define ROBOT_Action_H
 
+#include <Mod/Robot/App/PreCompiled.h>
 #include <Base/Persistence.h>
 #include <Base/Placement.h>
 

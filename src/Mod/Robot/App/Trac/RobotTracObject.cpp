@@ -40,12 +40,11 @@ PROPERTY_SOURCE(Robot::RobotTracObject, App::GeoFeature)
 
 RobotTracObject::RobotTracObject()
 {
-    ADD_PROPERTY_TYPE( TracOrigin,      (Base::Placement())  , "Trajectory",Prop_None,"Actuall base frame of the trajectory");
-    ADD_PROPERTY_TYPE( WaypointNumber, (0),"Tracjectory", Prop_None, "Actual Waypoint Numbers this Trac Contained");
-    ADD_PROPERTY_TYPE( TracManagerName, (""), "Trajectory", Prop_None,"The Name of the Task this TracObject belongs to");
-    ADD_PROPERTY_TYPE( ExecutorName, (""), "Trajectory", Prop_None,"The Name of the Robot to Operate this Tracjectory");
+    ADD_PROPERTY_TYPE(TracOrigin,      (Base::Placement())  , "Trajectory",Prop_None,"Actuall base frame of the trajectory");
+    ADD_PROPERTY_TYPE(WaypointNumber, (0),"Tracjectory", Prop_None, "Actual Waypoint Numbers this Trac Contained");
+    ADD_PROPERTY_TYPE(TracManagerName, (""), "Trajectory", Prop_None,"The Name of the Task this TracObject belongs to");
+    ADD_PROPERTY_TYPE(ExecutorName, (""), "Trajectory", Prop_None,"The Name of the Robot to Operate this Tracjectory");
     ADD_PROPERTY(TracTypeID,(0));
-//    m_ProgramPtr = ;
 }
 
 RobotTracObject::~RobotTracObject()
@@ -129,7 +128,7 @@ void RobotTracObject::setWaypointAdjust(const int pntID, const uint rbtID, const
 
 void RobotTracObject::setAdjustPoseToRest(const int s_PntID, const uint rbtID, const Base::Placement &t_adjust)
 {
-    for(int i = s_PntID; i<m_ProgramPtr->getTotalWayPointCount(); i++){
+    for(size_t i = s_PntID; i<m_ProgramPtr->getTotalWayPointCount(); i++){
         m_ProgramPtr->setWPntPoseAdjust(i,rbtID,t_adjust);
     }
 }
@@ -143,9 +142,6 @@ void RobotTracObject::setAdjustPoseToRest(const int s_PntID, const uint rbtID, c
 //{
 //    return m_ProgramPtr->getWaypoint_byPosition(poseID)->getWP_OriCartPose();
 //}
-
-
-
 
 bool RobotTracObject::removeTargetCommand(const int cmdID)
 {
