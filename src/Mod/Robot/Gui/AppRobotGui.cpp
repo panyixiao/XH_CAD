@@ -18,14 +18,14 @@
 #include "Mechanics/ViewProviderMechanicRobot.h"
 //#include "Mechanics/ViewProviderMechanicDevice.h"
 //#include "Mechanics/ViewProviderRobot6AxisObject.h"
-#include "Mechanics/ViewProviderMechanicGroup.h"
+//#include "Mechanics/ViewProviderMechanicGroup.h"
 
 #include "TaskManage/ViewProviderTaskObject.h"
 #include "Utilites/DraggerUtility.h"
 #include "PlanningObj/ViewProviderPlanningObj.h"
 
-#include "Trac/ViewProviderRobotTrajectory.h"
-#include "Trac/ViewProviderEdgebasedTracObject.h"
+//#include "Trac/ViewProviderRobotTrajectory.h"
+//#include "Trac/ViewProviderEdgebasedTracObject.h"
 
 #include "Tool/ViewProviderToolObject.h"
 #include "Tool/ViewProviderScannerObject.h"
@@ -94,7 +94,7 @@ PyMOD_INIT_FUNC(RobotGui)
     // Mechanics
     RobotGui::ViewProviderMechanicBase       ::init();
     RobotGui::ViewProviderMechanicRobot      ::init();
-    RobotGui::ViewProviderMechanicGroup      ::init();
+//    RobotGui::ViewProviderMechanicGroup      ::init();
 
     // Tool
     RobotGui::ViewProviderToolObject         ::init();
@@ -107,8 +107,8 @@ PyMOD_INIT_FUNC(RobotGui)
     // Task
     RobotGui::ViewProviderTaskObject         ::init();
     // Trac
-    RobotGui::ViewProviderRobotTrajectory    ::init();
-    RobotGui::ViewProviderEdgebasedTracObject::init();
+//    RobotGui::ViewProviderRobotTrajectory    ::init();
+//    RobotGui::ViewProviderEdgebasedTracObject::init();
 
     loadRobotResource();
     PyMOD_Return(mod);

@@ -49,36 +49,25 @@ TaskDlgMechanicControl::TaskDlgMechanicControl(Robot::MechanicBase *t_Mechanics,
 
         // Contents
         Content.push_back(t_RobotPanel);
-
     }
     else if(t_Mechanics->isDerivedFrom(Robot::MechanicPoser::getClassTypeId())){
         auto t_PoserPtr = static_cast<Robot::MechanicPoser*>(t_Mechanics);
         auto t_PoserPanel = new TaskBoxPoserSetupPanel(t_PoserPtr);
         QObject::connect(this, SIGNAL(signal_updatePanelWidgets()),
                          t_PoserPanel, SLOT(slot_updateSliderPosition()));
-
         t_PoserPanel->setMaximumWidth(MaxiumTaskBoxWidth);
         // Contents
         Content.push_back(t_PoserPanel);
     }
-    // Buttons
-    setButtonPosition(ButtonPosition::South);
-    setDlgWdith(MaxiumTaskBoxWidth+5);
-}
-
-
-TaskDlgMechanicControl::TaskDlgMechanicControl(Robot::MechanicGroup *t_Group, QWidget *parent)
-{
-    if(t_Group == nullptr)
-        return;
-    m_DocPtr = t_Group->getDocument();
-    auto t_GroupPanel = new TaskBoxMechanicGroupPanel(t_Group);
-    QObject::connect(this, SIGNAL(signal_updatePanelWidgets()),
-                     t_GroupPanel, SLOT(slot_updatePanelWidgets()));
-    QObject::connect(this, SIGNAL(signal_stationConnected(bool)),
-                     t_GroupPanel, SLOT(slot_stationConnected(bool)));
-    t_GroupPanel->setMaximumWidth(MaxiumTaskBoxWidth);
-    Content.push_back(t_GroupPanel);
+    else if(t_Mechanics->isDerivedFrom(Robot::MechanicExtAx::getClassTypeId())){
+        auto t_ExtAxPtr = static_cast<Robot::MechanicExtAx*>(t_Mechanics);
+        auto t_ExtAxPanel = new TaskBoxExtAxSetupPanel(t_ExtAxPtr);
+        QObject::connect(this, SIGNAL(signal_updatePanelWidgets()),
+                         t_ExtAxPanel, SLOT(slot_updateSliderPosition()));
+        t_ExtAxPanel->setMaximumWidth(MaxiumTaskBoxWidth);
+        // Contents
+        Content.push_back(t_ExtAxPanel);
+    }
     // Buttons
     setButtonPosition(ButtonPosition::South);
     setDlgWdith(MaxiumTaskBoxWidth+5);

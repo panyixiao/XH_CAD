@@ -98,10 +98,10 @@ void TaskBoxPoserSetupPanel::initUi_PoseSetupBox()
 {
     m_ui->comboBox_Reference->clear();
     m_ui->comboBox_Reference->addItem(tr("World"));
-    auto robotList = m_DocPtr->getObjectsOfType(Robot::Robot6AxisObject::getClassTypeId());
-    for(auto rbtObject : robotList){
-        m_ui->comboBox_Reference->addItem(tr(rbtObject->getNameInDocument()));
-    }
+//    auto robotList = m_DocPtr->getObjectsOfType(Robot::Mech::getClassTypeId());
+//    for(auto rbtObject : robotList){
+//        m_ui->comboBox_Reference->addItem(tr(rbtObject->getNameInDocument()));
+//    }
 
     slot_updatePositionerPosePanel();
 

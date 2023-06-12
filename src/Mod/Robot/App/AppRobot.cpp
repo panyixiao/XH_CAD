@@ -38,10 +38,10 @@
 #include "Mechanics/MechanicBase.h"
 #include "Mechanics/MechanicPoser.h"
 #include "Mechanics/MechanicRobot.h"
-#include "Mechanics/MechanicDevice.h"
+#include "Mechanics/MechanicExtAx.h"
 #include "Mechanics/KinematicModel.h"
-#include "Mechanics/Robot6AxisObject.h"
-#include "Mechanics/MechanicGroup.h"
+//#include "Mechanics/Robot6AxisObject.h"
+//#include "Mechanics/MechanicGroup.h"
 
 #include "Database/FileOperator.h"
 #include "Database/ToolDatabase.h"
@@ -58,17 +58,14 @@
 #include "PlanningObj/PlanningObject.h"
 
 #include "TaskManage/TaskObject.h"
-#include "TaskManage/Action.h"
-#include "TaskManage/ActionObject.h"
+#include "TaskManage/RobotProgram.h"
+#include "TaskManage/TargetPoint.h"
+#include "TaskManage/Command/CommandBase.h"
+#include "TaskManage/Command/MoveCommand.h"
+#include "TaskManage/Command/CoordCommand.h"
+#include "TaskManage/Command/ToolCommand.h"
 
-#include "Trac/RobotProgram.h"
-#include "Trac/RobotTracObject.h"
-#include "Trac/RobotWaypoint.h"
-#include "Trac/EdgebasedTracObject.h"
-#include "Trac/RobotCommand.h"
-#include "Trac/MoveCommand.h"
-#include "Trac/CoordCommand.h"
-#include "Trac/ToolCommand.h"
+//#include "Trac/RobotTracObject.h"
 
 namespace Robot {
 class Module : public Py::ExtensionModule<Module>
@@ -194,12 +191,12 @@ private:
             Base::Console().Error(msg.c_str());
             throw Py::Exception();
         }
-        auto t_RobotPtr = static_cast<Robot::MechanicDevice*>(pcDoc->addObject("Robot::MechanicDevice",ModelName.c_str()));
-        if(t_RobotPtr == nullptr){
-            Base::Console().Error("Failed to insert Robot Object into Document\n");
+        auto t_ExtAxPtr = static_cast<Robot::MechanicExtAx*>(pcDoc->addObject("Robot::MechanicExtAx",ModelName.c_str()));
+        if(t_ExtAxPtr == nullptr){
+            Base::Console().Error("Failed to insert ExtAxis Object into Document\n");
             throw Py::Exception();
         }
-        t_RobotPtr->File_URDF.setValue(t_ItemInfo.model_FilePath.c_str());
+        t_ExtAxPtr->FilePath_URDF.setValue(t_ItemInfo.model_FilePath.c_str());
         return Py::None();
     }
 
@@ -363,10 +360,7 @@ PyMOD_INIT_FUNC(Robot)
     Robot::MechanicBase            ::init();
     Robot::MechanicPoser           ::init();
     Robot::MechanicRobot           ::init();
-    Robot::Robot6AxisObject        ::init();
-    Robot::MechanicDevice          ::init();
-    Robot::MechanicGroup           ::init();
-
+    Robot::MechanicExtAx           ::init();
     // Frame
     Robot::FrameObject             ::init();
     // Object
@@ -376,16 +370,12 @@ PyMOD_INIT_FUNC(Robot)
     Robot::ScannerObject           ::init();
     Robot::TorchObject             ::init();
     // Task
-    Robot::Action                  ::init();
-    Robot::ActionObject            ::init();
     Robot::TaskObject              ::init();
     // Trac
     Robot::RobotProgram            ::init();
-    Robot::RobotTracObject         ::init();
-    Robot::RobotWaypoint           ::init();
-    Robot::EdgebasedTracObject     ::init();
+    Robot::TargetPoint             ::init();
     // Command
-    Robot::RobotCommand            ::init();
+    Robot::CommandBase             ::init();
     Robot::MoveCommand             ::init();
     Robot::CoordCommand            ::init();
     Robot::ToolCommand             ::init();

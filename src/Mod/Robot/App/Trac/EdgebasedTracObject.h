@@ -51,7 +51,7 @@ public:
     virtual ~EdgebasedTracObject();
 
     bool updateReferences();
-    void setTracSafePoint(const GroupPose& t_Pose);
+    void setTracSafePoint(const MechPose& t_Pose);
     bool generateConstraint();
     bool generateProgram();
     bool regenerateProgram();
@@ -105,7 +105,7 @@ protected:
                                                    const float interpoLen);
 private:
     TracType m_TracType;
-    GroupPose m_TracSafePoint;
+    MechPose m_TracSafePoint;
     std::vector<Base::Placement> edge_Poses;
     std::vector<TopoDS_Face> edge_FaceRef;
     std::vector<TopoDS_Edge> edge_EdgeRef;

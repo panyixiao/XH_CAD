@@ -14,13 +14,13 @@
 
 //#include <Mod/Robot/App/Mechanics/Robot6AxisObject.h>
 #include <Mod/Robot/App/Mechanics/MechanicBase.h>
-#include <Mod/Robot/App/Mechanics/MechanicGroup.h>
+//#include <Mod/Robot/App/Mechanics/MechanicGroup.h>
 
 class Ui_TaskBox_TaskManager;
 //class Ui_TaskBox_TaskEditor;
 
 using namespace Robot;
-class Robot6AxisObject;
+//class Robot6AxisObject;
 
 namespace RobotGui {
 class TaskBox_TaskManager : public Gui::TaskView::TaskBox {

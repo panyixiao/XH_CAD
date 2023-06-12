@@ -68,7 +68,7 @@ PyObject *RobotTracObject::getPyObject()
 }
 
 void RobotTracObject::insertCMD_MOVE(const std::string executorName,
-                                     const RobotWaypoint &t_Pnt,
+                                     const TargetPoint &t_Pnt,
                                      const Robot::MoveType t_Type,
                                      const Robot::MovePrec t_Prec,
                                      const float Vel,

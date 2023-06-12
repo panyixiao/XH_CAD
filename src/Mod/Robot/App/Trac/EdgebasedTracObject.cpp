@@ -121,7 +121,7 @@ bool EdgebasedTracObject::updateReferences()
     return true;
 }
 
-void EdgebasedTracObject::setTracSafePoint(const GroupPose &t_Pose)
+void EdgebasedTracObject::setTracSafePoint(const MechPose &t_Pose)
 {
     m_TracSafePoint = t_Pose;
 }
@@ -164,7 +164,7 @@ bool EdgebasedTracObject::generateProgram()
         break;
     }
     // To Safe Point
-    RobotWaypoint safePoint(m_TracSafePoint);
+    TargetPoint safePoint(m_TracSafePoint);
     insertCMD_MOVE(ExecutorName.getStrValue(),
                    safePoint,
                    Robot::MoveType::MOVL,
@@ -172,7 +172,7 @@ bool EdgebasedTracObject::generateProgram()
                    trac_speed);
 
     for(size_t i = 0; i<t_Poses.size(); i++){
-        RobotWaypoint newWaypoint(t_Poses[i],
+        TargetPoint newWaypoint(t_Poses[i],
                                   CurrentExternalAxis.getValues(),
                                   1);
         if(i == 0){

@@ -82,18 +82,19 @@ set(MechanicObj_SRC
     Mechanics/MechanicBase.h
     Mechanics/MechanicPoser.cpp
     Mechanics/MechanicPoser.h
+    Mechanics/MechanicExtAx.h
+    Mechanics/MechanicExtAx.cpp
     Mechanics/MechanicRobot.cpp
     Mechanics/MechanicRobot.h
-    Mechanics/MechanicGroup.h
-    Mechanics/MechanicGroup.cpp
     Mechanics/KinematicModel.h
     Mechanics/KinematicModel.cpp
     Mechanics/RobotAlgos.h
     Mechanics/RobotAlgos.cpp
-    Mechanics/Robot6AxisObject.h
-    Mechanics/Robot6AxisObject.cpp
-    Mechanics/MechanicDevice.h
-    Mechanics/MechanicDevice.cpp)
+#    Mechanics/Robot6AxisObject.h
+#    Mechanics/Robot6AxisObject.cpp
+#    Mechanics/MechanicDevice.h
+#    Mechanics/MechanicDevice.cpp
+    )
 
 set(PlanningObj_SRC
     PlanningObj/PlanningObject.cpp
@@ -125,36 +126,33 @@ set(Utilites_SRC
     Utilites/FrameObject.h)
 
 set(TaskManage_SRC
-    TaskManage/Action.cpp
-    TaskManage/Action.h
     TaskManage/TaskObject.cpp
     TaskManage/TaskObject.h
-    TaskManage/ActionObject.cpp
-    TaskManage/ActionObject.h
-    TaskManage/SimulationManager.cpp
-    TaskManage/SimulationManager.h
-    TaskManage/TracSimulatior.cpp
-    TaskManage/TracSimulatior.h)
+    TaskManage/ProgramSimulator.cpp
+    TaskManage/ProgramSimulator.h
+    TaskManage/TargetPoint.h
+    TaskManage/TargetPoint.cpp
+    TaskManage/RobotProgram.cpp
+    TaskManage/RobotProgram.h)
+
+set(Command_SRCS
+    TaskManage/Command/CommandBase.h
+    TaskManage/Command/CommandBase.cpp
+    TaskManage/Command/MoveCommand.h
+    TaskManage/Command/MoveCommand.cpp
+    TaskManage/Command/CoordCommand.h
+    TaskManage/Command/CoordCommand.cpp
+    TaskManage/Command/ToolCommand.h
+    TaskManage/Command/ToolCommand.cpp)
 
 set(RobotTrac_SRCS
-    Trac/RobotProgram.cpp
-    Trac/RobotProgram.h
-    Trac/RobotWaypoint.h
-    Trac/RobotWaypoint.cpp
-    Trac/RobotTracObject.cpp
-    Trac/RobotTracObject.h
-    Trac/RobotCommand.cpp
-    Trac/RobotCommand.h
-    Trac/MoveCommand.cpp
-    Trac/MoveCommand.h
-    Trac/CoordCommand.cpp
-    Trac/CoordCommand.h
-    Trac/ToolCommand.cpp
-    Trac/ToolCommand.h
-    Trac/EdgebasedTracObject.cpp
-    Trac/EdgebasedTracObject.h)
+#    Trac/RobotTracObject.cpp
+#    Trac/RobotTracObject.h
+#    Trac/EdgebasedTracObject.cpp
+#    Trac/EdgebasedTracObject.h
+    )
 
-SET(Robot_SRCS
+SET(RobotMod_SRCS
     ${Database_SRC}
     ${MechanicObj_SRC}
     ${PlanningObj_SRC}
@@ -164,41 +162,45 @@ SET(Robot_SRCS
     ${Python_SRCS}
     ${RobotTrac_SRCS}
     ${Tool_SRCS}
+    ${Command_SRCS}
 )
 
 SET(TRAC_IK_SRC
-    trac_ik_cp/dual_quaternion.h
-    trac_ik_cp/kdl_tl.cpp
-    trac_ik_cp/kdl_tl.hpp
-    trac_ik_cp/math3d.h
-    trac_ik_cp/nlopt_ik.cpp
-    trac_ik_cp/nlopt_ik.hpp
-    trac_ik_cp/trac_ik.hpp
-    trac_ik_cp/trac_ik.cpp
+    Kinematics/trac_ik_cp/dual_quaternion.h
+    Kinematics/trac_ik_cp/kdl_tl.cpp
+    Kinematics/trac_ik_cp/kdl_tl.hpp
+    Kinematics/trac_ik_cp/math3d.h
+    Kinematics/trac_ik_cp/nlopt_ik.cpp
+    Kinematics/trac_ik_cp/nlopt_ik.hpp
+    Kinematics/trac_ik_cp/trac_ik.hpp
+    Kinematics/trac_ik_cp/trac_ik.cpp
 )
 
 set(KDL_PARSER_SRC
-    kdl_parser_cp/kdl_parser.hpp
-    kdl_parser_cp/check_kdl_parser.cpp
-    kdl_parser_cp/kdl_parser.cpp
-    kdl_parser_cp/visibility_control.hpp
+    Kinematics/kdl_parser_cp/kdl_parser.hpp
+    Kinematics/kdl_parser_cp/check_kdl_parser.cpp
+    Kinematics/kdl_parser_cp/kdl_parser.cpp
+    Kinematics/kdl_parser_cp/visibility_control.hpp
 )
 
-FILE( GLOB KDL_SRCS kdl_cp/[^.]*.cpp )
-FILE( GLOB KDL_HPPS kdl_cp/[^.]*.hpp kdl_cp/[^.]*.inl)
+FILE( GLOB KDL_SRCS Kinematics/kdl_cp/[^.]*.cpp )
+FILE( GLOB KDL_HPPS Kinematics/kdl_cp/[^.]*.hpp Kinematics/kdl_cp/[^.]*.h Kinematics/kdl_cp/[^.]*.inl)
 
-FILE( GLOB UTIL_SRCS kdl_cp/utilities/[^.]*.cpp kdl_cp/utilities/[^.]*.cxx)
-FILE( GLOB UTIL_HPPS kdl_cp/utilities/[^.]*.h kdl_cp/utilities/[^.]*.hpp)
+FILE( GLOB UTIL_SRCS Kinematics/kdl_cp/utilities/[^.]*.cpp Kinematics/kdl_cp/utilities/[^.]*.cxx)
+FILE( GLOB UTIL_HPPS Kinematics/kdl_cp/utilities/[^.]*.h Kinematics/kdl_cp/utilities/[^.]*.hpp)
 
+SET(Kinematics_SRC
+    ${TRAC_IK_SRC}
+    ${KDL_SRCS}
+    ${KDL_HPPS}
+    ${KDL_PARSER_SRC}
+    ${UTIL_SRCS}
+    ${UTIL_HPPS}
+    )
 
 SET(Robot_SRCS
-  ${Robot_SRCS}
-  ${KDL_SRCS}
-  ${KDL_HPPS}
-  ${UTIL_SRCS}
-  ${UTIL_HPPS}
-  ${TRAC_IK_SRC}
-  ${KDL_PARSER_SRC}
+  ${RobotMod_SRCS}
+  ${Kinematics_SRC}
 )
 
 SOURCE_GROUP("Python" FILES ${Python_SRCS})

@@ -1,14 +1,15 @@
 #ifndef DS_UTILITY_H
 #define DS_UTILITY_H
 
+#include <Inventor/nodes/SoTransform.h>
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Base/Matrix.h>
 #include <Base/Placement.h>
 #include <Mod/Part/App/PartFeature.h>
-#include <Inventor/nodes/SoTransform.h>
-#include "Mod/Robot/App/kdl_cp/chain.hpp"
-#include "Mod/Robot/App/kdl_cp/jntarray.hpp"
+#include <Mod/Robot/App/Utilites/FrameObject.h>
+#include "Mod/Robot/App/Kinematics/kdl_cp/chain.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/jntarray.hpp"
 
 #include "FrameObject.h"
 
@@ -18,7 +19,6 @@ namespace Robot {
 const std::string tmpMeshFilePath = "/tmp/";
 
 using Cordinate = std::pair<CordType, uint>;
-using CompPose = std::pair<Base::Placement, std::pair<double, double>>;
 
 struct RobotPose
 {
@@ -26,7 +26,7 @@ struct RobotPose
         CordInfo = std::make_pair(CordType::WCS,0);
     }
     void setPoseData(const Base::Placement& t_Pose);
-    void setPoseData(const CompPose& t_Pose);
+//    void setPoseData(const CompPose& t_Pose);
     void setPoseData(const std::vector<double>& t_JntVals);
     bool isValid() const{
         if(CordInfo.first == CordType::WCS){
@@ -45,19 +45,22 @@ struct RobotPose
     Base::Placement FlanPose;
 };
 
-struct GroupPose
+struct CartPose{
+    FrameObject* ref_Frame;
+    Base::Placement m_PoseInFrame;
+};
+
+struct MechPose
 {
 public:
-    RobotPose Pose_Rbt1;
-    RobotPose Pose_Rbt2;
-    std::vector<double> ExtVals = std::vector<double>(8,0.0);
+    Base::Placement m_PoseInMCS;
+    std::vector<double> m_PoseInACS;
     bool dynamicTrac = false;
 public:
-    GroupPose(){}
+    MechPose(){}
     bool isValid() const{
-        return Pose_Rbt1.isValid() || Pose_Rbt2.isValid();
+        return !m_PoseInMCS.isIdentity()&& !m_PoseInACS.empty();
     }
-    void setExtVals(const KDL::JntArray& t_JntVals);
     void Save (Base::Writer &/*writer*/) const;
     void Restore(Base::XMLReader &/*reader*/);
 };

@@ -45,8 +45,9 @@ SOURCE_GROUP("Resources" FILES ${RobotResource_SRCS})
 
 
 SET(Communication_SRCS
-    Comm/MechanicGroupCommManager.cpp
-    Comm/MechanicGroupCommManager.h)
+#    Comm/MechanicGroupCommManager.cpp
+#    Comm/MechanicGroupCommManager.h
+    )
 #SOURCE_GROUP("Comm" FILES ${Communication_SRCS})
 
 SET(RobotGui_SRC_Module
@@ -134,20 +135,17 @@ SOURCE_GROUP("PlanningObj" FILES ${RobotGui_SRC_PlanningObjectViewProvider}
 
 # Mechanics
 set(RobotGui_SRC_MechanicViewProvider
-#    Mechanics/ViewProviderRobot6AxisObject.cpp
-#    Mechanics/ViewProviderRobot6AxisObject.h
-#    Mechanics/ViewProviderMechanicDevice.cpp
-#    Mechanics/ViewProviderMechanicDevice.h
     Mechanics/ViewProviderMechanicBase.cpp
     Mechanics/ViewProviderMechanicBase.h
     Mechanics/ViewProviderMechanicRobot.cpp
     Mechanics/ViewProviderMechanicRobot.h
-    Mechanics/ViewProviderMechanicGroup.cpp
-    Mechanics/ViewProviderMechanicGroup.h)
+#    Mechanics/ViewProviderMechanicGroup.cpp
+#    Mechanics/ViewProviderMechanicGroup.h
+    )
 
 set(RobotGui_SRC_MechanicsTaskBox
-    Mechanics/TaskBoxMechanicGroupPanel.cpp
-    Mechanics/TaskBoxMechanicGroupPanel.h
+    Mechanics/TaskBoxExtAxSetupPanel.cpp
+    Mechanics/TaskBoxExtAxSetupPanel.h
     Mechanics/TaskBoxRobotTeachPanel.cpp
     Mechanics/TaskBoxRobotTeachPanel.h
     Mechanics/TaskBoxPoserSetupPanel.cpp
@@ -164,7 +162,7 @@ set(RobotGui_SRC_MechanicsTaskDlg
     )
 
 set(RobotGui_UIC_Mechanics
-    Mechanics/TaskBoxMechanicGroupPanel.ui
+    Mechanics/TaskBoxExtAxSetupPanel.ui
     Mechanics/TaskBoxRobotTeachPanel.ui
     Mechanics/TaskBoxPoserSetupPanel.ui
     Mechanics/MechanicSelectionPanel.ui
@@ -177,10 +175,11 @@ SOURCE_GROUP("Mechanics" FILES ${RobotGui_SRC_MechanicViewProvider}
                                ${RobotGui_UIC_Mechanics})
 # TracObj Related
 set(RobotGui_SRC_TracObjectViewProvider
-    Trac/ViewProviderEdgebasedTracObject.h
-    Trac/ViewProviderEdgebasedTracObject.cpp
-    Trac/ViewProviderRobotTrajectory.h
-    Trac/ViewProviderRobotTrajectory.cpp)
+#    Trac/ViewProviderEdgebasedTracObject.h
+#    Trac/ViewProviderEdgebasedTracObject.cpp
+#    Trac/ViewProviderRobotTrajectory.h
+#    Trac/ViewProviderRobotTrajectory.cpp
+    )
 
 SOURCE_GROUP("Trac" FILES ${RobotGui_SRC_TracObjectViewProvider})
 
@@ -192,12 +191,10 @@ set(RobotGui_SRC_TaskManageViewProvider
 set(RobotGui_SRC_TaskManageTaskBox
     TaskManage/TaskBox_TaskManager.cpp
     TaskManage/TaskBox_TaskManager.h
-#    TaskManage/TaskBox_ActionManager.cpp
-#    TaskManage/TaskBox_ActionManager.h
-    TaskManage/TaskBox_EdgeBasedTracEditor.cpp
-    TaskManage/TaskBox_EdgeBasedTracEditor.h
-    TaskManage/TaskBox_FreerunTracEditor.cpp
-    TaskManage/TaskBox_FreerunTracEditor.h
+    TaskManage/TaskBox_TracEditPanel.cpp
+    TaskManage/TaskBox_TracEditPanel.h
+    TaskManage/TaskBox_FeaturePathPanel.cpp
+    TaskManage/TaskBox_FeaturePathPanel.h
     TaskManage/TaskBox_TracSimulator.cpp
     TaskManage/TaskBox_TracSimulator.h)
 
@@ -206,11 +203,9 @@ set(RobotGui_SRC_TaskManageTaskDlg
     TaskManage/TaskDlg_TaskManage.cpp)
 
 set(RobotGui_UIC_TaskManage
-#    TaskManage/TaskBox_ActionManager.ui
     TaskManage/TaskBox_TaskManager.ui
-    TaskManage/TaskBox_FreerunTracEditor.ui
-#    TaskManage/TaskBox_EdgeTracGenerator.ui
-    TaskManage/TaskBox_EdgeBasedTracEditor.ui
+    TaskManage/TaskBox_FeaturePathPanel.ui
+    TaskManage/TaskBox_TracEditPanel.ui
     TaskManage/TaskBox_TracSimulator.ui
     )
 

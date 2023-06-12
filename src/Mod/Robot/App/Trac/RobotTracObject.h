@@ -8,14 +8,14 @@
 #include <App/PropertyFile.h>
 #include <App/PropertyGeo.h>
 
-#include "RobotProgram.h"
-#include "RobotWaypoint.h"
-#include "MoveCommand.h"
-#include "CoordCommand.h"
+#include "Mod/Robot/App/TaskManage/RobotProgram.h"
+#include "Mod/Robot/App/TaskManage/TargetPoint.h"
+#include "Mod/Robot/App/TaskManage/Command/MoveCommand.h"
+#include "Mod/Robot/App/TaskManage/Command/CoordCommand.h"
 
 
 using RobotProg_sptr = std::shared_ptr<Robot::RobotProgram>;
-using RobotWaypoint_sptr = std::shared_ptr<Robot::RobotWaypoint>;
+using TargetPoint_sptr = std::shared_ptr<Robot::TargetPoint>;
 
 namespace Robot
 {
@@ -62,7 +62,7 @@ public:
 
     // Program
     void insertCMD_MOVE(const std::string executorName,
-                        const Robot::RobotWaypoint& t_Pnt,
+                        const Robot::TargetPoint& t_Pnt,
                         const MoveType t_Type = Robot::MoveType::MOVL,
                         const MovePrec t_Prec = Robot::MovePrec::FINE,
                         const float Vel = 100.0,
@@ -93,7 +93,7 @@ public:
     void setRobotProgramPtr(const RobotProg_sptr t_ProgramPtr){
         m_ProgramPtr = t_ProgramPtr;
     }
-    const std::vector<RobotWaypoint_sptr>& getWaypointData() const{
+    const std::vector<TargetPoint_sptr>& getWaypointData() const{
         return m_ProgramPtr->getWaypointData();
     }
 

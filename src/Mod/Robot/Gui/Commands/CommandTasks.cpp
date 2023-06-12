@@ -13,9 +13,6 @@
 #include <Gui/Selection.h>
 #include <Gui/Document.h>
 
-#include <Mod/Robot/App/Mechanics/Robot6AxisObject.h>
-
-
 // #####################################################################################################
 // Create a ComboTask
 DEF_STD_CMD(CmdRobotCreateComboTask);

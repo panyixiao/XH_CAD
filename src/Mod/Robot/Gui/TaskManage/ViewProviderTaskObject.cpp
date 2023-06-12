@@ -66,19 +66,20 @@ ViewProviderTaskObject::~ViewProviderTaskObject()
 void ViewProviderTaskObject::attach(App::DocumentObject *pcObj)
 {
     claimChildren();
-    ViewProviderRobotTrajectory::attach(pcObj);
+//    ViewProviderRobotTrajectory::attach(pcObj);
 }
 
 void ViewProviderTaskObject::setDisplayMode(const char* ModeName)
 {
-    ViewProviderRobotTrajectory::setDisplayMode( ModeName );
+//    ViewProviderRobotTrajectory::setDisplayMode( ModeName );
 }
 
 std::vector<std::string> ViewProviderTaskObject::getDisplayModes(void) const
 {
-//    std::vector<std::string> StrList;
+    std::vector<std::string> StrList;
 //    StrList.push_back("TracsOnly");
-    return ViewProviderRobotTrajectory::getDisplayModes();
+//    return ViewProviderRobotTrajectory::getDisplayModes();
+    return StrList;
 }
 
 void ViewProviderTaskObject::updateData(const App::Property* prop)

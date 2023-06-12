@@ -61,11 +61,12 @@ void TaskObject::insertAction(DocumentObject *n_Action)
     if(n_Action == nullptr)
         return;
     bool valid = false;
-    if(n_Action->isDerivedFrom(Robot::RobotTracObject::getClassTypeId())){
-        valid = true;
-    }else if(n_Action->isDerivedFrom(Robot::ActionObject::getClassTypeId())){
-        valid = true;
-    }
+//    if(n_Action->isDerivedFrom(Robot::RobotTracObject::getClassTypeId())){
+//        valid = true;
+//    }
+//    else if(n_Action->isDerivedFrom(Robot::ActionObject::getClassTypeId())){
+//        valid = true;
+//    }
 
     if(valid){
         actList.push_back(std::string(n_Action->getNameInDocument()));
@@ -187,16 +188,16 @@ bool TaskObject::updateTracData()
     bool first = true;
     for(auto actionName : ActionList.getValues()){
         auto objPtr = getDocument()->getObject(actionName.c_str());
-        if(objPtr && objPtr->isDerivedFrom(Robot::RobotTracObject::getClassTypeId())){
-            auto TracObjPtr = static_cast<Robot::RobotTracObject*>(objPtr);
-            if(first){
-                m_ProgramPtr = TracObjPtr->getRobotProgramSptr();
-                first = false;
-            }
-            else{
-                m_ProgramPtr->joinData(TracObjPtr->getRobotProgramSptr());
-            }
-        }
+//        if(objPtr && objPtr->isDerivedFrom(Robot::RobotTracObject::getClassTypeId())){
+//            auto TracObjPtr = static_cast<Robot::RobotTracObject*>(objPtr);
+//            if(first){
+//                m_ProgramPtr = TracObjPtr->getRobotProgramSptr();
+//                first = false;
+//            }
+//            else{
+//                m_ProgramPtr->joinData(TracObjPtr->getRobotProgramSptr());
+//            }
+//        }
     }
     if(m_ProgramPtr != nullptr)
         return !m_ProgramPtr->getCmmdData().empty();

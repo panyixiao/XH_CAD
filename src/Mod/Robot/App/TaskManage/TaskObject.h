@@ -3,13 +3,14 @@
 #ifndef ROBOT_TASKOBJECT_H
 #define ROBOT_TASKOBJECT_H
 
+#include "Mod/Robot/App/PreCompiled.h"
+
 #include <App/Document.h>
 #include <App/GeoFeature.h>
 #include <App/PropertyFile.h>
 #include <App/PropertyGeo.h>
-#include "Mod/Robot/App/PreCompiled.h"
-#include "Mod/Robot/App/Trac/RobotProgram.h"
-#include "ActionObject.h"
+#include "Mod/Robot/App/TaskManage/RobotProgram.h"
+//#include "ActionObject.h"
 #include <Mod/Robot/App/Utilites/Export_Utility.h>
 #include <Mod/Robot/App/Utilites/FileIO_Utility.h>
 

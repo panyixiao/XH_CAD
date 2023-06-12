@@ -176,7 +176,7 @@ std::shared_ptr<Robot::RobotProgram> FileIO_Utility::readinProgramFromDrive(cons
                     auto cordNum = stdStringSplit(setup_cmd[2],std::string("="),false);
                     cordID = std::atoi(cordNum[1].c_str());
                 }
-                t_ProgramPtr->insertCMD_ChgCord(t_executror,t_Type, cordID);
+                t_ProgramPtr->insertCMD_ChgCord(t_Type, cordID);
             }
         }
         else{
@@ -233,20 +233,20 @@ std::shared_ptr<Robot::RobotProgram> FileIO_Utility::readinProgramFromDrive(cons
             auto gp2_PoseStr = stdStringSplit(pose_cmd[1], std::string(","),false);
             auto ext_PoseStr = stdStringSplit(pose_cmd[2], std::string(","),false);
 
-            Robot::GroupPose t_Pose;
-            t_Pose.Pose_Rbt1 = poseExtractor(gp1_PoseStr);
-            t_Pose.Pose_Rbt2 = poseExtractor(gp2_PoseStr);
-            for(auto i = 0; i<8; i++){
-                t_Pose.ExtVals[i] = std::atof(ext_PoseStr[i].c_str());
-            };
+            Robot::MechPose t_Pose;
+//            t_Pose.Pose_Rbt1 = poseExtractor(gp1_PoseStr);
+//            t_Pose.Pose_Rbt2 = poseExtractor(gp2_PoseStr);
+//            for(auto i = 0; i<8; i++){
+//                t_Pose.ExtVals[i] = std::atof(ext_PoseStr[i].c_str());
+//            };
 
-            auto t_PoseID = t_ProgramPtr->addNewPose(Robot::RobotWaypoint(t_Pose));
+//            auto t_PoseID = t_ProgramPtr->addNewPose(Robot::RobotWaypoint(t_Pose));
 
-            t_ProgramPtr->insertCMD_NewMOVE(t_executror,
-                                            t_PoseID,
-                                            t_MovType,
-                                            t_MovPrec,
-                                            t_Vel,t_bl,t_vbl);
+//            t_ProgramPtr->insertCMD_NewMOVE(t_executror,
+//                                            t_PoseID,
+//                                            t_MovType,
+//                                            t_MovPrec,
+//                                            t_Vel,t_bl,t_vbl);
         }
     }
 
@@ -454,15 +454,15 @@ bool FileIO_Utility::progTranslator_new(const ExportFileType& t_FileType,
 /// <param name="t_Position"></param>
 /// <param name="collaborateMode"></param>
 /// <returns></returns>
-const GoogolCoord_newVersion FileIO_Utility::convertRobotWaypoint2GoogolCoord_New(const RobotWaypoint_sptr t_Pnt,
+const GoogolCoord_newVersion FileIO_Utility::convertRobotWaypoint2GoogolCoord_New(const TargetPoint_sptr t_Pnt,
                                                                                   bool collaborateMode)
 {
     GoogolCoord_newVersion n_Pose;
 
-    n_Pose.dynSynch = t_Pnt->getWPPoseData().dynamicTrac;
-    n_Pose.gp_1 = convertRobotPose2GoogolFormat(t_Pnt->getWPPoseData().Pose_Rbt1);
-    n_Pose.gp_2.groupIndex = 2;
-    n_Pose.gp_2 = convertRobotPose2GoogolFormat(t_Pnt->getWPPoseData().Pose_Rbt2);
+//    n_Pose.dynSynch = t_Pnt->getWPPoseData().dynamicTrac;
+//    n_Pose.gp_1 = convertRobotPose2GoogolFormat(t_Pnt->getWPPoseData().Pose_Rbt1);
+//    n_Pose.gp_2.groupIndex = 2;
+//    n_Pose.gp_2 = convertRobotPose2GoogolFormat(t_Pnt->getWPPoseData().Pose_Rbt2);
 
     return n_Pose;
 }
@@ -528,9 +528,9 @@ bool FileIO_Utility::exportCommand(const std::vector<RobotCommand_sptr>& command
             }
         }
         else if (t_cmmdPtr->getType() == Robot::CommandType::ChgTool){
-            auto toolCommand = static_cast<Robot::ToolCommand*>(t_cmmdPtr.get());
-            int coord_ID = toolCommand->getCoordID();
-            m_fwriter << "COORD_NUM COOR=TCS ID="<< std::to_string(coord_ID) << "\n";
+//            auto toolCommand = static_cast<Robot::ToolCommand*>(t_cmmdPtr.get());
+//            int coord_ID = toolCommand->getCoordID();
+//            m_fwriter << "COORD_NUM COOR=TCS ID="<< std::to_string(coord_ID) << "\n";
 
         }
         else if (t_cmmdPtr->getType() == Robot::CommandType::OptTool) {

@@ -3,18 +3,18 @@
 #define ROBOT_KINEMATICMODEL_H
 
 #include <Mod/Robot/App/PreCompiled.h>
-#include "Mod/Robot/App/kdl_cp/chain.hpp"
-#include "Mod/Robot/App/kdl_cp/chainfksolverpos_recursive.hpp"
-#include "Mod/Robot/App/kdl_cp/frames_io.hpp"
-#include "Mod/Robot/App/kdl_cp/chainiksolvervel_pinv.hpp"
-#include "Mod/Robot/App/kdl_cp/chainjnttojacsolver.hpp"
-#include "Mod/Robot/App/kdl_cp/chainiksolverpos_nr.hpp"
-#include "Mod/Robot/App/kdl_cp/chainiksolverpos_nr_jl.hpp"
-#include "Mod/Robot/App/trac_ik_cp/trac_ik.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/chain.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/chainfksolverpos_recursive.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/frames_io.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/chainiksolvervel_pinv.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/chainjnttojacsolver.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/chainiksolverpos_nr.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/chainiksolverpos_nr_jl.hpp"
+#include "Mod/Robot/App/Kinematics/trac_ik_cp/trac_ik.hpp"
 
-#include "Mod/Robot/App/kdl_cp/chain.hpp"
-#include "Mod/Robot/App/kdl_cp/jntarray.hpp"
-#include "Mod/Robot/App/kdl_parser_cp/kdl_parser.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/chain.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/jntarray.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_parser_cp/kdl_parser.hpp"
 
 #include <Base/Persistence.h>
 #include <Base/Placement.h>

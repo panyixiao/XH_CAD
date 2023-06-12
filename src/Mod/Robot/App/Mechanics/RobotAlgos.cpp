@@ -27,18 +27,17 @@
 
 #endif
 
-#include "Mod/Robot/App/kdl_cp/chain.hpp"
-#include "Mod/Robot/App/kdl_cp/chainfksolver.hpp"
-#include "Mod/Robot/App/kdl_cp/chainfksolverpos_recursive.hpp"
-#include "Mod/Robot/App/kdl_cp/frames_io.hpp"
-#include "Mod/Robot/App/kdl_cp/chainiksolver.hpp"
-#include "Mod/Robot/App/kdl_cp/chainiksolvervel_pinv.hpp"
-#include "Mod/Robot/App/kdl_cp/chainjnttojacsolver.hpp"
-#include "Mod/Robot/App/kdl_cp/chainiksolverpos_nr.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/chain.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/chainfksolver.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/chainfksolverpos_recursive.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/frames_io.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/chainiksolver.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/chainiksolvervel_pinv.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/chainjnttojacsolver.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/chainiksolverpos_nr.hpp"
 
 #include <stdio.h>
 #include <iostream>
-
 #include <Base/Console.h>
 #include <Base/VectorPy.h>
 

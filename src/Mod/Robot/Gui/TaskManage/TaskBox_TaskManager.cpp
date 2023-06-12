@@ -50,55 +50,55 @@ bool TaskBox_TaskManager::reject() {
 
 
 void TaskBox_TaskManager::initUi_PanelWidget() {
-    m_proxy = new QWidget();
-    m_ui = new Ui_TaskBox_TaskManager;
-    m_ui->setupUi(m_proxy);
-  this->groupLayout()->addWidget(m_proxy, Qt::AlignTop);
+//    m_proxy = new QWidget();
+//    m_ui = new Ui_TaskBox_TaskManager;
+//    m_ui->setupUi(m_proxy);
+//  this->groupLayout()->addWidget(m_proxy, Qt::AlignTop);
 
-  // Gui Signals
-  QObject::connect(m_ui->pushButton_insertSeamTrac, SIGNAL(clicked()),
-                   this, SLOT(slot_insertAction_SeamTrac()));
-  QObject::connect(m_ui->pushButton_insertScanTrac, SIGNAL(clicked()),
-                   this, SLOT(slot_insertAction_ScanTrac()));
-  QObject::connect(m_ui->pushButton_insertFreeTrac, SIGNAL(clicked()),
-                   this, SLOT(slot_insertAction_FreerunTrac()));
+//  // Gui Signals
+//  QObject::connect(m_ui->pushButton_insertSeamTrac, SIGNAL(clicked()),
+//                   this, SLOT(slot_insertAction_SeamTrac()));
+//  QObject::connect(m_ui->pushButton_insertScanTrac, SIGNAL(clicked()),
+//                   this, SLOT(slot_insertAction_ScanTrac()));
+//  QObject::connect(m_ui->pushButton_insertFreeTrac, SIGNAL(clicked()),
+//                   this, SLOT(slot_insertAction_FreerunTrac()));
 
-  QObject::connect(m_ui->pushButton_editSelect, SIGNAL(clicked()),
-                   this, SLOT(slot_editSelectedAction()));
-  QObject::connect(m_ui->pushButton_deleteSelect, SIGNAL(clicked()),
-                   this, SLOT(slot_deleteSeletectedAction()));
+//  QObject::connect(m_ui->pushButton_editSelect, SIGNAL(clicked()),
+//                   this, SLOT(slot_editSelectedAction()));
+//  QObject::connect(m_ui->pushButton_deleteSelect, SIGNAL(clicked()),
+//                   this, SLOT(slot_deleteSeletectedAction()));
 
-  QObject::connect(m_ui->pushButton_MoveUp, SIGNAL(clicked()),
-                   this, SLOT(slot_moveUpSelectedAction()));
-  QObject::connect(m_ui->pushButton_MoveDown, SIGNAL(clicked()),
-                   this, SLOT(slot_moveDownSelectedAction()));
+//  QObject::connect(m_ui->pushButton_MoveUp, SIGNAL(clicked()),
+//                   this, SLOT(slot_moveUpSelectedAction()));
+//  QObject::connect(m_ui->pushButton_MoveDown, SIGNAL(clicked()),
+//                   this, SLOT(slot_moveDownSelectedAction()));
 
-  m_ActionList = new QStringList();
-  m_ActionListModel = new QStringListModel(*m_ActionList, NULL);
-  m_ui->List_Actions->setModel(m_ActionListModel);
-  QItemSelectionModel *selectionModelPtr = m_ui->List_Actions->selectionModel();
-  QObject::connect(selectionModelPtr, SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-                   this, SLOT(slot_selectionItemChanged(QItemSelection)));
-  updateActionList();
-  udpateOperatorList();
+//  m_ActionList = new QStringList();
+//  m_ActionListModel = new QStringListModel(*m_ActionList, NULL);
+//  m_ui->List_Actions->setModel(m_ActionListModel);
+//  QItemSelectionModel *selectionModelPtr = m_ui->List_Actions->selectionModel();
+//  QObject::connect(selectionModelPtr, SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+//                   this, SLOT(slot_selectionItemChanged(QItemSelection)));
+//  updateActionList();
+//  udpateOperatorList();
 }
 
 void TaskBox_TaskManager::updateActionList()
 {
-    if (m_ActionList == nullptr || m_ActionListModel == nullptr)
-        return;
-    auto act_list = m_targetTaskPtr->getActionList();
-    m_ActionList->clear();
-    for (auto const &obj_ptr : act_list) {
-        auto qstr_name = QObject::tr(obj_ptr->getNameInDocument());
-        if (m_ActionList->indexOf(qstr_name) == -1) {
-          m_ActionList->append(qstr_name);
-        }
-    };
-    m_ui->pushButton_MoveUp->setEnabled(act_list.size()>1);
-    m_ui->pushButton_MoveDown->setEnabled(act_list.size()>1);
+//    if (m_ActionList == nullptr || m_ActionListModel == nullptr)
+//        return;
+//    auto act_list = m_targetTaskPtr->getActionList();
+//    m_ActionList->clear();
+//    for (auto const &obj_ptr : act_list) {
+//        auto qstr_name = QObject::tr(obj_ptr->getNameInDocument());
+//        if (m_ActionList->indexOf(qstr_name) == -1) {
+//          m_ActionList->append(qstr_name);
+//        }
+//    };
+//    m_ui->pushButton_MoveUp->setEnabled(act_list.size()>1);
+//    m_ui->pushButton_MoveDown->setEnabled(act_list.size()>1);
 
-    m_ActionListModel->setStringList(*m_ActionList);
+//    m_ActionListModel->setStringList(*m_ActionList);
 }
 
 void TaskBox_TaskManager::udpateOperatorList()

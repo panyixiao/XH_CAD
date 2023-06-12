@@ -34,9 +34,6 @@ public:
     virtual void Restore(Base::XMLReader &/*reader*/);
 
     void moveToSelectedFaceCenter();
-    bool setRobotPose(const RobotPose &t_Pose);
-    const RobotPose getRobotPose(const CordType& t_Type) const;
-
 
     virtual bool setJointAngle(const size_t jntID, float jntAngle) override;
     void setTipPoseByDraggerPose(const Base::Placement& n_DraggerPose);

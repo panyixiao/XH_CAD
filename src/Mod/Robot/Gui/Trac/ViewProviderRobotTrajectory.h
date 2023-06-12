@@ -27,6 +27,7 @@
 //#include <Inventor/VRMLnodes/SoVRMLTransform.h>
 #include <Gui/ViewProviderGeometryObject.h>
 #include <Gui/SoFCSelection.h>
+#include <Mod/Robot/Gui/PreCompiled.h>
 
 class SoDragger;
 class SoJackDragger;

@@ -4,7 +4,7 @@
 #include <fstream>
 #include <memory>
 #include "DS_Utility.h"
-#include <Mod/Robot/App/Trac/RobotProgram.h>
+#include <Mod/Robot/App/TaskManage/RobotProgram.h>
 
 enum class ExportFileType {
 	scan_File = 0,
@@ -107,7 +107,7 @@ private:
                             const int sequenceID,
                             const std::vector<RobotCommand_sptr>& t_cmds);
 
-    const GoogolCoord_newVersion convertRobotWaypoint2GoogolCoord_New(const RobotWaypoint_sptr t_Pnt,
+    const GoogolCoord_newVersion convertRobotWaypoint2GoogolCoord_New(const TargetPoint_sptr t_Pnt,
                                                                       bool collaborateMode = false);
     const GroupPose_Googol convertRobotPose2GoogolFormat(const Robot::RobotPose &t_pose);
     static std::vector<std::string> stdStringSplit(const std::string& srcStr,

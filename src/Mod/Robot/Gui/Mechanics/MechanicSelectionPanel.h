@@ -2,8 +2,9 @@
 #define MECHANIC_SELECTIONPANEL_H
 
 #include <Mod/Robot/App/Database/MechanicDatabase.h>
-#include <Mod/Robot/App/Mechanics/MechanicDevice.h>
-#include <Mod/Robot/App/Mechanics/Robot6AxisObject.h>
+#include <Mod/Robot/App/Mechanics/MechanicBase.h>
+//#include <Mod/Robot/App/Mechanics/MechanicDevice.h>
+//#include <Mod/Robot/App/Mechanics/Robot6AxisObject.h>
 #include <Gui/TaskManagePanel/TaskManageDialog.h>
 #include <App/Document.h>
 #include <QStringList>

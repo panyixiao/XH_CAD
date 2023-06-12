@@ -293,29 +293,29 @@ void ControllerTcpConnector::onReadData()
         QList<QByteArray> exJntPosData = poseData[2].split(',');
 
         bool ok;
-        m_CurrentPose.Pose_Rbt1.CordInfo = std::make_pair<CordType, int>(CordType::ACS, 0);
+//        m_CurrentPose.Pose_Rbt1.CordInfo = std::make_pair<CordType, int>(CordType::ACS, 0);
 
-        if(m_CurrentPose.Pose_Rbt1.PoseData.size() == jontPoseData.size()){
-            for(int i = 0; i<jontPoseData.size(); i++){
-                auto d_val = jontPoseData[i].toDouble(&ok);
-                if(ok)
-                    m_CurrentPose.Pose_Rbt1.PoseData[i] = d_val;
-                else{
-                    qDebug() << "[Error] Failed to convert No."<<QString::number(i)<<" AxisVal to double";
-                }
-            }
-        }
+//        if(m_CurrentPose.Pose_Rbt1.PoseData.size() == jontPoseData.size()){
+//            for(int i = 0; i<jontPoseData.size(); i++){
+//                auto d_val = jontPoseData[i].toDouble(&ok);
+//                if(ok)
+//                    m_CurrentPose.Pose_Rbt1.PoseData[i] = d_val;
+//                else{
+//                    qDebug() << "[Error] Failed to convert No."<<QString::number(i)<<" AxisVal to double";
+//                }
+//            }
+//        }
 
-        if(m_CurrentPose.ExtVals.size() == exJntPosData.size()){
-            for(int i = 0; i < exJntPosData.size(); i++){
-                auto d_val = exJntPosData[i].toDouble(&ok);
-                if(ok)
-                    m_CurrentPose.ExtVals[i] = d_val;
-                else{
-                    qDebug() << "[Error] Failed to convert No."<<QString::number(i)<<" ExtVal to double";
-                }
-            }
-        }
+//        if(m_CurrentPose.ExtVals.size() == exJntPosData.size()){
+//            for(int i = 0; i < exJntPosData.size(); i++){
+//                auto d_val = exJntPosData[i].toDouble(&ok);
+//                if(ok)
+//                    m_CurrentPose.ExtVals[i] = d_val;
+//                else{
+//                    qDebug() << "[Error] Failed to convert No."<<QString::number(i)<<" ExtVal to double";
+//                }
+//            }
+//        }
 
         setFlagCmdRecv(RRT_RC_POS_GET);
 

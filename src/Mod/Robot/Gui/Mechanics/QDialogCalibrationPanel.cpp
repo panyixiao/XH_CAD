@@ -17,7 +17,7 @@
 
 #include "Mod/Robot/App/Utilites/FileIO_Utility.h"
 #include "Mod/Robot/App/Utilites/DS_Utility.h"
-#include "Mod/Robot/App/Trac/RobotWaypoint.h"
+#include "Mod/Robot/App/TaskManage/TargetPoint.h"
 
 #define MaxiumTaskBoxWidth 350
 
@@ -28,9 +28,9 @@ QDialogCalibrationPanel::QDialogCalibrationPanel(App::DocumentObject *t_Target,
                                                  QWidget *parent):
     QDialog(parent)
 {
-    if(t_Target == nullptr || !t_Target->isDerivedFrom(Robot::MechanicDevice::getClassTypeId()))
+    if(t_Target == nullptr || !t_Target->isDerivedFrom(Robot::MechanicBase::getClassTypeId()))
         return;
-    m_TargetObj = static_cast<Robot::MechanicDevice*>(t_Target);
+    m_TargetObj = static_cast<Robot::MechanicBase*>(t_Target);
     initUi();
 }
 
@@ -79,7 +79,7 @@ void QDialogCalibrationPanel::initUi()
     QObject::connect(m_ui->radioButton_prismaticJoint, SIGNAL(clicked(bool)),
                      this, SLOT(slot_jointTypeChanged()));
     slot_changeTargetAxis();
-    auto path_CalibFile = m_TargetObj->Path_CalibFile.getStrValue();
+    auto path_CalibFile = m_TargetObj->FilePath_Calibration.getStrValue();
     if(!path_CalibFile.empty()){
         m_ui->lineEdit->setText(QString::fromStdString(path_CalibFile));
         readinCalibrationFile(QString::fromStdString(path_CalibFile));
@@ -125,9 +125,9 @@ void QDialogCalibrationPanel::slot_updateCalibrationResult()
         return;
     }
     m_CalibPoses.clear();
-    for(int i = start_ID; i<=finish_ID; i++){
-       m_CalibPoses.push_back(m_CalibProgramPtr->getWaypointData()[i]->getWPCartPose_GP1());
-    }
+//    for(int i = start_ID; i<=finish_ID; i++){
+//       m_CalibPoses.push_back(m_CalibProgramPtr->getWaypointData()[i]->getWPCartPose_GP1());
+//    }
 
     Base::Placement t_Center;
     if(flag_isRotationJoint){
@@ -150,7 +150,7 @@ void QDialogCalibrationPanel::slot_applyToTargetObject()
 {
     if(m_TargetObj == nullptr)
         return;
-    auto originPose = m_TargetObj->Pose_Ref2Base.getValue();
+    auto originPose = m_TargetObj->Pose_Reference.getValue();
 
     double new_Tx = m_ui->label_result_Tx->isEnabled()?m_ui->label_result_Tx->text().toDouble():originPose.getPosition().x;
     double new_Ty = m_ui->label_result_Ty->isEnabled()?m_ui->label_result_Ty->text().toDouble():originPose.getPosition().y;
@@ -162,7 +162,7 @@ void QDialogCalibrationPanel::slot_applyToTargetObject()
     double new_Rz = m_ui->label_result_Rz->isEnabled()?m_ui->label_result_Rz->text().toDouble():yaw;
     Base::Rotation new_Rot;
     new_Rot.setYawPitchRoll(new_Rz,new_Ry,new_Rx);
-    m_TargetObj->Pose_Ref2Base.setValue(Base::Placement(Base::Vector3d(new_Tx,new_Ty,new_Tz),
+    m_TargetObj->Pose_Reference.setValue(Base::Placement(Base::Vector3d(new_Tx,new_Ty,new_Tz),
                                                         new_Rot));
     Q_EMIT signal_updatePosePanel();
 }
@@ -215,7 +215,7 @@ bool QDialogCalibrationPanel::readinCalibrationFile(const QString& t_path)
     m_ui->spinBox_LastID->setMinimum(3);
     m_ui->spinBox_LastID->setMaximum(t_size-1);
 
-    m_TargetObj->Path_CalibFile.setValue(t_path.toStdString().c_str());
+    m_TargetObj->FilePath_Calibration.setValue(t_path.toStdString().c_str());
     return true;
 }
 

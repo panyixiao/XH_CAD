@@ -8,7 +8,7 @@
 #include <Gui/TaskView/TaskSelectLinkProperty.h>
 #include "Mod/Robot/Gui/Utilites/WidgetUtility.h"
 #include "Mod/Robot/App/Mechanics/MechanicRobot.h"
-#include "Mod/Robot/App/Mechanics/Robot6AxisObject.h"
+//#include "Mod/Robot/App/Mechanics/Robot6AxisObject.h"
 
 class Ui_TaskBoxRobotTeachPanel;
 

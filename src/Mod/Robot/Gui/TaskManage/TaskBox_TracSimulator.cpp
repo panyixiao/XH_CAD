@@ -20,16 +20,16 @@
 using namespace RobotGui;
 using namespace Gui;
 
-TaskBox_TracSimulator::TaskBox_TracSimulator(Robot::RobotTracObject *t_TracObj,
-                                             QWidget *parent)
-    : TaskBox(Gui::BitmapFactory().pixmap("document-new"),tr("仿真管理"),true, parent)
-{
-    initUi(false);
-    if(!updateSimulationTarget(t_TracObj))
-        return;
-    m_SimulatorPtr = new Robot::TracSimulator();
-    m_SimulatorPtr->initDocPtr(m_DocPtr);
-}
+//TaskBox_TracSimulator::TaskBox_TracSimulator(Robot::RobotTracObject *t_TracObj,
+//                                             QWidget *parent)
+//    : TaskBox(Gui::BitmapFactory().pixmap("document-new"),tr("仿真管理"),true, parent)
+//{
+//    initUi(false);
+//    if(!updateSimulationTarget(t_TracObj))
+//        return;
+//    m_SimulatorPtr = new Robot::ProgramSimulator();
+//    m_SimulatorPtr->initDocPtr(m_DocPtr);
+//}
 
 TaskBox_TracSimulator::TaskBox_TracSimulator(Robot::TaskObject *t_TaskObj, QWidget *parent)
     : TaskBox(Gui::BitmapFactory().pixmap("document-new"),tr("仿真管理"),true, parent)
@@ -37,7 +37,7 @@ TaskBox_TracSimulator::TaskBox_TracSimulator(Robot::TaskObject *t_TaskObj, QWidg
     initUi(true);
     if(!updateSimulationTarget(t_TaskObj))
         return;
-    m_SimulatorPtr = new Robot::TracSimulator();
+    m_SimulatorPtr = new Robot::ProgramSimulator();
     m_SimulatorPtr->initDocPtr(m_DocPtr);
 }
 
@@ -74,20 +74,20 @@ void TaskBox_TracSimulator::initUi(bool showCmdlineWidget)
 
 void TaskBox_TracSimulator::generateCommandExecutingMsg(const size_t t_CmdID)
 {
-    auto cmdName = m_SimulatorPtr->getCurrentSimProgram()->generateCommandStr(m_SimulatorPtr->getSelectedCommandPtr(t_CmdID));
-    std::string msg = "Executing Command: " + cmdName + "...";
-    Base::Console().Message(msg.c_str());
+//    auto cmdName = m_SimulatorPtr->getCurrentSimProgram()->generateCommandStr(m_SimulatorPtr->getSelectedCommandPtr(t_CmdID));
+//    std::string msg = "Executing Command: " + cmdName + "...";
+//    Base::Console().Message(msg.c_str());
 }
 
-bool TaskBox_TracSimulator::updateSimulationTarget(Robot::RobotTracObject *t_TracObj)
-{
-    if(t_TracObj == nullptr)
-        return false;
-    m_DocPtr = t_TracObj->getDocument();
-    m_TracObjPtr = t_TracObj;
-    slot_updateSimProgram(m_TracObjPtr->getRobotProgramSptr());
-    return true;
-}
+//bool TaskBox_TracSimulator::updateSimulationTarget(Robot::RobotTracObject *t_TracObj)
+//{
+//    if(t_TracObj == nullptr)
+//        return false;
+//    m_DocPtr = t_TracObj->getDocument();
+////    m_TracObjPtr = t_TracObj;
+////    slot_updateSimProgram(m_TracObjPtr->getRobotProgramSptr());
+//    return true;
+//}
 
 bool TaskBox_TracSimulator::updateSimulationTarget(Robot::TaskObject *t_TaskObj)
 {
@@ -108,12 +108,12 @@ TaskBox_TracSimulator::~TaskBox_TracSimulator()
 void TaskBox_TracSimulator::slot_changeSelectedCommand(const QItemSelection &selection)
 {
 //    auto t_ID = ;
-    c_CmdID = m_ui->listView_CommandList->selectionModel()->currentIndex().row();
-    auto t_cmdPtr = m_SimulatorPtr->getSelectedCommandPtr(c_CmdID);
-    m_SimulatorPtr->executeSelectedCommand(t_cmdPtr);
-    auto t_PosePtr = m_SimulatorPtr->getSelectedCommandPose(t_cmdPtr);
-    if(t_PosePtr != nullptr)
-        m_ui->label_Pos->setText(QString::fromStdString(t_PosePtr->getWP_Name()));
+//    c_CmdID = m_ui->listView_CommandList->selectionModel()->currentIndex().row();
+//    auto t_cmdPtr = m_SimulatorPtr->getSelectedCommandPtr(c_CmdID);
+//    m_SimulatorPtr->executeSelectedCommand(t_cmdPtr);
+//    auto t_PosePtr = m_SimulatorPtr->getSelectedCommandPose(t_cmdPtr);
+//    if(t_PosePtr != nullptr)
+//        m_ui->label_Pos->setText(QString::fromStdString(t_PosePtr->getWP_Name()));
 }
 
 void TaskBox_TracSimulator::slot_updateSimProgram(const RobotProg_sptr t_Program)
@@ -121,7 +121,7 @@ void TaskBox_TracSimulator::slot_updateSimProgram(const RobotProg_sptr t_Program
     if(t_Program == nullptr)
         return;
     if(m_SimulatorPtr == nullptr){
-        m_SimulatorPtr = new Robot::TracSimulator();
+        m_SimulatorPtr = new Robot::ProgramSimulator();
         m_SimulatorPtr->initDocPtr(m_DocPtr);
     }
     m_SimulatorPtr->setTargetSimProgram(t_Program);
@@ -209,21 +209,20 @@ void TaskBox_TracSimulator::timerDone(void)
         timePos += .1f;
         totalTime += .1f;
         m_ui->timeSpinBox->setValue(totalTime);
-        if(!m_SimulatorPtr->udpateGroupPoseByTime(timePos)){
-            Base::Console().Message("(FAILED!)\n");
-            Base::Console().Warning("TaskBox_TracSimulator::timerDone(): Failed to Set Pose By Time\n");
-            stopSimulation();
-        }
-        else{
-            if(m_SimulatorPtr->commandFinished(temp_CmdID)){
-                Base::Console().Message("(DONE!)\n");
-                auto t_id = c_CmdID - m_SimulatorPtr->getMoveBufferCommandNum()+temp_CmdID;
-                generateCommandExecutingMsg(t_id);
-                temp_CmdID++;
-
-            }
-            timer->start();
-        }
+//        if(!m_SimulatorPtr->udpateGroupPoseByTime(timePos)){
+//            Base::Console().Message("(FAILED!)\n");
+//            Base::Console().Warning("TaskBox_TracSimulator::timerDone(): Failed to Set Pose By Time\n");
+//            stopSimulation();
+//        }
+//        else{
+//            if(m_SimulatorPtr->commandFinished(temp_CmdID)){
+//                Base::Console().Message("(DONE!)\n");
+//                auto t_id = c_CmdID - m_SimulatorPtr->getMoveBufferCommandNum()+temp_CmdID;
+//                generateCommandExecutingMsg(t_id);
+//                temp_CmdID++;
+//            }
+//            timer->start();
+//        }
     }
     else{
         if(updateSimualtionTrac()){
@@ -268,15 +267,15 @@ bool TaskBox_TracSimulator::updateSimualtionTrac()
         }
         c_CmdID++;
     }
-    m_SimulatorPtr->updateMovCommandBuffer(t_Commands);
-    flag_continue &= m_SimulatorPtr->generateSimulationTrac_FromCurrentPose()>0;
-    if(flag_continue){
-        duration = m_SimulatorPtr->getDuration();
-    }
-    else{
-        std::string msg = "TaskBox_TracSimulator: Failed to Generate Trac From line: " + std::to_string(c_CmdID) + "\n";
-        Base::Console().Warning(msg.c_str());
-    }
+//    m_SimulatorPtr->updateMovCommandBuffer(t_Commands);
+//    flag_continue &= m_SimulatorPtr->generateSimulationTrac_FromCurrentPose()>0;
+//    if(flag_continue){
+//        duration = m_SimulatorPtr->getDuration();
+//    }
+//    else{
+//        std::string msg = "TaskBox_TracSimulator: Failed to Generate Trac From line: " + std::to_string(c_CmdID) + "\n";
+//        Base::Console().Warning(msg.c_str());
+//    }
     return flag_continue;
 }
 

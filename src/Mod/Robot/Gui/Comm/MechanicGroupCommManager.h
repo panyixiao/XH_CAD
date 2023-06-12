@@ -264,7 +264,7 @@ protected:
 
 private:
     MechanicGroup* m_TargetGroup = nullptr;
-    GroupPose      m_CurrentPose;
+    MechPose      m_CurrentPose;
 //    poseUpdateCallBack    m_PoseUpdateCallBack = nullptr;
     // Mirror Transfer TCP Server
     QTcpServer			tcpServerMirror;

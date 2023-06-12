@@ -388,91 +388,91 @@ void MechanicRobot::Restore(Base::XMLReader &reader)
 }
 
 
-bool MechanicRobot::setRobotPose(const RobotPose &t_Pose)
-{
-    bool success = true;
+//bool MechanicRobot::setRobotPose(const RobotPose &t_Pose)
+//{
+//    bool success = true;
 
-    Base::Placement t_CartPose;
-    t_CartPose.setPosition(Base::Vector3d(t_Pose.PoseData[0],
-                                          t_Pose.PoseData[1],
-                                          t_Pose.PoseData[2]));
-    Base::Rotation t_Rot;
-    t_Rot.setYawPitchRoll(t_Pose.PoseData[3],
-                          t_Pose.PoseData[4],
-                          t_Pose.PoseData[5]);
-    t_CartPose.setRotation(t_Rot);
+//    Base::Placement t_CartPose;
+//    t_CartPose.setPosition(Base::Vector3d(t_Pose.PoseData[0],
+//                                          t_Pose.PoseData[1],
+//                                          t_Pose.PoseData[2]));
+//    Base::Rotation t_Rot;
+//    t_Rot.setYawPitchRoll(t_Pose.PoseData[3],
+//                          t_Pose.PoseData[4],
+//                          t_Pose.PoseData[5]);
+//    t_CartPose.setRotation(t_Rot);
 
-    switch(t_Pose.CordInfo.first){
-    case CordType::ACS:
-        success &= setJointAngles(t_Pose.PoseData);
-        break;
-    case CordType::MCS:
-    {
-        success &= setRobotTipPose(t_CartPose,CoordOrigin::Robot);
-    }
-        break;
-    case CordType::TCS:{
-        uint toolIndex = t_Pose.CordInfo.second;
-        auto toolTrans = getToolFrameTrans(toolIndex);
-        Base::Placement t_FlanPose = t_CartPose * toolTrans.inverse();
-        success &= setRobotTipPose(t_FlanPose,CoordOrigin::Flan);
-    }
-        break;
-    case CordType::WCS:{
-        success &= setRobotTipPose(t_CartPose,CoordOrigin::World);
-    }
-        break;
-
-    case CordType::PCS:
-        break;
-    }
-
-    return success;
-}
-
-const RobotPose MechanicRobot::getRobotPose(const CordType &t_Type) const
-{
-    RobotPose c_Pose;
-    CompPose t_CompPose;
-//    switch(t_Type){
+//    switch(t_Pose.CordInfo.first){
 //    case CordType::ACS:
-//        c_Pose.PoseData = getJointAngles();
-//        c_Pose.CordInfo.first = CordType::ACS;
-//        c_Pose.FlanPose = getCurrentFlanPose(CoordOrigin::Robot);
-//        c_Pose.ConfigID = (uint)m_kinematicModel.getConfigType();
+//        success &= setJointAngles(t_Pose.PoseData);
 //        break;
 //    case CordType::MCS:
-//        t_CompPose.first = getCurrentTipPose(CoordOrigin::Robot);
-//        t_CompPose.second.first = 0;
-//        t_CompPose.second.second = 0;
-//        c_Pose.setPoseData(t_CompPose);
-//        c_Pose.CordInfo.first = CordType::MCS;
-//        c_Pose.ConfigID = (uint)m_kinematicModel.getConfigType();
-//        c_Pose.FlanPose = getCurrentFlanPose(CoordOrigin::Robot);
+//    {
+//        success &= setRobotTipPose(t_CartPose,CoordOrigin::Robot);
+//    }
 //        break;
-//    case CordType::TCS:
-//        t_CompPose.first = getCurrentTipPose();
-//        t_CompPose.second.first = 0;
-//        t_CompPose.second.second = 0;
-//        c_Pose.setPoseData(t_CompPose);
-//        c_Pose.CordInfo.first = CordType::TCS;
-//        c_Pose.CordInfo.second = CurrentToolIndex.getValue();
-//        c_Pose.ConfigID = (uint)m_kinematicModel.getConfigType();
-//        c_Pose.FlanPose = getCurrentFlanPose(CoordOrigin::Robot);
+//    case CordType::TCS:{
+//        uint toolIndex = t_Pose.CordInfo.second;
+//        auto toolTrans = getToolFrameTrans(toolIndex);
+//        Base::Placement t_FlanPose = t_CartPose * toolTrans.inverse();
+//        success &= setRobotTipPose(t_FlanPose,CoordOrigin::Flan);
+//    }
 //        break;
-//    case CordType::WCS:
-//        t_CompPose.first = getCurrentTipPose();
-//        t_CompPose.second.first = 0;
-//        t_CompPose.second.second = 0;
-//        c_Pose.setPoseData(t_CompPose);
-//        c_Pose.CordInfo.first = CordType::WCS;
-//        c_Pose.ConfigID = (uint)m_kinematicModel.getConfigType();
-//        c_Pose.FlanPose = getCurrentFlanPose(CoordOrigin::World);
+//    case CordType::WCS:{
+//        success &= setRobotTipPose(t_CartPose,CoordOrigin::World);
+//    }
+//        break;
+
+//    case CordType::PCS:
 //        break;
 //    }
 
-    return c_Pose;
-}
+//    return success;
+//}
+
+//const RobotPose MechanicRobot::getRobotPose(const CordType &t_Type) const
+//{
+//    RobotPose c_Pose;
+////    CompPose t_CompPose;
+////    switch(t_Type){
+////    case CordType::ACS:
+////        c_Pose.PoseData = getJointAngles();
+////        c_Pose.CordInfo.first = CordType::ACS;
+////        c_Pose.FlanPose = getCurrentFlanPose(CoordOrigin::Robot);
+////        c_Pose.ConfigID = (uint)m_kinematicModel.getConfigType();
+////        break;
+////    case CordType::MCS:
+////        t_CompPose.first = getCurrentTipPose(CoordOrigin::Robot);
+////        t_CompPose.second.first = 0;
+////        t_CompPose.second.second = 0;
+////        c_Pose.setPoseData(t_CompPose);
+////        c_Pose.CordInfo.first = CordType::MCS;
+////        c_Pose.ConfigID = (uint)m_kinematicModel.getConfigType();
+////        c_Pose.FlanPose = getCurrentFlanPose(CoordOrigin::Robot);
+////        break;
+////    case CordType::TCS:
+////        t_CompPose.first = getCurrentTipPose();
+////        t_CompPose.second.first = 0;
+////        t_CompPose.second.second = 0;
+////        c_Pose.setPoseData(t_CompPose);
+////        c_Pose.CordInfo.first = CordType::TCS;
+////        c_Pose.CordInfo.second = CurrentToolIndex.getValue();
+////        c_Pose.ConfigID = (uint)m_kinematicModel.getConfigType();
+////        c_Pose.FlanPose = getCurrentFlanPose(CoordOrigin::Robot);
+////        break;
+////    case CordType::WCS:
+////        t_CompPose.first = getCurrentTipPose();
+////        t_CompPose.second.first = 0;
+////        t_CompPose.second.second = 0;
+////        c_Pose.setPoseData(t_CompPose);
+////        c_Pose.CordInfo.first = CordType::WCS;
+////        c_Pose.ConfigID = (uint)m_kinematicModel.getConfigType();
+////        c_Pose.FlanPose = getCurrentFlanPose(CoordOrigin::World);
+////        break;
+////    }
+
+//    return c_Pose;
+//}
 
 bool MechanicRobot::setJointAngle(const size_t jntID, float jntAngle)
 {

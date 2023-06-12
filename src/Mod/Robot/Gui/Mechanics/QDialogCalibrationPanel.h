@@ -6,8 +6,8 @@
 #include <QDialog>
 #include <App/DocumentObject.h>
 #include <Base/Placement.h>
-#include <Mod/Robot/App/Trac/RobotProgram.h>
-#include "Mod/Robot/App/Mechanics/MechanicDevice.h"
+#include <Mod/Robot/App/TaskManage/RobotProgram.h>
+#include "Mod/Robot/App/Mechanics/MechanicBase.h"
 
 class Ui_QDialogCalibrationPanel;
 namespace RobotGui {
@@ -46,7 +46,7 @@ private:
     size_t finish_ID;
     bool flag_isRotationJoint = true;
     // TODO: Upgrade to MechanicObject*
-    Robot::MechanicDevice *m_TargetObj;
+    Robot::MechanicBase *m_TargetObj;
 };
 
 

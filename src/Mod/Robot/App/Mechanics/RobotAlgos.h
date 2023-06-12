@@ -30,7 +30,7 @@
 #include <string>
 #include <vector>
 
-#include "Mod/Robot/App/kdl_cp/frames_io.hpp"
+#include "Mod/Robot/App/Kinematics/kdl_cp/frames_io.hpp"
 #include <Base/Placement.h>
 
 namespace Robot

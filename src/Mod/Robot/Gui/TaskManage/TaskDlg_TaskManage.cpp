@@ -36,20 +36,20 @@ TaskDlg_TaskManage::TaskDlg_TaskManage(Robot::TaskObject *t_TaskObj,
   this->setMaximumWidth(Maxium_Width+5);
 }
 
-TaskDlg_TaskManage::TaskDlg_TaskManage(RobotTracObject *t_TracObj, QWidget *parent)
-{
-    if(t_TracObj == nullptr)
-        return;
-    m_taskObjPtr = static_cast<Robot::TaskObject*>(t_TracObj->getTracManager());
-    m_DocPtr = t_TracObj->getDocument();
+//TaskDlg_TaskManage::TaskDlg_TaskManage(RobotTracObject *t_TracObj, QWidget *parent)
+//{
+//    if(t_TracObj == nullptr)
+//        return;
+//    m_taskObjPtr = static_cast<Robot::TaskObject*>(t_TracObj->getTracManager());
+//    m_DocPtr = t_TracObj->getDocument();
 
-    if(m_TskBox_TracSimulator == nullptr){
-        m_TskBox_TracSimulator = new TaskBox_TracSimulator(t_TracObj);
-    }
-    showTskBox_TracObject(t_TracObj);
-    showTskBox_SimuManage(t_TracObj);
-    this->setMaximumWidth(Maxium_Width+5);
-}
+//    if(m_TskBox_TracSimulator == nullptr){
+//        m_TskBox_TracSimulator = new TaskBox_TracSimulator(t_TracObj);
+//    }
+//    showTskBox_TracObject(t_TracObj);
+//    showTskBox_SimuManage(t_TracObj);
+//    this->setMaximumWidth(Maxium_Width+5);
+//}
 
 void TaskDlg_TaskManage::accept() {
     Q_EMIT Signal_dlg_accept();
@@ -71,40 +71,40 @@ void TaskDlg_TaskManage::reject() {
 }
 
 void TaskDlg_TaskManage::slot_insertFreerunTrac(QString operator_Name){
-    insertTracObject(operator_Name.toStdString(), Robot::TracType::FREETRAC);
+//    insertTracObject(operator_Name.toStdString(), Robot::TracType::FREETRAC);
     hideTskBoxes(true);
 }
 
 void TaskDlg_TaskManage::slot_insertScanTrac(QString operator_Name)
 {
-    insertTracObject(operator_Name.toStdString(), Robot::TracType::SCANTRAC);
+//    insertTracObject(operator_Name.toStdString(), Robot::TracType::SCANTRAC);
     hideTskBoxes(true);
 }
 
 void TaskDlg_TaskManage::slot_insertSeamTrac(QString operator_Name)
 {
-    insertTracObject(operator_Name.toStdString(), Robot::TracType::SEAMTRAC);
+//    insertTracObject(operator_Name.toStdString(), Robot::TracType::SEAMTRAC);
     hideTskBoxes(true);
 }
 
 void TaskDlg_TaskManage::slot_tracEditDone(App::DocumentObject * t_obj)
 {
-    if(m_TskBox_freerunTracEditor)
-        m_TskBox_freerunTracEditor = nullptr;
-    if(m_TskBox_edgebasedTracEditor)
-        m_TskBox_edgebasedTracEditor = nullptr;
+//    if(m_TskBox_freerunTracEditor)
+//        m_TskBox_freerunTracEditor = nullptr;
+//    if(m_TskBox_edgebasedTracEditor)
+//        m_TskBox_edgebasedTracEditor = nullptr;
 
     // This happens when Edit Panel created by doubleclick TracObject
     if(m_taskObjPtr == nullptr){
         if(t_obj == nullptr)
             return;
-        if(t_obj->isDerivedFrom(Robot::RobotTracObject::getClassTypeId())){
-            auto trac_obj = static_cast<Robot::RobotTracObject*>(t_obj);
-            if(trac_obj==nullptr)
-                return;
-            // Get TracObject Task Name
-            m_taskObjPtr = static_cast<Robot::TaskObject*>(trac_obj->getDocument()->getObject(trac_obj->TracManagerName.getValue()));
-        }
+//        if(t_obj->isDerivedFrom(Robot::RobotTracObject::getClassTypeId())){
+//            auto trac_obj = static_cast<Robot::RobotTracObject*>(t_obj);
+//            if(trac_obj==nullptr)
+//                return;
+//            // Get TracObject Task Name
+//            m_taskObjPtr = static_cast<Robot::TaskObject*>(trac_obj->getDocument()->getObject(trac_obj->TracManagerName.getValue()));
+//        }
     }
     m_taskObjPtr->refreshTracData.setValue(true);
     showTskBox_TaskManage(m_taskObjPtr);
@@ -116,10 +116,10 @@ void TaskDlg_TaskManage::slot_disableEditing(bool flag)
 {
     if(m_TskBox_TaskManager!=nullptr)
         m_TskBox_TaskManager->setEnabled(!flag);
-    if(m_TskBox_freerunTracEditor!=nullptr)
-        m_TskBox_freerunTracEditor->setEnabled(!flag);
-    if(m_TskBox_edgebasedTracEditor!= nullptr)
-        m_TskBox_edgebasedTracEditor->setEnabled(!flag);
+//    if(m_TskBox_freerunTracEditor!=nullptr)
+//        m_TskBox_freerunTracEditor->setEnabled(!flag);
+//    if(m_TskBox_edgebasedTracEditor!= nullptr)
+//        m_TskBox_edgebasedTracEditor->setEnabled(!flag);
 
 }
 
@@ -128,10 +128,10 @@ void TaskDlg_TaskManage::slot_expandSimulationPanel()
     if(!m_TskBox_TracSimulator)
         return;
     m_TskBox_TracSimulator->setMinimumHeight(850);
-    if(m_TskBox_freerunTracEditor)
-        m_TskBox_freerunTracEditor->hideGroupBox();
-    if(m_TskBox_edgebasedTracEditor)
-        m_TskBox_edgebasedTracEditor->hideGroupBox();
+//    if(m_TskBox_freerunTracEditor)
+//        m_TskBox_freerunTracEditor->hideGroupBox();
+//    if(m_TskBox_edgebasedTracEditor)
+//        m_TskBox_edgebasedTracEditor->hideGroupBox();
     if(m_TskBox_TaskManager)
         m_TskBox_TaskManager->hideGroupBox();
     m_DlgCtrl->hide();
@@ -142,10 +142,10 @@ void TaskDlg_TaskManage::slot_foldinSimulationPanel()
     if(!m_TskBox_TracSimulator)
         return;
     m_TskBox_TracSimulator->setMinimumHeight(220);
-    if(m_TskBox_freerunTracEditor)
-        m_TskBox_freerunTracEditor->showHide();
-    if(m_TskBox_edgebasedTracEditor)
-        m_TskBox_edgebasedTracEditor->showHide();
+//    if(m_TskBox_freerunTracEditor)
+//        m_TskBox_freerunTracEditor->showHide();
+//    if(m_TskBox_edgebasedTracEditor)
+//        m_TskBox_edgebasedTracEditor->showHide();
     if(m_TskBox_TaskManager)
         m_TskBox_TaskManager->showHide();
     m_DlgCtrl->show();
@@ -155,13 +155,13 @@ void TaskDlg_TaskManage::slot_editTargetAction(App::DocumentObject *t_obj)
 {
     if(t_obj == nullptr)
         return;
-    if(t_obj->isDerivedFrom(Robot::RobotTracObject::getClassTypeId())){
-        showTskBox_TracObject(static_cast<Robot::RobotTracObject*>(t_obj));
-        showTskBox_SimuManage(static_cast<Robot::RobotTracObject*>(t_obj));
-    }
-    else if(t_obj->isDerivedFrom(Robot::ActionObject::getClassTypeId())){
-        showTskBox_ActObject(static_cast<Robot::ActionObject*>(t_obj));
-    }
+//    if(t_obj->isDerivedFrom(Robot::RobotTracObject::getClassTypeId())){
+////        showTskBox_TracObject(static_cast<Robot::RobotTracObject*>(t_obj));
+////        showTskBox_SimuManage(static_cast<Robot::RobotTracObject*>(t_obj));
+//    }
+//    else if(t_obj->isDerivedFrom(Robot::ActionObject::getClassTypeId())){
+//        showTskBox_ActObject(static_cast<Robot::ActionObject*>(t_obj));
+//    }
     hideTskBoxes(true);
 }
 
@@ -187,13 +187,13 @@ void TaskDlg_TaskManage::slot_insertImportedTrac(QString operator_Name)
                                                                    operator_Name.toStdString());
 
         // Set Trac operator
-        auto tracObj = static_cast<Robot::RobotTracObject*>(objPtr);
-        tracObj->setTracManager(std::string(m_taskObjPtr->getNameInDocument()));
-        tracObj->setOperator(operator_Name.toStdString());
-        tracObj->setTracType(Robot::TracType::FREETRAC);
-        tracObj->setRobotProgramPtr(t_ProgramPtr);
-        m_taskObjPtr->insertAction(tracObj);
-        showTskBox_TracObject(tracObj);
+//        auto tracObj = static_cast<Robot::RobotTracObject*>(objPtr);
+//        tracObj->setTracManager(std::string(m_taskObjPtr->getNameInDocument()));
+//        tracObj->setOperator(operator_Name.toStdString());
+//        tracObj->setTracType(Robot::TracType::FREETRAC);
+//        tracObj->setRobotProgramPtr(t_ProgramPtr);
+//        m_taskObjPtr->insertAction(tracObj);
+//        showTskBox_TracObject(tracObj);
         hideTskBoxes(true);
     }
 }
@@ -251,72 +251,72 @@ void TaskDlg_TaskManage::showTskBox_SimuManage(TaskObject *t_TaskObj)
     m_TskBox_TracSimulator->show();
 }
 
-void TaskDlg_TaskManage::showTskBox_SimuManage(RobotTracObject *t_TracObj)
-{
-    if(t_TracObj == nullptr)
-        return;
-    if(m_TskBox_TracSimulator == nullptr){
-        m_TskBox_TracSimulator = new TaskBox_TracSimulator(t_TracObj);
-        m_TskBox_TracSimulator->setMaximumHeight(220);
-        m_TskBox_TracSimulator->setMaximumWidth(Maxium_Width);
-        QObject::connect(m_TskBox_TracSimulator, SIGNAL(Signal_simulationOn(bool)),
-                         this, SLOT(slot_disableEditing(bool)));
-        QObject::connect(m_TskBox_TracSimulator, SIGNAL(Signal_expdSimulationPanel()),
-                         this, SLOT(slot_expandSimulationPanel()));
-        QObject::connect(m_TskBox_TracSimulator, SIGNAL(Signal_foldSimulationPanel()),
-                         this, SLOT(slot_foldinSimulationPanel()));
-        this->addWidget(m_TskBox_TracSimulator);
-    }
-    m_TskBox_TracSimulator->updateSimulationTarget(t_TracObj);
-    m_TskBox_TracSimulator->show();
-}
+//void TaskDlg_TaskManage::showTskBox_SimuManage(RobotTracObject *t_TracObj)
+//{
+//    if(t_TracObj == nullptr)
+//        return;
+//    if(m_TskBox_TracSimulator == nullptr){
+//        m_TskBox_TracSimulator = new TaskBox_TracSimulator(t_TracObj);
+//        m_TskBox_TracSimulator->setMaximumHeight(220);
+//        m_TskBox_TracSimulator->setMaximumWidth(Maxium_Width);
+//        QObject::connect(m_TskBox_TracSimulator, SIGNAL(Signal_simulationOn(bool)),
+//                         this, SLOT(slot_disableEditing(bool)));
+//        QObject::connect(m_TskBox_TracSimulator, SIGNAL(Signal_expdSimulationPanel()),
+//                         this, SLOT(slot_expandSimulationPanel()));
+//        QObject::connect(m_TskBox_TracSimulator, SIGNAL(Signal_foldSimulationPanel()),
+//                         this, SLOT(slot_foldinSimulationPanel()));
+//        this->addWidget(m_TskBox_TracSimulator);
+//    }
+//    m_TskBox_TracSimulator->updateSimulationTarget(t_TracObj);
+//    m_TskBox_TracSimulator->show();
+//}
 
-void TaskDlg_TaskManage::showTskBox_TracObject(RobotTracObject *t_TracObj)
-{
-    switch(t_TracObj->getTracType()){
-    case Robot::TracType::FREETRAC:
-        if(m_TskBox_freerunTracEditor == nullptr){
-            m_TskBox_freerunTracEditor = new TaskBox_FreerunTracEditor(t_TracObj);
-            QObject::connect(m_TskBox_freerunTracEditor, SIGNAL(Signal_TracEditDone(App::DocumentObject*)),
-                             this, SLOT(slot_tracEditDone(App::DocumentObject*)));
-            QObject::connect(m_TskBox_freerunTracEditor, SIGNAL(Signal_updateTracObject(const RobotProg_sptr)),
-                             m_TskBox_TracSimulator, SLOT(slot_updateSimProgram(const RobotProg_sptr)));
-            m_TskBox_freerunTracEditor->setMaximumWidth(Maxium_Width);
-            this->addWidget(m_TskBox_freerunTracEditor);
-        }
-        else{
-            m_TskBox_freerunTracEditor->setTargetTracObject(t_TracObj);
-        }
+//void TaskDlg_TaskManage::showTskBox_TracObject(RobotTracObject *t_TracObj)
+//{
+//    switch(t_TracObj->getTracType()){
+//    case Robot::TracType::FREETRAC:
+//        if(m_TskBox_freerunTracEditor == nullptr){
+//            m_TskBox_freerunTracEditor = new TaskBox_FreerunTracEditor(t_TracObj);
+//            QObject::connect(m_TskBox_freerunTracEditor, SIGNAL(Signal_TracEditDone(App::DocumentObject*)),
+//                             this, SLOT(slot_tracEditDone(App::DocumentObject*)));
+//            QObject::connect(m_TskBox_freerunTracEditor, SIGNAL(Signal_updateTracObject(const RobotProg_sptr)),
+//                             m_TskBox_TracSimulator, SLOT(slot_updateSimProgram(const RobotProg_sptr)));
+//            m_TskBox_freerunTracEditor->setMaximumWidth(Maxium_Width);
+//            this->addWidget(m_TskBox_freerunTracEditor);
+//        }
+//        else{
+//            m_TskBox_freerunTracEditor->setTargetTracObject(t_TracObj);
+//        }
 
-        m_TskBox_freerunTracEditor->show();
-        break;
+//        m_TskBox_freerunTracEditor->show();
+//        break;
 
-    case Robot::TracType::SCANTRAC:
-    case Robot::TracType::SEAMTRAC:
-        if(m_TskBox_edgebasedTracEditor == nullptr){
-            m_TskBox_edgebasedTracEditor = new TaskBox_EdgeBasedTracEditor(t_TracObj);
-            QObject::connect(m_TskBox_edgebasedTracEditor, SIGNAL(Signal_TracObjectEditDone(App::DocumentObject*)),
-                             this, SLOT(slot_tracEditDone(App::DocumentObject*)));
-            QObject::connect(m_TskBox_edgebasedTracEditor, SIGNAL(Signal_updateTracObject(const RobotProg_sptr)),
-                             m_TskBox_TracSimulator, SLOT(slot_updateSimProgram(const RobotProg_sptr)));
+//    case Robot::TracType::SCANTRAC:
+//    case Robot::TracType::SEAMTRAC:
+//        if(m_TskBox_edgebasedTracEditor == nullptr){
+//            m_TskBox_edgebasedTracEditor = new TaskBox_EdgeBasedTracEditor(t_TracObj);
+//            QObject::connect(m_TskBox_edgebasedTracEditor, SIGNAL(Signal_TracObjectEditDone(App::DocumentObject*)),
+//                             this, SLOT(slot_tracEditDone(App::DocumentObject*)));
+//            QObject::connect(m_TskBox_edgebasedTracEditor, SIGNAL(Signal_updateTracObject(const RobotProg_sptr)),
+//                             m_TskBox_TracSimulator, SLOT(slot_updateSimProgram(const RobotProg_sptr)));
 
-            m_TskBox_edgebasedTracEditor->setMaximumWidth(Maxium_Width);
-            this->addWidget(m_TskBox_edgebasedTracEditor);
-        }
-        else{
-            m_TskBox_edgebasedTracEditor->initEdgeTracEditor(t_TracObj);
-        }
-        m_TskBox_edgebasedTracEditor->show();
-        break;
-    }
+//            m_TskBox_edgebasedTracEditor->setMaximumWidth(Maxium_Width);
+//            this->addWidget(m_TskBox_edgebasedTracEditor);
+//        }
+//        else{
+//            m_TskBox_edgebasedTracEditor->initEdgeTracEditor(t_TracObj);
+//        }
+//        m_TskBox_edgebasedTracEditor->show();
+//        break;
+//    }
 
-    m_DlgCtrl->showButtons(false);
-}
+//    m_DlgCtrl->showButtons(false);
+//}
 
-void TaskDlg_TaskManage::showTskBox_ActObject(ActionObject *t_ActObj)
-{
-    m_DlgCtrl->showButtons(false);
-}
+//void TaskDlg_TaskManage::showTskBox_ActObject(ActionObject *t_ActObj)
+//{
+//    m_DlgCtrl->showButtons(false);
+//}
 
 
 void TaskDlg_TaskManage::hideTskBoxes(bool hide)
@@ -332,7 +332,7 @@ void TaskDlg_TaskManage::hideTskBoxes(bool hide)
 }
 
 // TO TASKBOX_TaskManager
-bool TaskDlg_TaskManage::insertTracObject(const string opt_Name, const TracType &t_type)
+/*bool TaskDlg_TaskManage::insertTracObject(const string opt_Name, const TracType &t_type)
 {
     std::string tracName, cmmd_str;
     switch(t_type){
@@ -369,7 +369,7 @@ bool TaskDlg_TaskManage::insertTracObject(const string opt_Name, const TracType 
     }
 
     return false;
-}
+}*/
 
 const string TaskDlg_TaskManage::getDialogType() const
 {

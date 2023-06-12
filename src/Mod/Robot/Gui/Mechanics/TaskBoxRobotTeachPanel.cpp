@@ -10,7 +10,7 @@
 #include <QPushButton>
 #include "Mod/Robot/App/Utilites/DS_Utility.h"
 #include "Mod/Robot/Gui/ui_TaskBoxRobotTeachPanel.h"
-#include "Mod/Robot/App/Mechanics/MechanicGroup.h"
+//#include "Mod/Robot/App/Mechanics/MechanicGroup.h"
 
 using namespace RobotGui;
 
@@ -191,10 +191,10 @@ void TaskBoxRobotTeachPanel::initUi_TcpControlBox()
 
 void TaskBoxRobotTeachPanel::initUi_BaseSetupBox()
 {
-    auto extAxisDevice = m_DocPtr->getObjectsOfType(Robot::MechanicDevice::getClassTypeId());
+    auto extAxisDevice = m_DocPtr->getObjectsOfType(Robot::MechanicBase::getClassTypeId());
 
     for(auto objPtr : extAxisDevice){
-        auto devicePtr = static_cast<Robot::MechanicDevice*>(objPtr);
+        auto devicePtr = static_cast<Robot::MechanicBase*>(objPtr);
         if(devicePtr->DeviceType.getValue() == (int)Robot::MechanicType::M_ExtAxis)
             m_ui->comboBox_assembleReferenceList->addItem(tr(devicePtr->getNameInDocument()));
     }
@@ -290,14 +290,14 @@ void TaskBoxRobotTeachPanel::slot_changeReferenceBase()
         }
         else{
             if(!m_RobotPtr->LinkedExtAxName.getStrValue().empty()){
-                auto t_DevicePtr = static_cast<Robot::MechanicDevice*>(m_DocPtr->getObject(m_RobotPtr->LinkedExtAxName.getValue()));
-                t_DevicePtr->unloadRobot(m_RobotPtr->getNameInDocument());
+                auto t_DevicePtr = static_cast<Robot::MechanicBase*>(m_DocPtr->getObject(m_RobotPtr->LinkedExtAxName.getValue()));
+//                t_DevicePtr->unloadRobot(m_RobotPtr->getNameInDocument());
             }
 
             auto extAxisDeviceName = m_ui->comboBox_assembleReferenceList->currentText().toStdString();
-            auto t_DevicePtr = static_cast<Robot::MechanicDevice*>(m_DocPtr->getObject(extAxisDeviceName.c_str()));
+            auto t_DevicePtr = static_cast<Robot::MechanicBase*>(m_DocPtr->getObject(extAxisDeviceName.c_str()));
             if(t_DevicePtr!=nullptr && t_DevicePtr->DeviceType.getValue() == (int)Robot::MechanicType::M_ExtAxis){
-                t_DevicePtr->loadRobot(m_RobotPtr->getNameInDocument());
+//                t_DevicePtr->loadRobot(m_RobotPtr->getNameInDocument());
                 m_RobotPtr->LinkedExtAxName.setValue(t_DevicePtr->getNameInDocument());
             }
 

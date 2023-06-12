@@ -12,7 +12,7 @@
 namespace RobotGui
 {
 
-class RobotGuiExport ViewProviderTaskObject : public ViewProviderRobotTrajectory
+class ViewProviderTaskObject : public Gui::ViewProviderGeometryObject
 {
     PROPERTY_HEADER(RobotGui::ViewProviderTaskObject);
 

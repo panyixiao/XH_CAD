@@ -1,25 +1,3 @@
-/***************************************************************************
- *   Copyright (c) 2009 Jürgen Riegel <juergen.riegel@web.de>              *
- *                                                                         *
- *   This file is part of the FreeCAD CAx development system.              *
- *                                                                         *
- *   This library is free software; you can redistribute it and/or         *
- *   modify it under the terms of the GNU Library General Public           *
- *   License as published by the Free Software Foundation; either          *
- *   version 2 of the License, or (at your option) any later version.      *
- *                                                                         *
- *   This library  is distributed in the hope that it will be useful,      *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU Library General Public License for more details.                  *
- *                                                                         *
- *   You should have received a copy of the GNU Library General Public     *
- *   License along with this library; see the file COPYING.LIB. If not,    *
- *   write to the Free Software Foundation, Inc., 59 Temple Place,         *
- *   Suite 330, Boston, MA  02111-1307, USA                                *
- *                                                                         *
- ***************************************************************************/
-
 
 #ifndef GUI_TaskBox_TracSimulator_H
 #define GUI_TaskBox_TracSimulator_H
@@ -37,11 +15,11 @@
 #include <QItemSelection>
 
 #include <Mod/Robot/App/Mechanics/KinematicModel.h>
-#include <Mod/Robot/App/Mechanics/Robot6AxisObject.h>
-#include <Mod/Robot/App/Trac/RobotTracObject.h>
-#include <Mod/Robot/App/TaskManage/TracSimulatior.h>
+//#include <Mod/Robot/App/Mechanics/Robot6AxisObject.h>
+//#include "Mod/Robot/Gui/Mechanics/ViewProviderRobot6AxisObject.h"
+//#include <Mod/Robot/App/Trac/RobotTracObject.h>
 #include <Mod/Robot/App/TaskManage/TaskObject.h>
-#include "Mod/Robot/Gui/Mechanics/ViewProviderRobot6AxisObject.h"
+#include <Mod/Robot/App/TaskManage/ProgramSimulator.h>
 
 
 class Ui_TaskBox_TracSimulator;
@@ -62,11 +40,11 @@ class TaskBox_TracSimulator : public Gui::TaskView::TaskBox
     Q_OBJECT
 
 public:
-    TaskBox_TracSimulator(Robot::RobotTracObject *t_TracObj,
-                          QWidget *parent = 0);
+//    TaskBox_TracSimulator(Robot::RobotTracObject *t_TracObj,
+//                          QWidget *parent = 0);
     TaskBox_TracSimulator(Robot::TaskObject *t_TaskObj,
                           QWidget *parent = 0);
-    bool updateSimulationTarget(Robot::RobotTracObject* t_TracObj);
+//    bool updateSimulationTarget(Robot::RobotTracObject* t_TracObj);
     bool updateSimulationTarget(Robot::TaskObject* t_TaskObj);
     ~TaskBox_TracSimulator();
     /// Observer message from the Selection
@@ -102,9 +80,10 @@ protected:
 
     QTimer *timer;
     App::Document* m_DocPtr = nullptr;
-    Robot::TracSimulator    *m_SimulatorPtr = nullptr;
+    Robot::ProgramSimulator    *m_SimulatorPtr = nullptr;
     Robot::TaskObject       *m_TaskObjPtr = nullptr;
-    Robot::RobotTracObject  *m_TracObjPtr = nullptr;
+
+//    Robot::RobotTracObject  *m_TracObjPtr = nullptr;
     QStringList *m_stringList = nullptr;
     QStringListModel *m_stringListModel = nullptr;
 
