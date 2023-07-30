@@ -7,11 +7,15 @@ cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
 if (POLICY CMP0072)
     cmake_policy(SET CMP0072 OLD)
 endif(POLICY CMP0072)
+cmake_policy(SET CMP0074 NEW)
 
 find_program(CCACHE_PROGRAM ccache)  #This check should occur before project()
 if(CCACHE_PROGRAM)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
 endif()
+
+add_compile_options(-DCMAKE_TOOLCHAIN_FILE=C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake)
+#set(Boost_INCLUDE_DIR D:/Dev/Lib/boost_1_72_0)
 
 project(FreeCAD)
 

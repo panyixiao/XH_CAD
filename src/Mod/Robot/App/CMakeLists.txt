@@ -4,6 +4,8 @@ else(MSVC)
     add_definitions(-DHAVE_LIMITS_H -DHAVE_CONFIG_H)
 endif(MSVC)
 
+set(CMAKE_PREFIX_PATH "D:/Dev/Install/vcpkg/packages/nlopt_x86-windows/ ${CMAKE_PREFIX_PATH}")
+
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(pkg_nlopt REQUIRED nlopt)
 find_package(Boost REQUIRED COMPONENTS date_time)
